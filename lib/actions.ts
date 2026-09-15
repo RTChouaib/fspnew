@@ -1,12 +1,13 @@
 'use server';
 
-import { getOrCreateUser, recordAnswer, saveTestResult } from '@/lib/progress';
+import { getOrCreateUser, getSubscription, recordAnswer, saveTestResult } from '@/lib/progress';
 import { getCurrentUserId, setSession, clearSession } from '@/lib/session';
 
 export async function startCheckoutSession(email: string) {
   const user = await getOrCreateUser(email);
   await setSession(user.id, user.email);
-  return { userId: user.id, email: user.email };
+  const subscription = await getSubscription(user.id);
+  return { userId: user.id, email: user.email, alreadyActive: subscription?.status === 'active' };
 }
 
 export async function recordAnswerAction(termId: string, correct: boolean) {

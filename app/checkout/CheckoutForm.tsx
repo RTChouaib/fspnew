@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { startCheckoutSession } from '@/lib/actions';
 import { CheckoutButton } from '@/components/CheckoutButton';
 
@@ -13,7 +14,7 @@ const PRICE_ID_BY_PLAN: Record<string, string> = {
 export function CheckoutForm({ plan }: { plan: 'weekly' | 'monthly' | 'quarterly' }) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-  const [session, setSession] = useState<{ userId: string; email: string } | null>(null);
+  const [session, setSession] = useState<{ userId: string; email: string; alreadyActive: boolean } | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleContinue() {
@@ -28,10 +29,23 @@ export function CheckoutForm({ plan }: { plan: 'weekly' | 'monthly' | 'quarterly
     setLoading(false);
   }
 
+  if (session?.alreadyActive) {
+    return (
+      <div className="card" style={{ textAlign: 'center' }}>
+        <p style={{ margin: '0 0 12px' }}>
+          Für <strong>{session.email}</strong> läuft bereits ein aktives Abo. Eine erneute
+          Zahlung ist nicht nötig.
+        </p>
+        <Link href="/account" className="btn btn-blue btn-block">
+          Zum Konto
+        </Link>
+      </div>
+    );
+  }
+
   if (session) {
     return (
       <CheckoutButton
-        plan={plan}
         priceId={PRICE_ID_BY_PLAN[plan]}
         userEmail={session.email}
         userId={session.userId}
