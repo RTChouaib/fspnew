@@ -2,29 +2,32 @@ import Link from 'next/link';
 
 const PLANS = [
   {
-    name: 'Wöchentlich',
+    name: 'Wochenplan',
     price: '4,99 €',
     period: 'pro Woche',
-    note: 'Für kurze, intensive Vorbereitung',
+    note: 'Für kurzfristiges Training',
+    badge: null,
     featured: false,
     features: ['Alle Begriffe & Kategorien', 'Unbegrenztes Training', 'Spaced Repetition & Fehlertraining', 'Jederzeit kündbar'],
     plan: 'weekly',
   },
   {
-    name: 'Monatlich',
+    name: 'Monatsplan',
     price: '14,99 €',
     period: 'pro Monat',
-    note: '≈ 3,46 € / Woche',
-    featured: true,
+    note: 'Für regelmäßiges Training · ≈ 3,46 € / Woche',
+    badge: null,
+    featured: false,
     features: ['Alle Begriffe & Kategorien', 'Unbegrenztes Training', 'Spaced Repetition & Fehlertraining', 'Vollständige Fortschrittsverfolgung', 'Jederzeit kündbar'],
     plan: 'monthly',
   },
   {
-    name: '3 Monate',
+    name: 'FSP Intensiv — 3 Monate',
     price: '29,99 €',
     period: 'für 3 Monate',
-    note: '≈ 2,31 € / Woche — bester Wert',
-    featured: false,
+    note: 'Für die gezielte Vorbereitung über mehrere Monate · ≈ 2,31 € / Woche',
+    badge: 'Beste Wahl',
+    featured: true,
     features: ['Alle Begriffe & Kategorien', 'Unbegrenztes Training', 'Spaced Repetition & Fehlertraining', 'Vollständige Fortschrittsverfolgung', 'Jederzeit kündbar'],
     plan: 'quarterly',
   },
@@ -35,7 +38,7 @@ export function PricingCards() {
     <div className="pricing-grid">
       {PLANS.map((p) => (
         <div key={p.plan} className={`plan ${p.featured ? 'featured' : ''}`}>
-          {p.featured && <div className="plan-badge">Empfohlen</div>}
+          {p.badge && <div className="plan-badge">{p.badge}</div>}
           <div className="plan-name">{p.name}</div>
           <div className="plan-price">{p.price}</div>
           <div className="plan-period">{p.period}</div>

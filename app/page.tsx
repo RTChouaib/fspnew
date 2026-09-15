@@ -8,10 +8,11 @@ function Faq() {
   const items: [string, string][] = [
     ['Was ist die FSP?', 'Die Fachsprachprüfung (FSP) ist eine Prüfung für internationale Ärztinnen und Ärzte, in der die medizinische Fachsprache und die Kommunikation mit Patient:innen auf Deutsch nachgewiesen werden muss.'],
     ['Für wen ist die App?', 'Für internationale Mediziner:innen, die sich gezielt auf die FSP vorbereiten — nicht für allgemeines Deutschlernen.'],
-    ['Brauche ich Deutsch auf B2-Niveau?', 'Ja, ein Sprachniveau von etwa B2 wird empfohlen, da die Inhalte medizinisches Fachvokabular voraussetzen.'],
+    ['Brauche ich Deutsch auf B2-Niveau?', 'B2 ist eine gute Grundlage, da der Schwerpunkt auf medizinischer Fachsprache und klinischer Kommunikation liegt.'],
+    ['Ist FSP Terminology ein offizieller FSP-Kurs?', 'Nein. FSP Terminology ist ein unabhängiges Lernangebot zur Sprachvorbereitung und kein offizielles Produkt einer Ärztekammer oder Prüfungsbehörde.'],
     ['Kann ich jederzeit kündigen?', 'Ja. Die Kündigung ist jederzeit im Konto-Bereich mit einem Klick möglich, ohne Rückfragen oder Fristen.'],
     ['Was bekomme ich mit dem Abo?', 'Zugriff auf alle Begriffe, unbegrenztes Training, alle Lernmodi, Tests, Fehlertraining und deinen vollständigen Fortschritt.'],
-    ['Gibt es eine kostenlose Probe?', 'Ja, du kannst 5 Fragen kostenlos und ohne Registrierung ausprobieren.'],
+    ['Gibt es eine kostenlose Probe?', 'Ja, du kannst 5 echte FSP-Aufgaben kostenlos und ohne Registrierung ausprobieren.'],
   ];
   return (
     <>
@@ -40,17 +41,17 @@ export default function LandingPage() {
               Medizinisches Deutsch für die <em>Fachsprachprüfung.</em>
             </h1>
             <p className="lead">
-              Trainiere Fachbegriffe, Patientensprache und klinische Formulierungen mit
-              realistischen FSP-Aufgaben.
+              Trainiere Fachsprache, Patientensprache, Anamnese und Arztbrief mit kurzen,
+              realistischen FSP-Aufgaben — statt endloser Vokabellisten.
             </p>
             <div className="hero-cta">
-              <Link href="/demo" className="btn btn-blue">Kostenlos ausprobieren</Link>
+              <Link href="/demo" className="btn btn-blue">5 Aufgaben kostenlos testen</Link>
               <Link href="/pricing" className="arrow-link">
                 Preise ansehen <span className="arr">↗</span>
               </Link>
             </div>
             <div className="coords">
-              B2–C1 · {TERMS.length} BEGRIFFE · {CATEGORIES.length} FACHGEBIETE
+              B2–C1 · AKTIVES TRAINING STATT PASSIVES AUSWENDIGLERNEN
             </div>
           </div>
           <div className="transform-card">
@@ -74,7 +75,7 @@ export default function LandingPage() {
         </div>
       </div>
 
-      <div className="section" id="how">
+      <div className="section">
         <div className="wrap">
           <div className="section-head">
             <div className="section-num">01 / DAS PROBLEM</div>
@@ -143,10 +144,47 @@ export default function LandingPage() {
         </div>
       </div>
 
+      <div className="section" id="how">
+        <div className="wrap">
+          <div className="section-head">
+            <div className="section-num">03 / SO TRAINIERST DU</div>
+            <h2>
+              Kurze Einheiten. <em>Aktiver Abruf.</em>
+            </h2>
+            <p>
+              Kurze Trainingseinheiten helfen dir, medizinische Formulierungen aktiv abzurufen —
+              nicht nur wiederzuerkennen.
+            </p>
+          </div>
+          <div className="steps-grid">
+            <div className="step-card">
+              <div className="step-num">01</div>
+              <h3>Aufgabe lösen</h3>
+              <p>Du bearbeitest eine realistische FSP-Aufgabe — Fachsprache, Patientensprache oder Arztbrief.</p>
+            </div>
+            <div className="step-card">
+              <div className="step-num">02</div>
+              <h3>Antwort prüfen</h3>
+              <p>Du siehst sofort, ob deine Formulierung stimmt, und warum.</p>
+            </div>
+            <div className="step-card">
+              <div className="step-num">03</div>
+              <h3>Fehler verstehen</h3>
+              <p>Typische Verwechslungen und Fehlerquellen werden dir direkt erklärt.</p>
+            </div>
+            <div className="step-card">
+              <div className="step-num">04</div>
+              <h3>Schwachstellen wiederholen</h3>
+              <p>Falsch beantwortete Begriffe kommen gezielt zurück, bis du sie sicher beherrschst.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="section">
         <div className="wrap">
           <div className="section-head">
-            <div className="section-num">03 / KATEGORIEN</div>
+            <div className="section-num">04 / KATEGORIEN</div>
             <h2>
               Nach Fachgebiet <em>geordnet.</em>
             </h2>
@@ -163,7 +201,7 @@ export default function LandingPage() {
       <div className="section">
         <div className="wrap">
           <div className="section-head">
-            <div className="section-num">04 / FORTSCHRITT</div>
+            <div className="section-num">05 / FORTSCHRITT</div>
             <h2>
               Dein Fortschritt <em>im Blick.</em>
             </h2>
@@ -175,10 +213,56 @@ export default function LandingPage() {
         </div>
       </div>
 
+      <div className="section">
+        <div className="wrap narrow habit-banner">
+          <div className="eyebrow">Tägliche Routine</div>
+          <h2>
+            10 Minuten täglich. <em>Aktiv trainieren.</em>
+          </h2>
+          <p>
+            Kleine, regelmäßige Trainingseinheiten statt stundenlanges Durcharbeiten von
+            Vokabellisten. Eine sinnvolle Ergänzung zu Kursen und Unterricht — kein Ersatz für
+            eine bestandene Prüfung garantiert dies allein.
+          </p>
+        </div>
+      </div>
+
+      <div className="section">
+        <div className="wrap">
+          <div className="section-head">
+            <div className="section-num">06 / FÜR WEN</div>
+            <h2>
+              Für wen ist <em>FSP Terminology?</em>
+            </h2>
+            <p>
+              Du kennst die Medizin — aber dir fehlen manchmal die richtigen deutschen
+              Formulierungen? Genau auf diese sprachliche Lücke konzentriert sich dieses Training.
+            </p>
+          </div>
+          <div className="grid-3">
+            <div className="feature-card">
+              <h3>Du bereitest dich auf die FSP vor</h3>
+              <p>Du möchtest medizinisches Deutsch regelmäßig und gezielt trainieren.</p>
+            </div>
+            <div className="feature-card">
+              <h3>Du bist etwa auf B2/C1-Niveau</h3>
+              <p>
+                Du kennst die medizinischen Inhalte, brauchst aber mehr Sicherheit bei
+                Fachsprache und klinischen Formulierungen.
+              </p>
+            </div>
+            <div className="feature-card">
+              <h3>Du übst selbstständig zwischen Kursen</h3>
+              <p>Kurze Einheiten eignen sich als zusätzliches Training neben FSP-Kursen und Unterricht.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="section" id="pricing-preview">
         <div className="wrap">
           <div className="section-head">
-            <div className="section-num">05 / PREISE</div>
+            <div className="section-num">07 / PREISE</div>
             <h2>
               Wähle deinen <em>Zeitrahmen.</em>
             </h2>
@@ -191,7 +275,7 @@ export default function LandingPage() {
       <div className="section">
         <div className="wrap narrow">
           <div className="section-head">
-            <div className="section-num">06 / FAQ</div>
+            <div className="section-num">08 / FAQ</div>
             <h2>Häufige Fragen</h2>
           </div>
           <Faq />
@@ -200,11 +284,11 @@ export default function LandingPage() {
 
       <div className="section">
         <div className="wrap narrow" style={{ textAlign: 'center' }}>
-          <div className="section-num">07 / LOS GEHT&apos;S</div>
+          <div className="section-num">09 / LOS GEHT&apos;S</div>
           <h2>
             FSP-Training <em>starten.</em>
           </h2>
-          <Link href="/demo" className="btn btn-blue">Kostenlos ausprobieren</Link>
+          <Link href="/demo" className="btn btn-blue">5 Aufgaben kostenlos testen</Link>
         </div>
       </div>
 

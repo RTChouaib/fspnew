@@ -70,6 +70,16 @@ button{font-family:var(--sans); cursor:pointer;}
 .feature-card p{font-size:14px; margin:0;}
 .divider{height:1px; background:var(--line); border:none; margin:0;}
 /* Pricing */
+.steps-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px;}
+.step-card{padding:22px; border:1px solid var(--line); border-radius:var(--radius); background:var(--card);}
+.step-num{font-family:var(--mono); font-size:13px; color:var(--blue-dark); font-weight:500; letter-spacing:.03em; margin-bottom:10px;}
+.step-card h3{font-size:16px; margin-bottom:6px;}
+.step-card p{font-size:13.5px; margin:0;}
+
+.habit-banner{text-align:center; padding:36px 40px; border:1px solid var(--line); border-radius:var(--radius-lg); background:var(--blue-tint);}
+.habit-banner .eyebrow{margin-bottom:12px;}
+.habit-banner p{max-width:520px; margin:0 auto;}
+
 .pricing-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
 .plan{border:1px solid var(--line); border-radius:var(--radius-lg); padding:26px; background:var(--card); display:flex; flex-direction:column;}
 .plan.featured{border:2px solid var(--blue); position:relative;}
@@ -153,8 +163,13 @@ button{font-family:var(--sans); cursor:pointer;}
   .hero h1{font-size:32px;}
   .grid-3{grid-template-columns:1fr;}
   .grid-2{grid-template-columns:1fr;}
+  .steps-grid{grid-template-columns:1fr 1fr; gap:12px;}
   .pricing-grid{grid-template-columns:1fr;}
   .cat-grid{grid-template-columns:1fr 1fr;}
   .stat-row{grid-template-columns:1fr 1fr;}
   .nav-links{display:none;}
+  .habit-banner{padding:28px 22px;}
+}
+@media (max-width: 420px){
+  .steps-grid{grid-template-columns:1fr;}
 }

@@ -32,25 +32,29 @@ export function DemoQuiz({ questions }: { questions: Question[] }) {
   if (done) {
     return (
       <div style={{ textAlign: 'center', paddingTop: 20 }}>
-        <div className="eyebrow">Probelektion abgeschlossen</div>
+        <div className="eyebrow">Deine ersten Ergebnisse</div>
         <h2>
           {done.correct}/{done.total} richtig
         </h2>
         <p>
-          {done.correct >= Math.ceil(done.total * 0.6)
-            ? 'Du kennst bereits viele Begriffe — jetzt kannst du gezielt deine Schwachstellen trainieren.'
-            : 'Ein guter Start — mit gezieltem Training verbesserst du dich schnell.'}
+          Du hast jetzt einen ersten Eindruck davon, wo dir medizinische Fachsprache leichtfällt —
+          und wo du noch gezielt trainieren kannst.
         </p>
         <div className="card" style={{ margin: '26px 0', textAlign: 'left' }}>
-          <h3 style={{ fontSize: 16 }}>Über 60 FSP-relevante Begriffe warten auf dich</h3>
+          <h3 style={{ fontSize: 16 }}>Aktives Training statt passives Auswendiglernen</h3>
           <p style={{ margin: 0, fontSize: 14 }}>
             Alle Kategorien, unbegrenztes Training, Spaced Repetition, Fehlertraining, Tests und
             dein vollständiger Fortschritt.
           </p>
         </div>
-        <Link href="/pricing" className="btn btn-blue btn-block">
-          Vorbereitung starten
-        </Link>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link href="/pricing" className="btn btn-blue">
+            FSP-Training beginnen
+          </Link>
+          <Link href="/#how" className="btn btn-outline">
+            So funktioniert&apos;s
+          </Link>
+        </div>
       </div>
     );
   }

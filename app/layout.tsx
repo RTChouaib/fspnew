@@ -18,11 +18,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'FSP Terminology — Medizinisches Deutsch für die Fachsprachprüfung',
   description:
-    'Trainiere Fachbegriffe, Patientensprache und klinische Formulierungen mit realistischen FSP-Aufgaben. Gezielte Vorbereitung auf die Fachsprachprüfung.',
+    'Medizinisches Deutsch für internationale Ärztinnen und Ärzte: Fachsprache, Patientensprache und FSP-Aufgaben gezielt trainieren. 5 Aufgaben kostenlos testen.',
   openGraph: {
     title: 'FSP Terminology',
     description:
-      'Medizinisches Deutsch für die Fachsprachprüfung — gezielt trainieren, sicher bestehen.',
+      'Medizinisches Deutsch für die Fachsprachprüfung — Fachsprache, Patientensprache, Anamnese und Arztbrief aktiv trainieren.',
   },
 };
 

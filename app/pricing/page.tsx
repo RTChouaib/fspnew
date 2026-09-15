@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { MarketingTopBar } from '@/components/MarketingTopBar';
 import { MarketingFooter } from '@/components/MarketingFooter';
 import { PricingCards } from '@/components/PricingCards';
@@ -23,13 +24,14 @@ export default async function PricingPage({
         <div className="eyebrow">Bereit, gezielt für die FSP zu trainieren?</div>
         <h2>Vorbereitung starten</h2>
         <p>
-          Wähle den Plan, der zu deiner Prüfungsvorbereitung passt. Keine versteckten Kosten,
+          Wähle den Plan, der zu deiner Prüfungsvorbereitung passt. Keine langfristige Bindung,
           jederzeit kündbar.
         </p>
         <PricingCards />
         <p className="small-muted" style={{ marginTop: 18 }}>
           Alle Preise inkl. gesetzlicher MwSt. Zahlungsabwicklung erfolgt sicher über unseren
-          Zahlungsanbieter — wir speichern keine Kartendaten.
+          Zahlungsanbieter — wir speichern keine Kartendaten. Noch unsicher?{' '}
+          <Link href="/demo">5 Aufgaben kostenlos testen</Link>.
         </p>
       </div>
       <MarketingFooter />
