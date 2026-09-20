@@ -1,10 +1,18 @@
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { DM_Serif_Display, Manrope, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({
+const dmSerifDisplay = DM_Serif_Display({
   subsets: ['latin'],
-  variable: '--font-inter',
+  weight: ['400'],
+  variable: '--font-serif',
+  display: 'swap',
+});
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-sans',
   display: 'swap',
 });
 
@@ -28,7 +36,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang="de"
+      className={`${dmSerifDisplay.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

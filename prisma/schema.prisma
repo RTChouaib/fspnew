@@ -16,6 +16,8 @@ model User {
   mistakes     Mistake[]
   testResults  TestResult[]
   loginCodes   LoginCode[]
+  caseSessions CaseSession[]
+  skills       UserSkill[]
 }
 
 model LoginCode {
@@ -87,4 +89,73 @@ model AnalyticsEvent {
   name      String
   props     Json?
   createdAt DateTime @default(now())
+}
+
+// ============================================================
+// FSP Fälle — text-based patient simulation (added on top of the
+// existing terminology product; nothing above this line was changed
+// in meaning, only User gained the two relations above).
+// ============================================================
+
+model ClinicalCase {
+  id               String        @id @default(cuid())
+  slug             String        @unique
+  title            String
+  specialty        String
+  difficulty       Int           @default(1) // 1 = easy, 2 = medium, 3 = hard
+  estimatedMinutes Int           @default(15)
+  patientName      String
+  patientAge       Int
+  patientSex       String
+  openingStatement String
+  // Full case facts (history, findings, etc.) — server-only, NEVER sent to
+  // the client as-is. patient.ts extracts only what the current turn needs.
+  caseData         Json
+  // Scoring rubric (required questions, critical omissions, targets,
+  // weights) — server-only, NEVER sent to the client before evaluation.
+  rubric           Json
+  isPublished      Boolean       @default(false)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  sessions         CaseSession[]
+
+  @@index([isPublished, specialty])
+}
+
+model CaseSession {
+  id                 String       @id @default(cuid())
+  userId             String
+  user               User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  caseId             String
+  case               ClinicalCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  status             String       @default("in_progress") // in_progress | completed | abandoned
+  startedAt          DateTime     @default(now())
+  completedAt        DateTime?
+  messageCount       Int          @default(0)
+  durationSeconds    Int?
+  // Array of {role, content, timestamp} — the full conversation.
+  transcript         Json         @default("[]")
+  // Full structured evaluation once completed (see lib/ai/schemas.ts).
+  evaluation         Json?
+  overallScore       Int?
+  anamnesisScore     Int?
+  languageScore      Int?
+  communicationScore Int?
+
+  @@index([userId, status])
+  @@index([caseId])
+}
+
+model UserSkill {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skillKey      String    // e.g. "anamnesis", "patient_language", "terminology"
+  score         Int       @default(0) // 0-100, updated as an exponential moving average
+  attempts      Int       @default(0)
+  successes     Int       @default(0)
+  lastPracticed DateTime?
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([userId, skillKey])
 }

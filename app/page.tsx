@@ -7,6 +7,7 @@ import { PricingCards } from '@/components/PricingCards';
 function Faq() {
   const items: [string, string][] = [
     ['Was ist die FSP?', 'Die Fachsprachprüfung (FSP) ist eine Prüfung für internationale Ärztinnen und Ärzte, in der die medizinische Fachsprache und die Kommunikation mit Patient:innen auf Deutsch nachgewiesen werden muss.'],
+    ['Was sind FSP Fälle?', 'Simulierte Anamnesegespräche mit einer virtuellen Patientin oder einem virtuellen Patienten. Du stellst Fragen auf Deutsch, bekommst natürliche Antworten und am Ende eine detaillierte Trainingsauswertung — kein offizielles FSP-Ergebnis, sondern gezieltes Übungsfeedback.'],
     ['Für wen ist die App?', 'Für internationale Mediziner:innen, die sich gezielt auf die FSP vorbereiten — nicht für allgemeines Deutschlernen.'],
     ['Brauche ich Deutsch auf B2-Niveau?', 'B2 ist eine gute Grundlage, da der Schwerpunkt auf medizinischer Fachsprache und klinischer Kommunikation liegt.'],
     ['Ist FSP Terminology ein offizieller FSP-Kurs?', 'Nein. FSP Terminology ist ein unabhängiges Lernangebot zur Sprachvorbereitung und kein offizielles Produkt einer Ärztekammer oder Prüfungsbehörde.'],
@@ -38,11 +39,12 @@ export default function LandingPage() {
           <div>
             <div className="eyebrow">Für internationale Ärztinnen und Ärzte</div>
             <h1>
-              Medizinisches Deutsch für die <em>Fachsprachprüfung.</em>
+              Bereite dich auf die FSP vor — im <em>echten Gespräch.</em>
             </h1>
             <p className="lead">
-              Trainiere Fachsprache, Patientensprache, Anamnese und Arztbrief mit kurzen,
-              realistischen FSP-Aufgaben — statt endloser Vokabellisten.
+              Führe simulierte Patientengespräche auf Deutsch, erhalte sofortiges persönliches
+              Feedback zu Anamnese, Patientensprache und Fachsprache — und trainiere gezielt
+              genau das, was dir noch fehlt.
             </p>
             <div className="hero-cta">
               <Link href="/demo" className="btn btn-blue">5 Aufgaben kostenlos testen</Link>
@@ -51,7 +53,7 @@ export default function LandingPage() {
               </Link>
             </div>
             <div className="coords">
-              B2–C1 · AKTIVES TRAINING STATT PASSIVES AUSWENDIGLERNEN
+              B2–C1 · PATIENTENGESPRÄCHE · FACHSPRACHE · SOFORTIGES FEEDBACK
             </div>
           </div>
           <div className="transform-card">
@@ -78,7 +80,47 @@ export default function LandingPage() {
       <div className="section">
         <div className="wrap">
           <div className="section-head">
-            <div className="section-num">01 / DAS PROBLEM</div>
+            <div className="section-num">01 / FSP FÄLLE</div>
+            <h2>
+              Kein Vokabeltest. <em>Ein echtes Gespräch.</em>
+            </h2>
+            <p>
+              Führe ein simuliertes Anamnesegespräch mit einer virtuellen Patientin oder einem
+              virtuellen Patienten — auf Deutsch, wie in der Prüfung. Am Ende erhältst du eine
+              detaillierte Auswertung: Was hast du gut gemacht, was hast du übersehen, und wie
+              hättest du es sprachlich besser formulieren können.
+            </p>
+          </div>
+          <div className="grid-3">
+            <div className="feature-card">
+              <h3>Realistische Fälle</h3>
+              <p>
+                Thoraxschmerzen, Dyspnoe, Bauchschmerzen und mehr — Fälle aus verschiedenen
+                Fachgebieten, wie sie in der FSP vorkommen.
+              </p>
+            </div>
+            <div className="feature-card">
+              <h3>Sofortiges Feedback</h3>
+              <p>
+                Nach jedem Gespräch: Stärken, fehlende Informationen und konkrete sprachliche
+                Verbesserungsvorschläge — deine Formulierung neben der besseren Alternative.
+              </p>
+            </div>
+            <div className="feature-card">
+              <h3>Gezieltes Training</h3>
+              <p>
+                Deine Schwachstellen aus den Gesprächen fließen direkt in dein
+                Begriffs-Training ein — du übst genau das, was dir noch fehlt.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="section">
+        <div className="wrap">
+          <div className="section-head">
+            <div className="section-num">02 / DAS PROBLEM</div>
             <h2>
               Du kennst die Medizin — aber findest im Gespräch nicht immer die{' '}
               <em>richtigen</em> deutschen Worte?
@@ -114,7 +156,7 @@ export default function LandingPage() {
       <div className="section">
         <div className="wrap">
           <div className="section-head">
-            <div className="section-num">02 / DIE LÖSUNG</div>
+            <div className="section-num">03 / DIE LÖSUNG</div>
             <h2>
               Nicht noch eine <em>Vokabel-App.</em>
             </h2>
@@ -147,7 +189,7 @@ export default function LandingPage() {
       <div className="section" id="how">
         <div className="wrap">
           <div className="section-head">
-            <div className="section-num">03 / SO TRAINIERST DU</div>
+            <div className="section-num">04 / SO TRAINIERST DU</div>
             <h2>
               Kurze Einheiten. <em>Aktiver Abruf.</em>
             </h2>
@@ -184,7 +226,7 @@ export default function LandingPage() {
       <div className="section">
         <div className="wrap">
           <div className="section-head">
-            <div className="section-num">04 / KATEGORIEN</div>
+            <div className="section-num">05 / KATEGORIEN</div>
             <h2>
               Nach Fachgebiet <em>geordnet.</em>
             </h2>
@@ -201,7 +243,7 @@ export default function LandingPage() {
       <div className="section">
         <div className="wrap">
           <div className="section-head">
-            <div className="section-num">05 / FORTSCHRITT</div>
+            <div className="section-num">06 / FORTSCHRITT</div>
             <h2>
               Dein Fortschritt <em>im Blick.</em>
             </h2>
@@ -230,7 +272,7 @@ export default function LandingPage() {
       <div className="section">
         <div className="wrap">
           <div className="section-head">
-            <div className="section-num">06 / FÜR WEN</div>
+            <div className="section-num">07 / FÜR WEN</div>
             <h2>
               Für wen ist <em>FSP Terminology?</em>
             </h2>
@@ -262,7 +304,7 @@ export default function LandingPage() {
       <div className="section" id="pricing-preview">
         <div className="wrap">
           <div className="section-head">
-            <div className="section-num">07 / PREISE</div>
+            <div className="section-num">08 / PREISE</div>
             <h2>
               Wähle deinen <em>Zeitrahmen.</em>
             </h2>
@@ -275,7 +317,7 @@ export default function LandingPage() {
       <div className="section">
         <div className="wrap narrow">
           <div className="section-head">
-            <div className="section-num">08 / FAQ</div>
+            <div className="section-num">09 / FAQ</div>
             <h2>Häufige Fragen</h2>
           </div>
           <Faq />
@@ -284,7 +326,7 @@ export default function LandingPage() {
 
       <div className="section">
         <div className="wrap narrow" style={{ textAlign: 'center' }}>
-          <div className="section-num">09 / LOS GEHT&apos;S</div>
+          <div className="section-num">10 / LOS GEHT&apos;S</div>
           <h2>
             FSP-Training <em>starten.</em>
           </h2>

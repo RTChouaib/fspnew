@@ -5,8 +5,8 @@ import { getSubscription, canAccess } from '@/lib/progress';
 
 const TABS = [
   { href: '/dashboard', icon: '⌂', label: 'Start' },
+  { href: '/cases', icon: '◆', label: 'Fälle' },
   { href: '/practice', icon: '◐', label: 'Üben' },
-  { href: '/test', icon: '▤', label: 'Test' },
   { href: '/mistakes', icon: '✕', label: 'Fehler' },
   { href: '/search', icon: '⌕', label: 'Suche' },
 ];
@@ -27,6 +27,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </Link>
           <div className="nav-links">
             <Link href="/dashboard" className="nav-link">START</Link>
+            <Link href="/cases" className="nav-link">FÄLLE</Link>
             <Link href="/practice" className="nav-link">ÜBEN</Link>
             <Link href="/test" className="nav-link">TEST</Link>
             <Link href="/account" className="nav-link">KONTO</Link>

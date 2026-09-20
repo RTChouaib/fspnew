@@ -26,3 +26,7 @@ export function assertPaddleEnv() {
 export function assertDatabaseEnv() {
   requireEnv('DATABASE_URL');
 }
+
+export function assertAIEnv() {
+  requireEnv('DEEPSEEK_API_KEY');
+}
