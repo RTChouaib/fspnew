@@ -73,14 +73,22 @@ export function DemoQuiz({ questions }: { questions: Question[] }) {
         <div className="question-term">{q.prompt}</div>
         <div className="question-sub">Wähle die passende Übersetzung</div>
         <div className="options">
-          {q.options.map((o) => {
+          {q.options.map((o, i) => {
             let cls = 'option-btn';
             if (chosen) {
               if (o === q.correct) cls += ' correct';
               else if (o === chosen) cls += ' wrong';
             }
             return (
-              <button key={o} className={cls} disabled={!!chosen} onClick={() => choose(o)}>
+              <button
+                key={`${index}-${i}`}
+                className={cls}
+                disabled={!!chosen}
+                onClick={(e) => {
+                  choose(o);
+                  e.currentTarget.blur();
+                }}
+              >
                 {o}
               </button>
             );
