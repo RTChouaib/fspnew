@@ -26,6 +26,25 @@ export function reconcileUserSession({
   return userIdFromEmail ?? uid ?? null;
 }
 
+// Next.js only allows cookie writes from a Server Action or Route Handler —
+// never during a Server Component's render, even though cookies() is
+// readable everywhere. getCurrentUserId() is called from both kinds of
+// places (plain page/layout components AND actions/handlers). The writes
+// below are a self-healing convenience (fixing a stale cookie once we've
+// already resolved the correct user from the DB), not something the
+// identity check depends on, so it's safe to just skip the write — and
+// keep the correct return value — when the runtime forbids it.
+function tryWriteCookie(fn: () => void) {
+  try {
+    fn();
+  } catch {
+    // Called from a Server Component render — cookie writes aren't
+    // permitted here. The resolved user id is still correct; the cookie
+    // will simply get reconciled next time this runs from an action or
+    // route handler instead.
+  }
+}
+
 export async function getCurrentUserId(): Promise<string | null> {
   const store = await cookies();
   const uid = store.get(COOKIE_NAME)?.value ?? null;
@@ -38,21 +57,21 @@ export async function getCurrentUserId(): Promise<string | null> {
     const user = await db.user.findUnique({ where: { id: uid } });
     if (user) {
       if (email && email !== user.email) {
-        store.set(EMAIL_COOKIE_NAME, user.email, cookieOptions);
+        tryWriteCookie(() => store.set(EMAIL_COOKIE_NAME, user.email, cookieOptions));
       }
       return user.id;
     }
-    store.delete(COOKIE_NAME);
+    tryWriteCookie(() => store.delete(COOKIE_NAME));
   }
 
   if (email) {
     const user = await db.user.findUnique({ where: { email } });
     if (user) {
-      store.set(COOKIE_NAME, user.id, cookieOptions);
-      store.set(EMAIL_COOKIE_NAME, user.email, cookieOptions);
+      tryWriteCookie(() => store.set(COOKIE_NAME, user.id, cookieOptions));
+      tryWriteCookie(() => store.set(EMAIL_COOKIE_NAME, user.email, cookieOptions));
       return user.id;
     }
-    store.delete(EMAIL_COOKIE_NAME);
+    tryWriteCookie(() => store.delete(EMAIL_COOKIE_NAME));
   }
 
   return null;
