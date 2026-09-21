@@ -40,7 +40,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="de"
       className={`${dmSerifDisplay.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <footer
+          style={{
+            padding: '1rem 1.25rem',
+            textAlign: 'center',
+            fontSize: '0.8rem',
+            color: '#6b7280',
+            borderTop: '1px solid #e5e7eb',
+            marginTop: '2rem',
+          }}
+        >
+          For any issues contact <a href="mailto:chouaib@by-rtc.com">chouaib@by-rtc.com</a>
+        </footer>
+      </body>
     </html>
   );
 }

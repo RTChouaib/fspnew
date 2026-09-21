@@ -45,6 +45,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </Link>
         ))}
       </div>
+      <footer style={{ padding: '1rem 1.25rem', textAlign: 'center', fontSize: '0.8rem', color: '#6b7280', borderTop: '1px solid #e5e7eb', marginTop: '1rem' }}>
+        For any issues contact <a href="mailto:chouaib@by-rtc.com">chouaib@by-rtc.com</a>
+      </footer>
     </>
   );
 }
