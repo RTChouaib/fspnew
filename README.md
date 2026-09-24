@@ -44,12 +44,47 @@ server logs, not hidden as a false "Delivered" success.
 
 ## Database schema
 
-`prisma/schema.prisma` is the single source of truth. To change it: edit the file, then run
-`npx prisma migrate dev --name <description>` to generate and apply a migration. Do not
-install or run any other Prisma-branded CLI/package beyond `prisma` and `@prisma/client` —
-mixing toolchains is what caused the original database errors this rebuild fixed.
+`prisma/schema.prisma` is the single source of truth. To change it:
+
+1. Edit `schema.prisma`.
+2. Run `npx prisma migrate dev --name <description>` locally, pointed at a dev database (not
+   production — `migrate dev` can reset data if it detects drift). This generates a new
+   folder under `prisma/migrations/` containing the actual SQL, and applies it to your local
+   dev database.
+3. **Commit the generated `prisma/migrations/<timestamp>_<description>/` folder.** This step
+   is not optional — the migration only exists once it's a file in the repo. A schema.prisma
+   change with no matching committed migration folder means production's real database never
+   gets the change, even though the code that expects it is deployed and live. (This is
+   exactly what happened with the case-simulation tables before this fix — the schema was
+   edited but no migration was ever committed, so every page that queried those tables 500'd
+   in production while working fine anywhere `prisma db push` or `migrate dev` had been run
+   by hand.)
+4. Push. `npm run build` now runs `prisma migrate deploy && next build` — Vercel applies any
+   committed-but-not-yet-applied migrations automatically, before the app is built, on every
+   deploy. No manual production DB step is ever required again as long as step 3 happened.
+
+Do not install or run any other Prisma-branded CLI/package beyond `prisma` and
+`@prisma/client` — mixing toolchains is what caused the original database errors this
+rebuild fixed. Do not run `prisma db push` against production either — it skips the
+migration-history table entirely, so subsequent `migrate deploy` runs won't know the change
+already happened.
+
+If you're ever unsure whether production's database actually matches `schema.prisma`, check
+`/api/health` (confirms the connection works and required env vars are set, but not schema
+drift specifically) or compare the table list in Neon's dashboard against the models in
+`schema.prisma`.
 
 ## Deployment
 
-Vercel + a custom domain. See the project's deployment notes for the full checklist
+Vercel + a custom domain. `npm run build` (`prisma migrate deploy && next build`) is what
+Vercel runs on every deploy, so schema changes ship automatically as long as the migration
+folder was committed. See the project's deployment notes for the rest of the checklist
 (environment variables, Paddle webhook URL, DNS, going live with real Paddle credentials).
+
+**Preview deployments:** if Vercel Preview builds point at the same `DATABASE_URL` as
+Production (common for small projects with a single database), they will also run
+`prisma migrate deploy` against that same production database on every preview build. This
+is safe (migrations are additive and idempotent — deploy is a no-op if nothing's pending),
+but worth knowing if you ever branch to a separate preview database: point Preview at its own
+`DATABASE_URL` and this still works the same way, applying migrations to whichever database
+that environment's `DATABASE_URL` points to.
