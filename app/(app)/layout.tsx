@@ -6,9 +6,9 @@ import { AppIcon } from '@/components/AppIcon';
 
 const NAV = [
   { href: '/dashboard', icon: 'home' as const, label: 'Dashboard' },
-  { href: '/practice', icon: 'book' as const, label: 'Üben' },
-  { href: '/cases', icon: 'stethoscope' as const, label: 'Fälle' },
-  { href: '/test', icon: 'clipboard' as const, label: 'Kurztest' },
+  { href: '/learn', icon: 'book' as const, label: 'Lernplan' },
+  { href: '/cases', icon: 'stethoscope' as const, label: 'Patientengespräch' },
+  { href: '/test', icon: 'clipboard' as const, label: 'Tests' },
   { href: '/mistakes', icon: 'alert' as const, label: 'Fehler' },
 ];
 
@@ -22,12 +22,13 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div className="app-frame">
       <aside className="app-sidebar">
         <Link href="/dashboard" className="app-brand"><span className="brand-mark">F</span><span>FSP <b>Terminology</b></span></Link>
-        <div className="sidebar-label">TRAINING</div>
+        <div className="sidebar-label">DEIN TRAINING</div>
         <nav className="side-nav">
           {NAV.map((item) => <Link key={item.href} href={item.href} className="side-link"><AppIcon name={item.icon}/><span>{item.label}</span></Link>)}
         </nav>
         <div className="sidebar-spacer" />
         <nav className="side-nav side-nav-secondary">
+          <Link href="/study" className="side-link"><AppIcon name="target"/><span>Heute lernen</span></Link>
           <Link href="/search" className="side-link"><AppIcon name="search"/><span>Suche</span></Link>
           <Link href="/account" className="side-link"><AppIcon name="user"/><span>Konto</span></Link>
         </nav>
