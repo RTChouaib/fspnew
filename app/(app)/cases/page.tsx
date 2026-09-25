@@ -1,32 +1,5 @@
 import Link from 'next/link';
 import { getPublishedCases } from '@/lib/cases';
-
-const DIFFICULTY_LABEL: Record<number, string> = { 1: 'Leicht', 2: 'Mittel', 3: 'Schwer' };
-
-export default async function CasesPage() {
-  const cases = await getPublishedCases();
-
-  return (
-    <div style={{ maxWidth: 720, margin: '0 auto' }}>
-      <div className="section-num">FSP FÄLLE</div>
-      <h2>Patientengespräche üben</h2>
-      <p className="small-muted" style={{ marginBottom: 20 }}>
-        Simulierte Anamnesegespräche mit sofortigem, persönlichem Feedback.
-      </p>
-      {cases.map((c) => (
-        <Link key={c.id} href={`/cases/${c.slug}`} className="term-row" style={{ display: 'block' }}>
-          <div className="tr-main">{c.title}</div>
-          <div className="tr-sub">
-            {c.patientName}, {c.patientAge} Jahre · <span className="badge badge-cat">{c.specialty}</span>{' '}
-            · {DIFFICULTY_LABEL[c.difficulty] ?? c.difficulty} · {c.estimatedMinutes} Min
-          </div>
-        </Link>
-      ))}
-      {cases.length === 0 && (
-        <div className="empty-state">
-          <p>Noch keine Fälle veröffentlicht.</p>
-        </div>
-      )}
-    </div>
-  );
-}
+import { AppIcon } from '@/components/AppIcon';
+const DIFFICULTY_LABEL: Record<number,string>={1:'Leicht',2:'Mittel',3:'Schwer'};
+export default async function CasesPage(){const cases=await getPublishedCases();return <><div className="page-header"><div><div className="page-kicker">FSP Training</div><h1 className="page-title">Patientengespräche</h1><p className="page-subtitle">Trainiere Anamnese, medizinische Kommunikation und patientenfreundliche Sprache in realistischen Fällen.</p></div></div><div className="app-grid app-grid-2">{cases.map(c=><Link key={c.id} href={`/cases/${c.slug}`} className="app-card app-card-pad" style={{textDecoration:'none',color:'inherit'}}><div style={{display:'flex',justifyContent:'space-between',gap:12,alignItems:'flex-start'}}><div><div className="recommend-label">{c.specialty}</div><h3 style={{fontSize:17,fontWeight:750,margin:'6px 0 5px'}}>{c.title}</h3><p className="small-muted" style={{margin:0}}>{c.patientName}, {c.patientAge} Jahre</p></div><AppIcon name="chevron"/></div><div className="mini-meta" style={{marginTop:18}}><span className="meta-pill"><AppIcon name="clock" size={13}/>{c.estimatedMinutes} Min</span><span className="meta-pill">{DIFFICULTY_LABEL[c.difficulty]??c.difficulty}</span></div></Link>)}</div>{cases.length===0&&<div className="empty-state"><p>Noch keine Fälle veröffentlicht.</p></div>}</>;}

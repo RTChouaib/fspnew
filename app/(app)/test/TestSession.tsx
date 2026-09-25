@@ -82,11 +82,11 @@ export function TestSession({ questions }: { questions: Question[] }) {
   const pct = Math.round((index / questions.length) * 100);
 
   return (
-    <div style={{ maxWidth: 640, margin: '0 auto' }}>
+    <div style={{ maxWidth: 760, margin: '0 auto' }}><div className="page-kicker">FSP Kurztest</div><h1 className="page-title" style={{marginBottom:18}}>Wissen prüfen</h1>
       <div className="progress-bar-track">
         <div className="progress-bar-fill" style={{ width: `${pct}%` }} />
       </div>
-      <div className="question-card">
+      <div className="app-card question-card">
         <div className="question-kicker">
           {q.kicker} · Frage {index + 1}/{questions.length}
         </div>

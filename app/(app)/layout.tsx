@@ -2,49 +2,50 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getCurrentUserId } from '@/lib/session';
 import { getSubscription, canAccess } from '@/lib/progress';
+import { AppIcon } from '@/components/AppIcon';
 
-const TABS = [
-  { href: '/dashboard', icon: '⌂', label: 'Start' },
-  { href: '/cases', icon: '◆', label: 'Fälle' },
-  { href: '/practice', icon: '◐', label: 'Üben' },
-  { href: '/mistakes', icon: '✕', label: 'Fehler' },
-  { href: '/search', icon: '⌕', label: 'Suche' },
+const NAV = [
+  { href: '/dashboard', icon: 'home' as const, label: 'Dashboard' },
+  { href: '/practice', icon: 'book' as const, label: 'Üben' },
+  { href: '/cases', icon: 'stethoscope' as const, label: 'Fälle' },
+  { href: '/test', icon: 'clipboard' as const, label: 'Kurztest' },
+  { href: '/mistakes', icon: 'alert' as const, label: 'Fehler' },
 ];
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const userId = await getCurrentUserId();
   if (!userId) redirect('/login');
-
   const subscription = await getSubscription(userId);
   if (!canAccess(subscription, 'full')) redirect('/pricing?reason=paid');
 
   return (
-    <>
-      <div className="topbar">
-        <div className="topbar-inner">
-          <Link href="/dashboard" className="logo">
-            <span className="dot"></span>FSP Terminology
-          </Link>
-          <div className="nav-links">
-            <Link href="/dashboard" className="nav-link">START</Link>
-            <Link href="/cases" className="nav-link">FÄLLE</Link>
-            <Link href="/practice" className="nav-link">ÜBEN</Link>
-            <Link href="/test" className="nav-link">TEST</Link>
-            <Link href="/account" className="nav-link">KONTO</Link>
-          </div>
-        </div>
-      </div>
-      <div className="app-shell">
-        <div className="wrap">{children}</div>
-      </div>
-      <div className="tabbar">
-        {TABS.map((t) => (
-          <Link key={t.href} href={t.href} className="tab-item">
-            <span className="tab-icon">{t.icon}</span>
-            {t.label}
-          </Link>
-        ))}
-      </div>
-    </>
+    <div className="app-frame">
+      <aside className="app-sidebar">
+        <Link href="/dashboard" className="app-brand"><span className="brand-mark">F</span><span>FSP <b>Terminology</b></span></Link>
+        <div className="sidebar-label">TRAINING</div>
+        <nav className="side-nav">
+          {NAV.map((item) => <Link key={item.href} href={item.href} className="side-link"><AppIcon name={item.icon}/><span>{item.label}</span></Link>)}
+        </nav>
+        <div className="sidebar-spacer" />
+        <nav className="side-nav side-nav-secondary">
+          <Link href="/search" className="side-link"><AppIcon name="search"/><span>Suche</span></Link>
+          <Link href="/account" className="side-link"><AppIcon name="user"/><span>Konto</span></Link>
+        </nav>
+        <div className="sidebar-note"><span className="status-dot"/> FSP Vorbereitung<br/><small>Dein Training, Schritt für Schritt.</small></div>
+      </aside>
+
+      <main className="app-main">
+        <header className="mobile-app-header">
+          <Link href="/dashboard" className="app-brand"><span className="brand-mark">F</span><span>FSP <b>Terminology</b></span></Link>
+          <Link href="/account" className="icon-button" aria-label="Konto"><AppIcon name="user"/></Link>
+        </header>
+        <div className="app-content">{children}</div>
+      </main>
+
+      <nav className="mobile-tabbar">
+        {NAV.slice(0,4).map((item) => <Link key={item.href} href={item.href} className="mobile-tab"><AppIcon name={item.icon}/><span>{item.label}</span></Link>)}
+        <Link href="/search" className="mobile-tab"><AppIcon name="search"/><span>Mehr</span></Link>
+      </nav>
+    </div>
   );
 }

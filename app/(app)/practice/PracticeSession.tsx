@@ -44,7 +44,7 @@ export function PracticeSession({ initialQueue }: { initialQueue: Term[] }) {
         <div className="es-emoji">🎉</div>
         <h3>Alles erledigt!</h3>
         <p>Heute gibt es keine fälligen Wiederholungen.</p>
-        <Link href="/dashboard" className="btn btn-outline">
+        <Link href="/dashboard" className="app-btn app-btn-secondary">
           Zurück zum Start
         </Link>
       </div>
@@ -66,11 +66,11 @@ export function PracticeSession({ initialQueue }: { initialQueue: Term[] }) {
   const pct = Math.round((index / queue.length) * 100);
 
   return (
-    <div style={{ maxWidth: 640, margin: '0 auto' }}>
+    <div style={{ maxWidth: 760, margin: '0 auto' }}><div className="page-kicker">Begriffe trainieren</div><h1 className="page-title" style={{marginBottom:18}}>Aktive Wiederholung</h1>
       <div className="progress-bar-track">
         <div className="progress-bar-fill" style={{ width: `${pct}%` }} />
       </div>
-      <div className="flash-card">
+      <div className="app-card flash-card">
         <div className="question-kicker">
           Begriff {index + 1}/{queue.length}
         </div>
@@ -78,7 +78,7 @@ export function PracticeSession({ initialQueue }: { initialQueue: Term[] }) {
         {!revealed ? (
           <>
             <div className="flash-hint">Leertaste zum Aufdecken · Klick auf „Antwort anzeigen&quot;</div>
-            <button className="btn btn-outline" style={{ marginTop: 20 }} onClick={() => setRevealed(true)}>
+            <button className="app-btn app-btn-secondary" style={{ marginTop: 20 }} onClick={() => setRevealed(true)}>
               Antwort anzeigen
             </button>
           </>
@@ -95,10 +95,10 @@ export function PracticeSession({ initialQueue }: { initialQueue: Term[] }) {
               <div className="a-val">{term.explanation}</div>
             </div>
             <div className="judge-row">
-              <button className="judge-btn judge-wrong" onClick={() => judge(false)}>
+              <button className="app-btn app-btn-secondary judge-btn judge-wrong" onClick={() => judge(false)}>
                 ✗ Nicht gewusst <span className="small-muted">(1)</span>
               </button>
-              <button className="judge-btn judge-right" onClick={() => judge(true)}>
+              <button className="app-btn app-btn-primary judge-btn judge-right" onClick={() => judge(true)}>
                 ✓ Gewusst <span className="small-muted">(2)</span>
               </button>
             </div>
