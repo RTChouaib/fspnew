@@ -1,6 +1,7 @@
 import { TERMS, type Term } from '@/data/terms';
 import { getDueTermIds, getMistakeTermIds, getProgressMap } from '@/lib/progress';
 import { getWeakestSkills } from '@/lib/simulation';
+import { db } from '@/lib/db';
 
 export type LearningModule = {
   id: string;
@@ -89,4 +90,46 @@ export async function buildStudyPlan(userId: string) {
     weakSkills,
     estimatedMinutes: Math.min(40, 6 + newTerms.length + 5 + 12 + Math.min(3, mistakes.length)),
   };
+}
+
+function startOfDay(date = new Date()) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+export async function getOrCreateTodayStudySession(userId: string, focusCategory: string) {
+  const sessionDate = startOfDay();
+  return db.studySession.upsert({
+    where: { userId_sessionDate: { userId, sessionDate } },
+    update: {},
+    create: {
+      userId,
+      sessionDate,
+      focusCategory,
+      completedSteps: [],
+    },
+  });
+}
+
+export async function updateStudySession(
+  userId: string,
+  sessionId: string,
+  currentStep: number,
+  completedSteps: string[],
+  totalSteps: number,
+) {
+  const session = await db.studySession.findFirst({ where: { id: sessionId, userId } });
+  if (!session) return null;
+  const uniqueSteps = [...new Set(completedSteps)];
+  const completed = uniqueSteps.length >= totalSteps;
+  return db.studySession.update({
+    where: { id: session.id },
+    data: {
+      currentStep: Math.max(0, Math.min(currentStep, Math.max(totalSteps - 1, 0))),
+      completedSteps: uniqueSteps,
+      status: completed ? 'completed' : 'in_progress',
+      completedAt: completed ? new Date() : null,
+    },
+  });
 }

@@ -87,58 +87,28 @@ export function SimulationChat({
   const doctorTurns = transcript.filter((t) => t.role === 'doctor').length;
 
   return (
-    <div style={{ maxWidth: 640, margin: '0 auto', display: 'flex', flexDirection: 'column', minHeight: '65vh' }}>
+    <div className="simulation-shell">
       <div className="question-kicker">
         {caseTitle} · {patientName}, {patientAge} Jahre
       </div>
 
-      <div
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-          margin: '12px 0',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 10,
-          paddingRight: 4,
-        }}
-      >
+<div className="simulation-transcript">
         {transcript.map((entry, i) => (
-          <div
-            key={i}
-            style={{
-              alignSelf: entry.role === 'doctor' ? 'flex-end' : 'flex-start',
-              maxWidth: '80%',
-              background: entry.role === 'doctor' ? 'var(--blue)' : 'var(--card)',
-              color: entry.role === 'doctor' ? '#fff' : 'var(--ink)',
-              border: entry.role === 'doctor' ? 'none' : '1px solid var(--line)',
-              borderRadius: 12,
-              padding: '10px 14px',
-              fontSize: 14.5,
-              lineHeight: 1.45,
-            }}
-          >
+<div key={i} className={`simulation-bubble ${entry.role}`}>
             {entry.content}
           </div>
         ))}
-        {sending && (
-          <div
-            style={{
-              alignSelf: 'flex-start',
-              color: 'var(--muted)',
-              fontSize: 13,
-              fontStyle: 'italic',
-            }}
-          >
+<>{sending && (
+          <div className="small-muted" style={{ fontStyle: 'italic' }}>
             {patientName} antwortet…
           </div>
-        )}
+        )}</>
         <div ref={bottomRef} />
       </div>
 
       {error && <p className="err-text">{error}</p>}
 
-      <div style={{ display: 'flex', gap: 8 }}>
+      <div className="simulation-composer">
         <input
           className="search-input"
           style={{ flex: 1 }}

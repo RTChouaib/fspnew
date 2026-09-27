@@ -25,7 +25,7 @@ export default async function DashboardPage() {
     <section className="daily-plan-card app-card">
       <div className="daily-plan-top"><div><div className="learn-overline">HEUTIGER FOKUS</div><h2>{studyPlan.focusCategory}</h2><p>Deine Einheit verbindet Wiederholung, neue Begriffe, Anwendung und einen FSP-Check.</p></div><div className="daily-plan-time"><AppIcon name="clock" size={15}/> ca. {studyPlan.estimatedMinutes} Min</div></div>
       <div className="daily-steps"><span><b>01</b> Wiederholen</span><span><b>02</b> Lernen</span><span><b>03</b> Patientengespräch</span><span><b>04</b> Check</span></div>
-      <div className="daily-plan-bottom"><div className="daily-focus-term"><span>Heute im Fokus</span><b>{studyPlan.focusTerm.medicalTerm}</b><small>{studyPlan.focusTerm.patientTerms.join(' / ')}</small></div><Link href="/study" className="app-btn app-btn-primary">Training starten <AppIcon name="arrow" size={16}/></Link></div>
+      <div className="daily-plan-bottom"><div className="daily-focus-term"><span>Heute im Fokus</span><b>{studyPlan.focusTerm.medicalTerm}</b><small>{studyPlan.focusTerm.patientTerms.join(' / ')}</small></div><Link href="/study#start" className="app-btn app-btn-primary">Training starten <AppIcon name="arrow" size={16}/></Link></div>
     </section>
 
     <section className="app-section"><div className="section-title-app">Dein Fortschritt</div><div className="app-grid app-grid-4">
@@ -44,7 +44,7 @@ export default async function DashboardPage() {
       </div>
     </section>
 
-    {recommendedCase && <section className="app-section"><div className="section-heading-row"><div><div className="section-title-app" style={{margin:0}}>Als Nächstes anwenden</div><p className="small-muted">Setze deinen heutigen Schwerpunkt direkt im Gespräch ein.</p></div></div><div className="app-card case-recommend-inline"><div><div className="recommend-label">PATIENTENGESPRÄCH</div><div className="recommend-title">{recommendedCase.title}</div><p className="recommend-meta">{recommendedCase.patientName} · {recommendedCase.specialty} · {recommendedCase.estimatedMinutes} Min</p></div><Link href={`/cases/${recommendedCase.slug}`} className="app-btn app-btn-primary">Gespräch starten <AppIcon name="arrow" size={16}/></Link></div></section>}
+    {recommendedCase && <section className="app-section"><div className="section-heading-row"><div><div className="section-title-app" style={{margin:0}}>Als Nächstes anwenden</div><p className="small-muted">Setze deinen heutigen Schwerpunkt direkt im Gespräch ein.</p></div></div><div className="app-card case-recommend-inline"><div><div className="recommend-label">PATIENTENGESPRÄCH</div><div className="recommend-title">{recommendedCase.title}</div><p className="recommend-meta">{recommendedCase.patientName} · {recommendedCase.specialty} · {recommendedCase.estimatedMinutes} Min</p>{recommendedCase.resume && <p className="small-muted" style={{margin:'6px 0 0'}}>Du hast diesen Fall bereits begonnen.</p>}</div><Link href={`/cases/${recommendedCase.slug}`} className="app-btn app-btn-primary">Gespräch starten <AppIcon name="arrow" size={16}/></Link></div></section>}
 
     <section className="app-section"><div className="section-title-app">Freies Training</div><div className="app-grid app-grid-3">
       <Link href="/practice" className="app-card quick-card"><div className="quick-icon"><AppIcon name="book"/></div><div><div className="quick-title">Begriffe üben</div><div className="quick-desc">Spaced Repetition und Patientensprache</div></div><AppIcon name="chevron" size={16}/></Link>

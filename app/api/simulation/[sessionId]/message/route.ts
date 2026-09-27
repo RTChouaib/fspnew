@@ -3,6 +3,8 @@ import { getSessionForUser, appendTurn } from '@/lib/simulation';
 import { getCaseForSimulation } from '@/lib/cases';
 import { generatePatientResponse, type TranscriptEntry } from '@/lib/ai/patient';
 import { checkRateLimit } from '@/lib/ai/rateLimit';
+import { getSubscription, canAccess } from '@/lib/progress';
+import { trackEvent } from '@/lib/analytics';
 import { MAX_USER_MESSAGE_LENGTH, MAX_TRANSCRIPT_MESSAGES } from '@/lib/ai/schemas';
 
 export async function POST(req: Request, { params }: { params: Promise<{ sessionId: string }> }) {
@@ -10,6 +12,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ session
 
   const userId = await getCurrentUserId();
   if (!userId) return new Response('Unauthorized', { status: 401 });
+  const subscription = await getSubscription(userId);
+  if (!canAccess(subscription, 'full')) return new Response('Subscription required', { status: 402 });
 
   if (!checkRateLimit(`sim-message:${userId}`)) {
     return new Response('Zu viele Anfragen — bitte kurz warten.', { status: 429 });
@@ -63,6 +67,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ session
   const updatedTranscript = [...transcript, doctorEntry, patientEntry];
 
   await appendTurn(sessionId, updatedTranscript);
+  await trackEvent('case_message_sent', userId, { sessionId });
 
   return Response.json({ message: patientReply.message, emotion: patientReply.emotion });
 }

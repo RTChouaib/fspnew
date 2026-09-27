@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getCurrentUserId } from '@/lib/session';
 import { getSessionForUser } from '@/lib/simulation';
+import { termById } from '@/data/terms';
 import type { Evaluation } from '@/lib/ai/schemas';
 
 const SCORE_LABEL: Record<string, string> = {
@@ -105,6 +106,20 @@ export default async function ResultsPage({
         <h3 style={{ fontSize: 15 }}>Zusammenfassung</h3>
         <p style={{ fontSize: 13.5, margin: 0 }}>{evaluation.summary}</p>
       </div>
+
+      {session.reviewTermIds.length > 0 && (
+        <div className="card" style={{ marginBottom: 20 }}>
+          <h3 style={{ fontSize: 15 }}>Diese Begriffe solltest du wiederholen</h3>
+          <p className="small-muted">Deine Auswertung hat diese vorhandenen Begriffe als relevante Review-Themen erkannt.</p>
+          <div style={{ display: 'grid', gap: 8, marginTop: 12 }}>
+            {session.reviewTermIds.map((id) => {
+              const term = termById(id);
+              if (!term) return null;
+              return <Link key={id} href={`/term/${id}`} className="activity-row" style={{ padding: '10px 0' }}><div className="activity-main"><div className="activity-title">{term.medicalTerm}</div><div className="activity-meta">{term.patientTerms.join(' / ')}</div></div><span>→</span></Link>;
+            })}
+          </div>
+        </div>
+      )}
 
       <Link href="/cases" className="btn btn-blue btn-block">
         Weiteren Fall üben

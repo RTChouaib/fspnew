@@ -1,0 +1,1 @@
+ALTER TABLE "CaseSession" ADD COLUMN "reviewTermIds" TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[];

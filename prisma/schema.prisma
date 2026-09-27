@@ -18,6 +18,7 @@ model User {
   loginCodes   LoginCode[]
   caseSessions CaseSession[]
   skills       UserSkill[]
+  studySessions StudySession[]
 }
 
 model LoginCode {
@@ -128,7 +129,7 @@ model CaseSession {
   user               User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   caseId             String
   case               ClinicalCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
-  status             String       @default("in_progress") // in_progress | completed | abandoned
+  status             String       @default("in_progress") // in_progress | evaluating | completed | abandoned
   startedAt          DateTime     @default(now())
   completedAt        DateTime?
   messageCount       Int          @default(0)
@@ -141,6 +142,7 @@ model CaseSession {
   anamnesisScore     Int?
   languageScore      Int?
   communicationScore Int?
+  reviewTermIds      String[] @default([])
 
   @@index([userId, status])
   @@index([caseId])
@@ -158,4 +160,20 @@ model UserSkill {
   updatedAt     DateTime  @updatedAt
 
   @@unique([userId, skillKey])
+}
+
+model StudySession {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionDate     DateTime
+  focusCategory   String
+  currentStep     Int      @default(0)
+  completedSteps  String[]
+  status          String   @default("in_progress") // in_progress | completed
+  startedAt       DateTime @default(now())
+  completedAt     DateTime?
+
+  @@unique([userId, sessionDate])
+  @@index([userId, status])
 }

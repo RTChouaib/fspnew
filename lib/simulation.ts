@@ -55,7 +55,8 @@ export async function appendTurn(
 export async function completeSession(
   sessionId: string,
   evaluation: Evaluation,
-  durationSeconds: number
+  durationSeconds: number,
+  reviewTermIds: string[] = []
 ) {
   return db.caseSession.update({
     where: { id: sessionId },
@@ -68,6 +69,7 @@ export async function completeSession(
       anamnesisScore: evaluation.scores.anamnesis,
       languageScore: evaluation.scores.languageAccuracy,
       communicationScore: evaluation.scores.communication,
+      reviewTermIds,
     },
   });
 }
@@ -136,4 +138,41 @@ export async function getTrainingStandScore(userId: string): Promise<number | nu
   if (sessions.length === 0) return null;
   const sum = sessions.reduce((s, x) => s + (x.overallScore ?? 0), 0);
   return Math.round(sum / sessions.length);
+}
+
+/** Convert evaluator feedback into reviewable existing terminology without inventing terms. */
+export async function queueEvaluationWeaknesses(userId: string, evaluation: Evaluation) {
+  const { TERMS } = await import('@/data/terms');
+  const feedback = [
+    ...evaluation.missingInformation,
+    ...evaluation.strengths.filter(() => false),
+    ...evaluation.languageCorrections.map((c) => `${c.original} ${c.better}`),
+  ].join(' ').toLowerCase();
+
+  const candidates = TERMS.map((term) => {
+    const aliases = [
+      term.medicalTerm,
+      ...term.patientTerms,
+      ...(term.synonyms ?? []),
+      ...(term.relatedTerms ?? []),
+      ...(term.commonMistakes ?? []),
+      term.explanation,
+    ].map((x) => x.toLowerCase());
+    const hits = aliases.reduce((n, alias) => {
+      const normalized = alias.replace(/[^a-zäöüß0-9 ]/gi, ' ').trim();
+      if (!normalized || normalized.length < 4) return n;
+      return feedback.includes(normalized) ? n + 1 : n;
+    }, 0);
+    return { termId: term.id, hits };
+  }).filter((x) => x.hits > 0).sort((a, b) => b.hits - a.hits).slice(0, 8);
+
+  if (!candidates.length) return [];
+  await db.$transaction(
+    candidates.map(({ termId }) => db.mistake.upsert({
+      where: { userId_termId: { userId, termId } },
+      update: {},
+      create: { userId, termId },
+    }))
+  );
+  return candidates.map((x) => x.termId);
 }

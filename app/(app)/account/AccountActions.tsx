@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { logout } from '@/lib/actions';
+import { logout, deleteAccountAction } from '@/lib/actions';
 
-export function AccountActions({ isActive }: { isActive: boolean }) {
+export function AccountActions({ isActive, canDelete }: { isActive: boolean; canDelete: boolean }) {
   const router = useRouter();
   const [cancelling, setCancelling] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,6 +40,12 @@ export function AccountActions({ isActive }: { isActive: boolean }) {
     }
   }
 
+  async function handleDelete() {
+    if (!canDelete) return;
+    if (!confirm('Konto wirklich löschen? Dies löscht dauerhaft dein Konto, deinen Lernfortschritt, Fehler, Patientengespräche und gespeicherte Ergebnisse. Dieser Vorgang kann nicht rückgängig gemacht werden.')) return;
+    await deleteAccountAction();
+  }
+
   async function handleLogout() {
     await logout();
     router.push('/');
@@ -62,6 +68,7 @@ export function AccountActions({ isActive }: { isActive: boolean }) {
       <button className="btn btn-outline btn-block" style={{ marginTop: 10 }} onClick={handleLogout}>
         Abmelden
       </button>
+      {canDelete ? <button className="btn btn-danger-outline btn-block" style={{ marginTop: 10 }} onClick={handleDelete}>Konto dauerhaft löschen</button> : <p className="small-muted" style={{marginTop:10}}>Kontolöschung ist erst nach Ende deines Abos möglich.</p>}
     </>
   );
 }

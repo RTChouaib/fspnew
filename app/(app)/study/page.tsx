@@ -2,10 +2,23 @@ import Link from 'next/link';
 import { getCurrentUserId } from '@/lib/session';
 import { AppIcon } from '@/components/AppIcon';
 import { buildStudyPlan } from '@/lib/learning';
+import { getRecommendedCase } from '@/lib/cases';
+import { StudySession } from './StudySession';
+import { getOrCreateTodayStudySession } from '@/lib/learning';
 
 export default async function StudyPage() {
   const userId = (await getCurrentUserId())!;
-  const plan = await buildStudyPlan(userId);
+  const [plan, recommendedCase] = await Promise.all([buildStudyPlan(userId), getRecommendedCase(userId)]);
+  const persisted = await getOrCreateTodayStudySession(userId, plan.focusCategory);
+
+  const steps = [
+    { id: 'review', number: '01', title: 'Wiederholen', description: `${plan.reviewTerms.length} fällige Begriffe aus ${plan.focusCategory}`, duration: 'ca. 6 Min', href: '/practice', icon: 'book' as const },
+    { id: 'learn', number: '02', title: 'Neu lernen', description: plan.newTerms.length ? `${plan.newTerms.length} neue Begriffe mit Patientensprache und Arztbrief` : 'Keine neuen Begriffe in diesem Schwerpunkt — weiter üben.', duration: 'ca. 8 Min', href: plan.newTerms.length ? `/term/${plan.newTerms[0].id}` : '/practice', icon: 'target' as const },
+    { id: 'conversation', number: '03', title: 'Patientengespräch', description: recommendedCase ? `${recommendedCase.title} · ${recommendedCase.patientName} · echte interaktive Anamnese` : 'Ein interaktives Patientengespräch mit einem KI-Patienten.', duration: recommendedCase ? `ca. ${recommendedCase.estimatedMinutes} Min` : 'ca. 12 Min', href: recommendedCase ? `/cases/${recommendedCase.slug}` : '/cases', icon: 'stethoscope' as const },
+    { id: 'check', number: '04', title: 'Check', description: 'Teste, ob du die Begriffe im Kontext sicher abrufen kannst.', duration: 'ca. 5 Min', href: '/test', icon: 'clipboard' as const },
+    { id: 'mistakes', number: '05', title: 'Fehler schließen', description: plan.mistakes.length ? `${plan.mistakes.length} persönliche Fehler warten auf Wiederholung.` : 'Keine offenen Fehler — dieser Schritt kann übersprungen werden.', duration: 'ca. 3 Min', href: '/practice?mode=mistakes', icon: 'alert' as const },
+  ];
+
   return <>
     <div className="page-header">
       <div><div className="page-kicker">Heute</div><h1 className="page-title">Dein FSP-Training</h1><p className="page-subtitle">Eine geführte Einheit, die sich an deinem aktuellen Lernstand orientiert.</p></div>
@@ -17,13 +30,17 @@ export default async function StudyPage() {
       <div className="study-focus-term"><span>Beispielbegriff</span><strong>{plan.focusTerm.medicalTerm}</strong><small>{plan.focusTerm.patientTerms.join(' / ')}</small></div>
     </section>
 
-    <div className="study-tasks">
-      <div className="study-task"><div className="study-task-num">01</div><div className="study-task-icon"><AppIcon name="book"/></div><div className="study-task-copy"><b>Wiederholen</b><span>{plan.reviewTerms.length} fällige Begriffe aus {plan.focusCategory}</span></div><Link href="/practice" className="app-btn app-btn-secondary">Starten <AppIcon name="arrow" size={15}/></Link></div>
-      <div className="study-task"><div className="study-task-num">02</div><div className="study-task-icon"><AppIcon name="target"/></div><div className="study-task-copy"><b>Neu lernen</b><span>{plan.newTerms.length ? `${plan.newTerms.length} neue Begriffe mit Patientensprache und Arztbrief` : 'Keine neuen Begriffe in diesem Schwerpunkt — weiter üben.'}</span></div><Link href={plan.newTerms.length ? `/term/${plan.newTerms[0].id}` : '/practice'} className="app-btn app-btn-secondary">Lernen <AppIcon name="arrow" size={15}/></Link></div>
-      <div className="study-task"><div className="study-task-num">03</div><div className="study-task-icon"><AppIcon name="stethoscope"/></div><div className="study-task-copy"><b>Anwenden</b><span>Nutze dein Wissen in einem echten Patientengespräch.</span></div><Link href="/cases" className="app-btn app-btn-primary">Gespräch <AppIcon name="arrow" size={15}/></Link></div>
-      <div className="study-task"><div className="study-task-num">04</div><div className="study-task-icon"><AppIcon name="clipboard"/></div><div className="study-task-copy"><b>Check</b><span>Teste, ob du die Begriffe im Kontext sicher abrufen kannst.</span></div><Link href="/test" className="app-btn app-btn-secondary">Test <AppIcon name="arrow" size={15}/></Link></div>
-      {plan.mistakes.length > 0 && <div className="study-task"><div className="study-task-num">05</div><div className="study-task-icon"><AppIcon name="alert"/></div><div className="study-task-copy"><b>Fehler schließen</b><span>{plan.mistakes.length} persönliche Fehler warten auf Wiederholung.</span></div><Link href="/practice?mode=mistakes" className="app-btn app-btn-secondary">Fehler <AppIcon name="arrow" size={15}/></Link></div>}
-    </div>
+    <StudySession steps={steps} sessionId={persisted.id} currentStep={persisted.currentStep} completedSteps={persisted.completedSteps} status={persisted.status} />
+
+    <section className="study-tasks">
+      {steps.map((step) => (
+        <div key={step.id} className="study-task">
+          <div className="study-task-num">{step.number}</div><div className="study-task-icon"><AppIcon name={step.icon}/></div>
+          <div className="study-task-copy"><b>{step.title}</b><span>{step.description}</span></div>
+          <Link href={step.href} className="app-btn app-btn-secondary">Direkt öffnen <AppIcon name="arrow" size={15}/></Link>
+        </div>
+      ))}
+    </section>
 
     <section className="study-principle app-card"><div className="study-principle-icon"><AppIcon name="chart"/></div><div><b>Warum diese Reihenfolge?</b><p>Du lernst zuerst die Sprache, rufst sie aktiv ab und setzt sie danach im Patientengespräch ein. Feedback und Fehler fließen in deine nächste Einheit zurück.</p></div></section>
   </>;

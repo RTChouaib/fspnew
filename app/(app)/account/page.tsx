@@ -16,7 +16,8 @@ export default async function AccountPage() {
     getSubscription(userId),
   ]);
 
-  const isActive = subscription?.status === 'active';
+  const isActive = subscription?.status === 'active' || subscription?.status === 'trial';
+  const canDelete = !isActive;
 
   return (
     <div style={{ maxWidth: 640, margin: '0 auto' }}>
@@ -37,7 +38,7 @@ export default async function AccountPage() {
             : 'Kein aktives Abo'}
         </p>
       </div>
-      <AccountActions isActive={isActive} />
+      <AccountActions isActive={isActive} canDelete={canDelete} />
     </div>
   );
 }
