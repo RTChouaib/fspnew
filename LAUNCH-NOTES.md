@@ -45,3 +45,10 @@ npm run build
 Then test the real Patientengespräch flow against the production AI configuration.
 
 Paddle was intentionally not modified.
+
+## Latest UX fix
+- Production builds now run `prisma db seed` so the 10 synthetic Patientengespräch cases are present automatically.
+- Study steps now show green completion checks.
+- Completing a study activity offers a direct button to the next activity.
+- New-term study uses a real multi-term queue with automatic next-term progression.
+- Patientengespräch results can continue directly to the Check step.

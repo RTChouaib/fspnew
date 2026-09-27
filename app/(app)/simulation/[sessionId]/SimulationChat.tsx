@@ -10,12 +10,16 @@ export function SimulationChat({
   patientName,
   patientAge,
   initialTranscript,
+  returnTo,
+  studyStep,
 }: {
   sessionId: string;
   caseTitle: string;
   patientName: string;
   patientAge: number;
   initialTranscript: TranscriptEntry[];
+  returnTo?: string;
+  studyStep?: string;
 }) {
   const router = useRouter();
   const [transcript, setTranscript] = useState<TranscriptEntry[]>(initialTranscript);
@@ -77,7 +81,8 @@ export function SimulationChat({
         setEnding(false);
         return;
       }
-      router.push(`/simulation/${sessionId}/results`);
+      const qs = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}${studyStep ? `&studyStep=${encodeURIComponent(studyStep)}` : ''}` : '';
+      router.push(`/simulation/${sessionId}/results${qs}`);
     } catch {
       setError('Verbindungsfehler. Bitte versuche es erneut.');
       setEnding(false);

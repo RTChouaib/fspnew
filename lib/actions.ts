@@ -5,7 +5,7 @@ import { getOrCreateUser, getSubscription, recordAnswer, saveTestResult } from '
 import { getCurrentUserId, setSession, clearSession } from '@/lib/session';
 import { db } from '@/lib/db';
 import { createSession } from '@/lib/simulation';
-import { updateStudySession } from '@/lib/learning';
+import { updateStudySession, completeTodayStudyStep } from '@/lib/learning';
 import { canAccess } from '@/lib/progress';
 import { trackEvent } from '@/lib/analytics';
 
@@ -37,14 +37,17 @@ export async function logout() {
   await clearSession();
 }
 
-export async function startCaseSession(caseId: string) {
+export async function startCaseSession(caseId: string, returnTo?: string, studyStep?: string) {
   const userId = await getCurrentUserId();
   if (!userId) redirect('/pricing?reason=auth');
   const subscription = await getSubscription(userId);
   if (!canAccess(subscription, 'full')) redirect('/pricing?reason=paid');
 
   const existing = await db.caseSession.findFirst({ where: { userId, caseId, status: 'in_progress' } });
-  if (existing) redirect(`/simulation/${existing.id}`);
+  if (existing) {
+    const qs = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}${studyStep ? `&studyStep=${encodeURIComponent(studyStep)}` : ''}` : '';
+    redirect(`/simulation/${existing.id}${qs}`);
+  }
 
   const caseRecord = await db.clinicalCase.findUnique({
     where: { id: caseId, isPublished: true },
@@ -54,7 +57,8 @@ export async function startCaseSession(caseId: string) {
 
   const session = await createSession(userId, caseRecord.id, caseRecord.openingStatement);
   await trackEvent('case_started', userId, { caseId: caseRecord.id });
-  redirect(`/simulation/${session.id}`);
+  const qs = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}${studyStep ? `&studyStep=${encodeURIComponent(studyStep)}` : ''}` : '';
+  redirect(`/simulation/${session.id}${qs}`);
 }
 
 
@@ -69,6 +73,13 @@ export async function saveStudySessionProgress(input: {
   const result = await updateStudySession(userId, input.sessionId, input.currentStep, input.completedSteps, input.totalSteps);
   if (result) await trackEvent(input.completedSteps.length ? 'study_step_completed' : 'study_started', userId, { sessionId: input.sessionId, currentStep: input.currentStep });
   return result;
+}
+
+
+export async function completeStudyStepAction(stepId: string) {
+  const userId = await getCurrentUserId();
+  if (!userId) return null;
+  return completeTodayStudyStep(userId, stepId);
 }
 
 export async function deleteAccountAction() {

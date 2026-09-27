@@ -2,17 +2,16 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { recordAnswerAction, saveTestResultAction } from '@/lib/actions';
+import { recordAnswerAction, saveTestResultAction, completeStudyStepAction } from '@/lib/actions';
 import { termById } from '@/data/terms';
 import type { Question } from '@/lib/quiz';
 
-export function TestSession({ questions }: { questions: Question[] }) {
+export function TestSession({ questions, studyStep }: { questions: Question[]; studyStep?: string }) {
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<{ termId: string; correct: boolean }[]>([]);
   const [chosen, setChosen] = useState<string | null>(null);
-  const [result, setResult] = useState<{ score: number; total: number; weakCategories: string[] } | null>(
-    null
-  );
+  const [result, setResult] = useState<{ score: number; total: number; weakCategories: string[] } | null>(null);
+  const [continuing, setContinuing] = useState(false);
 
   const q = questions[index];
 
@@ -69,9 +68,9 @@ export function TestSession({ questions }: { questions: Question[] }) {
             <p style={{ fontSize: 13.5 }}>Keine besonderen Schwachstellen in diesem Test.</p>
           )}
         </div>
-        <Link href="/mistakes" className="btn btn-blue btn-block">
-          Fehler wiederholen
-        </Link>
+        {studyStep === 'check' ? <button className="btn btn-blue btn-block" disabled={continuing} onClick={async () => { setContinuing(true); await completeStudyStepAction('check'); window.location.href = '/practice?mode=mistakes&studyStep=mistakes'; }}>
+          {continuing ? 'Speichern…' : 'Weiter: Fehler schließen →'}
+        </button> : <Link href="/mistakes" className="btn btn-blue btn-block">Fehler wiederholen</Link>}
         <Link href="/dashboard" className="btn btn-outline btn-block" style={{ marginTop: 10 }}>
           Zurück zum Start
         </Link>

@@ -112,6 +112,23 @@ export async function getOrCreateTodayStudySession(userId: string, focusCategory
   });
 }
 
+
+export async function completeTodayStudyStep(userId: string, stepId: string) {
+  const session = await db.studySession.findFirst({ where: { userId, sessionDate: startOfDay() } });
+  if (!session) return null;
+  const steps = ['review', 'learn', 'conversation', 'check', 'mistakes'];
+  if (!steps.includes(stepId)) return null;
+  const uniqueSteps = [...new Set([...session.completedSteps, stepId])];
+  const mistakes = await db.mistake.count({ where: { userId } });
+  const requiredStepCount = mistakes > 0 ? steps.length : steps.length - 1;
+  const completed = uniqueSteps.length >= requiredStepCount;
+  const currentStep = Math.min(Math.max(steps.indexOf(stepId) + 1, 0), steps.length - 1);
+  return db.studySession.update({
+    where: { id: session.id },
+    data: { completedSteps: uniqueSteps, currentStep, status: completed ? 'completed' : 'in_progress', completedAt: completed ? new Date() : null },
+  });
+}
+
 export async function updateStudySession(
   userId: string,
   sessionId: string,

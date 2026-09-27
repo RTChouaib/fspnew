@@ -4,8 +4,9 @@ import { StartCaseButton } from './StartCaseButton';
 
 const DIFFICULTY_LABEL: Record<number, string> = { 1: 'Leicht', 2: 'Mittel', 3: 'Schwer' };
 
-export default async function CaseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function CaseDetailPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ from?: string; studyStep?: string }> }) {
   const { slug } = await params;
+  const { from, studyStep } = await searchParams;
   const c = await getCaseSummaryBySlug(slug);
   if (!c) notFound();
 
@@ -27,7 +28,7 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ slu
         Führe ein Anamnesegespräch auf Deutsch. Am Ende erhältst du eine detaillierte Auswertung —
         das ist eine Trainingsbewertung, kein offizielles FSP-Ergebnis.
       </p>
-      <StartCaseButton caseId={c.id} />
+      <StartCaseButton caseId={c.id} returnTo={from === 'study' ? '/study' : undefined} studyStep={studyStep} />
     </div>
   );
 }

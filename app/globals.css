@@ -253,3 +253,16 @@ button{font-family:var(--sans); cursor:pointer;}
 .simulation-composer{display:flex;gap:8px}
 .simulation-composer .search-input{flex:1}
 @media(max-width:620px){.simulation-shell{min-height:calc(100vh - 150px)}.simulation-bubble{max-width:92%}.simulation-composer{align-items:stretch}.simulation-composer .app-btn,.simulation-composer .btn{width:auto;min-width:76px}.simulation-composer .search-input{min-width:0}.simulation-shell .btn-outline{width:100%}}
+.study-step-rail{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--app-border)}
+.study-step-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--app-border);background:#fff;color:#667085;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:700;cursor:pointer;transition:.15s}
+.study-step-pill:hover:not(:disabled){border-color:#c8d6ea;transform:translateY(-1px)}
+.study-step-pill.is-active{border-color:#9fc0ef;background:#f4f8ff;color:#2563eb}
+.study-step-pill.is-done{border-color:#b7e4c7;background:#ecfdf3;color:#15803d}
+.study-step-pill.is-disabled{opacity:.65;cursor:default}
+.study-step-pill-icon{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#f1f4f8;color:#8a95a3;font-size:8px}
+.study-step-pill.is-active .study-step-pill-icon{background:#e4efff;color:#2563eb}
+.study-step-pill.is-done .study-step-pill-icon{background:#d8f7e3;color:#15803d}
+.study-task.is-done{border-color:#b7e4c7;background:#fbfffc}
+.study-task-check{width:22px;height:22px;border-radius:50%;background:#dcfce7;color:#15803d;display:grid;place-items:center}
+.study-complete-inline{display:flex;align-items:center;gap:16px;padding:22px;text-align:left}
+@media(max-width:620px){.study-step-rail{overflow-x:auto;flex-wrap:nowrap;padding-bottom:12px}.study-step-pill{flex:none}.study-complete-inline{flex-direction:column;align-items:flex-start}}

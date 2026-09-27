@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { getCurrentUserId } from '@/lib/session';
 import { getSessionForUser } from '@/lib/simulation';
 import { termById } from '@/data/terms';
+import { completeStudyStepAction } from '@/lib/actions';
 import type { Evaluation } from '@/lib/ai/schemas';
 
 const SCORE_LABEL: Record<string, string> = {
@@ -18,8 +19,10 @@ export default async function ResultsPage({
   params,
 }: {
   params: Promise<{ sessionId: string }>;
+  searchParams: Promise<{ returnTo?: string; studyStep?: string }>;
 }) {
   const { sessionId } = await params;
+  const { returnTo, studyStep } = await searchParams;
   const userId = (await getCurrentUserId())!;
   const session = await getSessionForUser(sessionId, userId);
   if (!session || session.status !== 'completed' || !session.evaluation) notFound();
@@ -121,8 +124,13 @@ export default async function ResultsPage({
         </div>
       )}
 
-      <Link href="/cases" className="btn btn-blue btn-block">
-        Weiteren Fall üben
+      {returnTo === '/study' && studyStep === 'conversation' ? (
+        <form action={async () => { 'use server'; await completeStudyStepAction('conversation'); redirect('/test?studyStep=check'); }} style={{ marginTop: 18 }}>
+          <button className="btn btn-blue btn-block">Gespräch abschließen & weiter zum Check →</button>
+        </form>
+      ) : null}
+      <Link href={returnTo === '/study' ? '/study' : '/cases'} className="btn btn-blue btn-block" style={{ marginTop: returnTo === '/study' ? 10 : 0 }}>
+        {returnTo === '/study' ? 'Zum Lernplan' : 'Weiteren Fall üben'}
       </Link>
       <Link href="/practice" className="btn btn-outline btn-block" style={{ marginTop: 10 }}>
         Begriffe wiederholen

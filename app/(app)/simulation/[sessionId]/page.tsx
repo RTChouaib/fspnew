@@ -8,8 +8,10 @@ export default async function SimulationPage({
   params,
 }: {
   params: Promise<{ sessionId: string }>;
+  searchParams: Promise<{ returnTo?: string; studyStep?: string }>;
 }) {
   const { sessionId } = await params;
+  const { returnTo, studyStep } = await searchParams;
   const userId = (await getCurrentUserId())!;
   const session = await getSessionForUser(sessionId, userId);
   if (!session) notFound();
@@ -24,6 +26,8 @@ export default async function SimulationPage({
       patientName={session.case.patientName}
       patientAge={session.case.patientAge}
       initialTranscript={transcript}
+      returnTo={returnTo}
+      studyStep={studyStep}
     />
   );
 }
