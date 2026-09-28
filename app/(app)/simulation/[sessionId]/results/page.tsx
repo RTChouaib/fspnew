@@ -17,6 +17,7 @@ const SCORE_LABEL: Record<string, string> = {
 
 export default async function ResultsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ sessionId: string }>;
   searchParams: Promise<{ returnTo?: string; studyStep?: string }>;

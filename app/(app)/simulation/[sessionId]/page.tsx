@@ -6,6 +6,7 @@ import type { TranscriptEntry } from '@/lib/ai/patient';
 
 export default async function SimulationPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ sessionId: string }>;
   searchParams: Promise<{ returnTo?: string; studyStep?: string }>;
@@ -15,7 +16,12 @@ export default async function SimulationPage({
   const userId = (await getCurrentUserId())!;
   const session = await getSessionForUser(sessionId, userId);
   if (!session) notFound();
-  if (session.status === 'completed') redirect(`/simulation/${sessionId}/results`);
+  if (session.status === 'completed') {
+    const query = new URLSearchParams();
+    if (returnTo) query.set('returnTo', returnTo);
+    if (studyStep) query.set('studyStep', studyStep);
+    redirect(`/simulation/${sessionId}/results${query.toString() ? `?${query.toString()}` : ''}`);
+  }
 
   const transcript = session.transcript as unknown as TranscriptEntry[];
 
