@@ -11,6 +11,7 @@ export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLab
   const [revealed, setRevealed] = useState(false);
   const [finished, setFinished] = useState(false);
   const [finishing, setFinishing] = useState(false);
+  const [answered, setAnswered] = useState<boolean | null>(null);
 
   const term = queue[index];
 
@@ -31,12 +32,7 @@ export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLab
     async (correct: boolean) => {
       if (!term) return;
       await recordAnswerAction(term.id, correct);
-      if (index + 1 >= queue.length) {
-        await finish();
-      } else {
-        setIndex((i) => i + 1);
-        setRevealed(false);
-      }
+      setAnswered(correct);
     },
     [term, index, queue.length, finish]
   );
@@ -48,14 +44,19 @@ export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLab
         e.preventDefault();
         if (!revealed) setRevealed(true);
       }
-      if (revealed) {
+      if (revealed && answered === null) {
         if (e.key === '1') void judge(false);
         if (e.key === '2') void judge(true);
+      }
+      if (answered !== null && e.key === 'Enter') {
+        e.preventDefault();
+        if (index + 1 >= queue.length) void finish();
+        else { setIndex((i) => i + 1); setRevealed(false); setAnswered(null); }
       }
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [term, revealed, judge, finished]);
+  }, [term, revealed, judge, finished, answered, index, queue.length, finish]);
 
   if (queue.length === 0) {
     return <div className="empty-state">
@@ -76,7 +77,7 @@ export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLab
     </div>;
   }
 
-  const pct = Math.round((index / queue.length) * 100);
+  const pct = Math.round(((index + (answered !== null ? 1 : 0)) / queue.length) * 100);
 
   return (
     <div style={{ maxWidth: 760, margin: '0 auto' }}>
@@ -103,10 +104,22 @@ export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLab
               <div className="a-label">Erklärung</div>
               <div className="a-val">{term.explanation}</div>
             </div>
-            <div className="judge-row">
-              <button className="app-btn app-btn-secondary judge-btn judge-wrong" onClick={() => void judge(false)}>✗ Nicht gewusst <span className="small-muted">(1)</span></button>
-              <button className="app-btn app-btn-primary judge-btn judge-right" onClick={() => void judge(true)}>✓ Gewusst <span className="small-muted">(2)</span></button>
-            </div>
+            {answered === null ? (
+              <div className="judge-row">
+                <button className="app-btn app-btn-secondary judge-btn judge-wrong" onClick={() => void judge(false)}>✗ Nicht gewusst <span className="small-muted">(1)</span></button>
+                <button className="app-btn app-btn-primary judge-btn judge-right" onClick={() => void judge(true)}>✓ Gewusst <span className="small-muted">(2)</span></button>
+              </div>
+            ) : (
+              <div style={{ marginTop: 20, paddingTop: 18, borderTop: '1px solid var(--app-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+                <div>
+                  <div className="learn-overline">BEGRIFF GESPEICHERT</div>
+                  <div style={{ fontWeight: 650 }}>{answered ? 'Gut — weiter zum nächsten Begriff.' : 'Kein Problem — dieser Begriff wird wiederholt.'}</div>
+                </div>
+                <button className="app-btn app-btn-primary" onClick={() => { if (index + 1 >= queue.length) void finish(); else { setIndex((i) => i + 1); setRevealed(false); setAnswered(null); } }}>
+                  {index + 1 >= queue.length ? 'Abschnitt abschließen' : 'Nächster Begriff'} <span>→</span>
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>
