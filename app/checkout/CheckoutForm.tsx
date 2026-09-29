@@ -16,8 +16,13 @@ export function CheckoutForm({ plan }: { plan: 'weekly' | 'monthly' | 'quarterly
   const [error, setError] = useState('');
   const [session, setSession] = useState<{ userId: string; email: string; alreadyActive: boolean } | null>(null);
   const [loading, setLoading] = useState(false);
+  const [accepted, setAccepted] = useState(false);
 
   async function handleContinue() {
+    if (!accepted) {
+      setError('Bitte bestätigen Sie die AGB und Rückerstattungsrichtlinie.');
+      return;
+    }
     if (!email.includes('@')) {
       setError('Bitte eine gültige E-Mail-Adresse eingeben.');
       return;
@@ -65,8 +70,19 @@ export function CheckoutForm({ plan }: { plan: 'weekly' | 'monthly' | 'quarterly
           placeholder="name@beispiel.de"
         />
       </div>
+      <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', margin: '14px 0', fontSize: 14, lineHeight: 1.45 }}>
+        <input
+          type="checkbox"
+          checked={accepted}
+          onChange={(e) => setAccepted(e.target.checked)}
+          style={{ marginTop: 3 }}
+        />
+        <span>
+          Ich habe die <Link href="/legal/agb">AGB</Link>, die <Link href="/legal/datenschutz">Datenschutzerklärung</Link> und die <Link href="/legal/refund">Rückerstattungsrichtlinie</Link> gelesen und akzeptiere sie.
+        </span>
+      </label>
       {error && <p className="err-text">{error}</p>}
-      <button className="btn btn-blue btn-block" onClick={handleContinue} disabled={loading}>
+      <button className="btn btn-blue btn-block" onClick={handleContinue} disabled={loading || !accepted}>
         {loading ? 'Einen Moment…' : 'Weiter zur Zahlung'}
       </button>
     </div>
