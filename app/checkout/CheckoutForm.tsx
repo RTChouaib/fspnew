@@ -5,12 +5,6 @@ import Link from 'next/link';
 import { startCheckoutSession } from '@/lib/actions';
 import { CheckoutButton } from '@/components/CheckoutButton';
 
-const PRICE_ID_BY_PLAN: Record<string, string> = {
-  weekly: process.env.NEXT_PUBLIC_PRICE_WEEKLY!,
-  monthly: process.env.NEXT_PUBLIC_PRICE_MONTHLY!,
-  quarterly: process.env.NEXT_PUBLIC_PRICE_QUARTERLY!,
-};
-
 export function CheckoutForm({ plan }: { plan: 'weekly' | 'monthly' | 'quarterly' }) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -50,12 +44,7 @@ export function CheckoutForm({ plan }: { plan: 'weekly' | 'monthly' | 'quarterly
 
   if (session) {
     return (
-      <CheckoutButton
-        priceId={PRICE_ID_BY_PLAN[plan]}
-        userEmail={session.email}
-        userId={session.userId}
-        label="Bezahlen"
-      />
+      <CheckoutButton plan={plan} userEmail={session.email} label="Bezahlen" />
     );
   }
 

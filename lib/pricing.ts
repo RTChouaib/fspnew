@@ -11,11 +11,10 @@ export interface PlanConfig {
   features: string[];
 }
 
-// Display copy only. The actual Paddle price IDs this maps to at checkout
-// live in env vars (PRICE_WEEKLY / NEXT_PUBLIC_PRICE_WEEKLY, etc.) — see
-// components/CheckoutButton.tsx and app/checkout/CheckoutForm.tsx. Changing
-// a price here does NOT change what Paddle actually charges; that requires
-// creating a new Price in the Paddle dashboard and updating the env var.
+// Display copy only. The actual Polar product IDs this maps to at checkout
+// live in server-side env vars (POLAR_PRODUCT_WEEKLY, etc.) and are selected
+// by app/api/checkout/route.ts. Changing display copy here does not change
+// what Polar charges; update the product price in Polar and the matching env var.
 const SHARED_FEATURES = [
   'Interaktive Patientengespräche (FSP Fälle)',
   'Sofortiges, persönliches Feedback',

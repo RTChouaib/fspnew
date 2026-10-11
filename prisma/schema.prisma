@@ -41,7 +41,9 @@ model Subscription {
   status               String    @default("free") // free | trial | active | expired
   plan                 String?   // weekly | monthly | quarterly
   paddleCustomerId     String?
-  paddleSubscriptionId String?
+  paddleSubscriptionId String? // retained for existing records during payment-provider migration
+  polarCustomerId      String?
+  polarSubscriptionId  String? @unique
   currentPeriodEnd     DateTime?
   cancelAtPeriodEnd    Boolean   @default(false)
   updatedAt            DateTime  @updatedAt

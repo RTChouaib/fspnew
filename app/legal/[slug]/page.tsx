@@ -39,7 +39,7 @@ const CONTENT: Record<string, { title: string; intro?: string; sections: { headi
         heading: '2. Welche Daten wir verarbeiten',
         body: [
           'Bei der Nutzung des Dienstes können insbesondere Ihre E-Mail-Adresse, Login-Daten, Lernfortschritt, Fehler- und Testergebnisse, Angaben zu abgeschlossenen Lerneinheiten sowie Daten zu Patientengesprächen und deren Auswertungen verarbeitet werden.',
-          'Für die Anmeldung wird ein zeitlich begrenzter Login-Code verwendet. Zahlungsdaten werden nicht von FSP Terminology gespeichert; die Zahlungsabwicklung erfolgt über Paddle als Merchant of Record.',
+          'Für die Anmeldung wird ein zeitlich begrenzter Login-Code verwendet. Zahlungsdaten werden nicht von FSP Terminology gespeichert; die Zahlungsabwicklung erfolgt über Polar als Merchant of Record.',
         ],
       },
       {
@@ -74,8 +74,8 @@ const CONTENT: Record<string, { title: string; intro?: string; sections: { headi
       {
         heading: '7. Zahlungsabwicklung',
         body: [
-          'Zahlungen und Abonnements werden über Paddle abgewickelt. Paddle tritt als Merchant of Record bzw. autorisierter Wiederverkäufer auf und verarbeitet Zahlungs- und Transaktionsdaten. FSP Terminology erhält insbesondere die für die Zuordnung des Abonnements erforderlichen Informationen, nicht die vollständigen Kartendaten.',
-          'Für Fragen zu einer Zahlung, Kündigung oder einer Rückerstattung können Sie die von Paddle bereitgestellten Support- und Customer-Portal-Funktionen nutzen; bei produktbezogenen Problemen können Sie zusätzlich FSP Terminology unter chouaib@by-rtc.com kontaktieren.',
+          'Zahlungen und Abonnements werden über Polar abgewickelt. Polar tritt als Merchant of Record bzw. autorisierter Wiederverkäufer auf und verarbeitet Zahlungs- und Transaktionsdaten. FSP Terminology erhält insbesondere die für die Zuordnung des Abonnements erforderlichen Informationen, nicht die vollständigen Kartendaten.',
+          'Für Fragen zu einer Zahlung, Kündigung oder einer Rückerstattung können Sie die von Polar bereitgestellten Support- und Customer-Portal-Funktionen nutzen; bei produktbezogenen Problemen können Sie zusätzlich FSP Terminology unter chouaib@by-rtc.com kontaktieren.',
         ],
       },
       {
@@ -134,7 +134,7 @@ const CONTENT: Record<string, { title: string; intro?: string; sections: { headi
       {
         heading: '4. Zahlungsabwicklung',
         body: [
-          'Unser Bestellvorgang wird über Paddle.com abgewickelt. Paddle.com handelt als Merchant of Record für unsere Bestellungen und übernimmt die Zahlungsabwicklung sowie die damit verbundenen Kundenservice- und Rückerstattungsprozesse.',
+          'Unser Bestellvorgang wird über Polar abgewickelt. Polar handelt als Merchant of Record für unsere Bestellungen und übernimmt die Zahlungsabwicklung sowie die damit verbundenen Kundenservice- und Rückerstattungsprozesse.',
           'Wir speichern keine vollständigen Zahlungs- oder Kartendaten.',
         ],
       },
@@ -142,22 +142,22 @@ const CONTENT: Record<string, { title: string; intro?: string; sections: { headi
         heading: '5. Kündigung',
         body: [
           'Ein Abonnement kann jederzeit gekündigt werden. Die Kündigung verhindert weitere Verlängerungen und wird grundsätzlich zum Ende des bereits bezahlten Abrechnungszeitraums wirksam, sofern nicht zwingende gesetzliche Rechte etwas anderes vorsehen.',
-          'Die Kündigung kann über das von Paddle bereitgestellte Kundenportal bzw. über den entsprechenden Link in der Zahlungs- oder Bestätigungs-E-Mail erfolgen.',
+          'Die Kündigung kann über das von Polar bereitgestellte Kundenportal bzw. über den entsprechenden Link in der Zahlungs- oder Bestätigungs-E-Mail erfolgen.',
         ],
       },
       {
         heading: '6. Rückerstattungen und Probleme',
         body: [
           'Wir möchten Probleme zunächst schnell beheben. Wenn ein wesentlicher technischer Fehler oder ein anhaltendes Zugangsproblem dazu führt, dass die gekaufte Leistung nicht wie beschrieben genutzt werden kann und der Fehler nicht innerhalb angemessener Zeit behoben werden kann, kann eine Rückerstattung für die betroffene Zahlung veranlasst werden.',
-          'Auch bei einer fehlerhaften oder doppelten Belastung können Sie sich an uns oder direkt an Paddle wenden. Paddle kann vollständige oder teilweise Rückerstattungen bearbeiten.',
-          'Darüber hinaus bleiben alle zwingenden gesetzlichen Verbraucherrechte unberührt. Die jeweils geltende Paddle Refund Policy gilt für die über Paddle abgewickelte Transaktion.',
+          'Auch bei einer fehlerhaften oder doppelten Belastung können Sie sich an uns oder direkt an Polar wenden. Polar kann vollständige oder teilweise Rückerstattungen bearbeiten.',
+          'Darüber hinaus bleiben alle zwingenden gesetzlichen Verbraucherrechte unberührt. Die jeweils geltende Polar refund policy gilt für die über Polar abgewickelte Transaktion.',
         ],
       },
       {
         heading: '7. Widerruf und Verbraucherrechte',
         body: [
           'Soweit für einen Käufer gesetzliche Widerrufs- oder Rücktrittsrechte gelten, bleiben diese unberührt. Bei digitalen Leistungen können besondere gesetzliche Voraussetzungen gelten, insbesondere wenn die Leistung unmittelbar nach dem Kauf beginnt.',
-          'Die für die konkrete Transaktion geltenden Rechte und Verfahren ergeben sich ergänzend aus der Paddle Refund Policy und den anwendbaren Verbraucherschutzvorschriften.',
+          'Die für die konkrete Transaktion geltenden Rechte und Verfahren ergeben sich ergänzend aus der Polar refund policy und den anwendbaren Verbraucherschutzvorschriften.',
         ],
       },
       {
@@ -220,10 +220,10 @@ const CONTENT: Record<string, { title: string; intro?: string; sections: { headi
         ],
       },
       {
-        heading: 'Zahlungen über Paddle',
+        heading: 'Zahlungen über Polar',
         body: [
-          'Paddle ist Merchant of Record für die über Paddle abgewickelten Käufe. Refund-Anträge können über Paddle.net oder über den Link in Ihrer Zahlungsbestätigung gestellt werden. Paddle entscheidet die Erstattung entsprechend seiner Refund Policy und den anwendbaren gesetzlichen Rechten.',
-          'Wenn ein Anspruch wegen eines technischen oder produktbezogenen Mangels besteht, kann Paddle eine Rückerstattung nach Prüfung des Problems vornehmen.',
+          'Polar ist Merchant of Record für die über Polar abgewickelten Käufe. Refund-Anträge können über Polar customer portal oder über den Link in Ihrer Zahlungsbestätigung gestellt werden. Polar entscheidet die Erstattung entsprechend seiner Refund Policy und den anwendbaren gesetzlichen Rechten.',
+          'Wenn ein Anspruch wegen eines technischen oder produktbezogenen Mangels besteht, kann Polar eine Rückerstattung nach Prüfung des Problems vornehmen.',
         ],
       },
       {

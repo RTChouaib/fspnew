@@ -2,12 +2,12 @@ import { db } from './db';
 import { getCurrentUserId } from './session';
 
 /*
- * This file is the ONLY place manual (non-Paddle) subscription writes
+ * This file is the ONLY place manual (non-provider) subscription writes
  * happen. It intentionally does not touch lib/progress.ts, whose header
  * comment reserves subscription writes there for the signature-verified
- * Paddle webhook. Keeping this separate means:
- *   - a manual grant can never be mistaken for a real Paddle purchase
- *   - if a real Paddle webhook later arrives for the same user, it just
+ * verified payment webhook. Keeping this separate means:
+ *   - a manual grant can never be mistaken for a real provider purchase
+ *   - if a real verified payment webhook later arrives for the same user, it just
  *     overwrites this row via the normal upsert-by-userId behavior
  */
 

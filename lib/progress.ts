@@ -33,52 +33,51 @@ export async function getSubscription(userId: string) {
 }
 
 /* ============================================================
-   PADDLE WEBHOOK WRITES — the ONLY place subscription status changes.
-   Never call these from a client-facing route; only from the
-   signature-verified webhook handler (see PRODUCTION-GUIDE.md §5).
+   PAYMENT WEBHOOK WRITES — subscription status is changed only by
+   the signature-verified Polar webhook or the explicit admin tools.
+   Never call these from a client-facing route.
    ============================================================ */
 
-export async function upsertSubscriptionFromPaddle(data: {
+export async function upsertSubscriptionFromPolar(data: {
   userId: string;
   status: AccessLevel;
   plan: 'weekly' | 'monthly' | 'quarterly';
-  paddleCustomerId: string;
-  paddleSubscriptionId: string;
+  polarCustomerId: string;
+  polarSubscriptionId: string;
   currentPeriodEnd: Date;
+  cancelAtPeriodEnd?: boolean;
 }) {
   return db.subscription.upsert({
     where: { userId: data.userId },
     update: {
       status: data.status,
       plan: data.plan,
-      paddleCustomerId: data.paddleCustomerId,
-      paddleSubscriptionId: data.paddleSubscriptionId,
+      polarCustomerId: data.polarCustomerId,
+      polarSubscriptionId: data.polarSubscriptionId,
       currentPeriodEnd: data.currentPeriodEnd,
-      cancelAtPeriodEnd: false,
+      cancelAtPeriodEnd: data.cancelAtPeriodEnd ?? false,
     },
     create: {
       userId: data.userId,
       status: data.status,
       plan: data.plan,
-      paddleCustomerId: data.paddleCustomerId,
-      paddleSubscriptionId: data.paddleSubscriptionId,
+      polarCustomerId: data.polarCustomerId,
+      polarSubscriptionId: data.polarSubscriptionId,
       currentPeriodEnd: data.currentPeriodEnd,
+      cancelAtPeriodEnd: data.cancelAtPeriodEnd ?? false,
     },
   });
 }
 
-export async function markSubscriptionCancelPending(userId: string) {
-  return db.subscription.update({
-    where: { userId },
-    data: { cancelAtPeriodEnd: true },
+export async function markPolarSubscriptionExpired(polarSubscriptionId: string) {
+  return db.subscription.updateMany({
+    where: { polarSubscriptionId },
+    data: { status: 'expired', cancelAtPeriodEnd: false },
   });
 }
 
-export async function markSubscriptionExpired(userId: string) {
-  return db.subscription.update({
-    where: { userId },
-    data: { status: 'expired', cancelAtPeriodEnd: false },
-  });
+export async function markPolarCancelPending(userId: string) {
+  return db.subscription.update({ where: { userId }, data: { cancelAtPeriodEnd: true } });
 }
 
 /* ============================================================

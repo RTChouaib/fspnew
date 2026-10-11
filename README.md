@@ -1,7 +1,7 @@
 # FSP Terminology
 
 Medical German terminology training platform for the Fachsprachprüfung (FSP), built with
-Next.js (App Router), Prisma + Postgres, and Paddle Billing for subscriptions.
+Next.js (App Router), Prisma + Postgres, and Polar for subscriptions.
 
 ## Setup
 
@@ -18,10 +18,7 @@ Prisma product), which is fully removed now, but if you're pointing at the same 
 database that toolchain touched, create a **new** database (e.g. a new Neon project) rather
 than reusing the old one, to rule out any leftover inconsistent state.
 
-After deploying, visit `/api/health` to confirm the database connection and every required
-environment variable are actually configured — check this before testing the full checkout
-flow, so a config problem shows up immediately instead of as a confusing failure three
-steps into the funnel.
+After deploying, visit `/api/health` to confirm the database connection, then test the Polar checkout and webhook in Polar sandbox mode before accepting live payments.
 
 ## Authentication
 
@@ -32,15 +29,11 @@ and `EMAIL_FROM`. Codes expire after 10 minutes and are limited to 5 attempts.
 
 ## Payments
 
-Paddle Billing, as merchant of record (handles VAT/sales tax globally, and supports sellers
+Polar, as merchant of record (handles VAT/sales tax globally, and supports sellers
 based in Algeria, unlike Stripe). Subscription status is **only ever** written by the
-signature-verified webhook at `/api/webhooks/paddle` — never by the client. See that file's
-comments for exactly which Paddle events are handled and why.
+signature-verified webhook at `/api/webhooks/polar` — never by the client. Configure Polar to send subscription events to `/api/webhooks/polar`. Access is granted only by a verified webhook, not by a browser redirect.
 
-If a webhook event is missing `customData.userId`, the handler now returns a `422` and logs
-the raw payload, instead of silently returning `200` with no database write — so a
-config/integration mismatch is visible immediately in Paddle's delivery log and your
-server logs, not hidden as a false "Delivered" success.
+The Polar webhook verifies the signed raw request before writing subscription state. Checkout metadata carries the internal user ID, and subscription access is never granted by the success-page redirect.
 
 ## Database schema
 
@@ -79,7 +72,7 @@ drift specifically) or compare the table list in Neon's dashboard against the mo
 Vercel + a custom domain. `npm run build` (`prisma migrate deploy && next build`) is what
 Vercel runs on every deploy, so schema changes ship automatically as long as the migration
 folder was committed. See the project's deployment notes for the rest of the checklist
-(environment variables, Paddle webhook URL, DNS, going live with real Paddle credentials).
+(environment variables, Polar webhook URL, DNS, going live with real Polar credentials).
 
 **Preview deployments:** if Vercel Preview builds point at the same `DATABASE_URL` as
 Production (common for small projects with a single database), they will also run

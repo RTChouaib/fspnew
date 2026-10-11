@@ -1,6 +1,6 @@
 // Fails loudly and immediately with a clear message when required
 // configuration is missing, instead of surfacing as a confusing downstream
-// error (a mysterious Prisma/Paddle failure three layers deep). Call the
+// error (a mysterious Prisma/payment-provider failure three layers deep). Call the
 // relevant function from any module that depends on that config, as early
 // as possible (module load time, not inside a request handler).
 
@@ -15,13 +15,14 @@ export function requireEnv(name: string): string {
   return value;
 }
 
-export function assertPaddleEnv() {
-  requireEnv('PAYMENT_PROVIDER_KEY');
-  requireEnv('PAYMENT_WEBHOOK_SECRET');
-  requireEnv('PRICE_WEEKLY');
-  requireEnv('PRICE_MONTHLY');
-  requireEnv('PRICE_QUARTERLY');
+export function assertPolarEnv() {
+  requireEnv('POLAR_ACCESS_TOKEN');
+  requireEnv('POLAR_WEBHOOK_SECRET');
+  requireEnv('POLAR_PRODUCT_WEEKLY');
+  requireEnv('POLAR_PRODUCT_MONTHLY');
+  requireEnv('POLAR_PRODUCT_QUARTERLY');
 }
+
 
 export function assertDatabaseEnv() {
   requireEnv('DATABASE_URL');

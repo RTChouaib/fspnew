@@ -1,26 +1,24 @@
-import { paddle } from '@/lib/paddle';
 import { getCurrentUserId } from '@/lib/session';
-import { getSubscription, markSubscriptionCancelPending } from '@/lib/progress';
+import { getSubscription, markPolarCancelPending } from '@/lib/progress';
 
 export async function POST() {
   const userId = await getCurrentUserId();
   if (!userId) return new Response('Unauthorized', { status: 401 });
-
   const subscription = await getSubscription(userId);
-  if (!subscription?.paddleSubscriptionId) {
-    return new Response('No active subscription', { status: 400 });
-  }
+  if (!subscription?.polarSubscriptionId) return new Response('No Polar subscription found', { status: 400 });
+  const token = process.env.POLAR_ACCESS_TOKEN;
+  if (!token) return new Response('Payment provider is not configured', { status: 503 });
 
-  // effectiveFrom: 'next_billing_period' — access continues until the period
-  // the user already paid for ends. No retention offers, no forced survey,
-  // matching the brief's "no dark patterns" cancellation requirement.
-  await paddle.subscriptions.cancel(subscription.paddleSubscriptionId, {
-    effectiveFrom: 'next_billing_period',
+  const response = await fetch(`https://api.polar.sh/v1/subscriptions/${encodeURIComponent(subscription.polarSubscriptionId)}`, {
+    method: 'PATCH',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ cancel_at_period_end: true }),
+    cache: 'no-store',
   });
-
-  // Reflect it immediately in the UI ("Dein Zugriff endet am ...") — the
-  // webhook will later confirm the actual status change when the period ends.
-  await markSubscriptionCancelPending(userId);
-
+  if (!response.ok) {
+    console.error('[polar cancel] API request failed', response.status, await response.text().catch(() => ''));
+    return new Response('Could not cancel subscription with Polar', { status: 502 });
+  }
+  await markPolarCancelPending(userId);
   return Response.json({ ok: true, currentPeriodEnd: subscription.currentPeriodEnd });
 }
