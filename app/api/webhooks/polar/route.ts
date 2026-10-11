@@ -1,8 +1,18 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
-import { db } from '@/lib/db';
 import { upsertSubscriptionFromPolar, markPolarSubscriptionExpired } from '@/lib/progress';
 
 export const runtime = 'nodejs';
+
+function signingKeys(secret: string): Buffer[] {
+  // Polar's SDK signs with the UTF-8 bytes of the *entire* secret string
+  // (including the `polar_whs_` prefix). Fall back to a base64-decoded key
+  // (standard-webhooks style) so either secret format verifies.
+  const keys = [Buffer.from(secret, 'utf8')];
+  const remainder = secret.replace(/^(polar_whs_|whsec_)/, '');
+  const decoded = Buffer.from(remainder, 'base64');
+  if (decoded.length && !decoded.equals(keys[0])) keys.push(decoded);
+  return keys;
+}
 
 function verifyPolarSignature(rawBody: string, req: Request, secret: string): boolean {
   const id = req.headers.get('webhook-id');
@@ -12,18 +22,13 @@ function verifyPolarSignature(rawBody: string, req: Request, secret: string): bo
   const ts = Number(timestamp);
   if (!Number.isFinite(ts) || Math.abs(Date.now() / 1000 - ts) > 300) return false;
 
-  // Polar webhook secrets use the `polar_whs_` prefix and a base64-encoded key.
-  const encodedKey = secret.startsWith('polar_whs_') ? secret.slice('polar_whs_'.length) : secret;
-  let key: Buffer;
-  try { key = Buffer.from(encodedKey, 'base64'); } catch { return false; }
-  if (!key.length) return false;
-  const expected = createHmac('sha256', key).update(`${id}.${timestamp}.${rawBody}`).digest('base64');
+  const signed = `${id}.${timestamp}.${rawBody}`;
+  const expectedList = signingKeys(secret).map((key) => Buffer.from(createHmac('sha256', key).update(signed).digest('base64')));
   return signatureHeader.split(' ').some((entry) => {
     const [version, supplied] = entry.split(',', 2);
     if (version !== 'v1' || !supplied) return false;
-    const a = Buffer.from(expected);
     const b = Buffer.from(supplied);
-    return a.length === b.length && timingSafeEqual(a, b);
+    return expectedList.some((a) => a.length === b.length && timingSafeEqual(a, b));
   });
 }
 

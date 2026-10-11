@@ -1,4 +1,5 @@
 import { getCurrentUserId } from '@/lib/session';
+import { polarApiBase } from '@/lib/env';
 import { getSubscription, markPolarCancelPending } from '@/lib/progress';
 
 export async function POST() {
@@ -9,7 +10,7 @@ export async function POST() {
   const token = process.env.POLAR_ACCESS_TOKEN;
   if (!token) return new Response('Payment provider is not configured', { status: 503 });
 
-  const response = await fetch(`https://api.polar.sh/v1/subscriptions/${encodeURIComponent(subscription.polarSubscriptionId)}`, {
+  const response = await fetch(`${polarApiBase()}/v1/subscriptions/${encodeURIComponent(subscription.polarSubscriptionId)}`, {
     method: 'PATCH',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ cancel_at_period_end: true }),

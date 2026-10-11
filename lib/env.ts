@@ -23,6 +23,11 @@ export function assertPolarEnv() {
   requireEnv('POLAR_PRODUCT_QUARTERLY');
 }
 
+// Set POLAR_SERVER=sandbox to use sandbox-api.polar.sh (sandbox tokens/products
+// do NOT work against production and vice versa).
+export function polarApiBase() {
+  return process.env.POLAR_SERVER === 'sandbox' ? 'https://sandbox-api.polar.sh' : 'https://api.polar.sh';
+}
 
 export function assertDatabaseEnv() {
   requireEnv('DATABASE_URL');

@@ -1,5 +1,6 @@
 import { getCurrentUserId } from '@/lib/session';
 import { db } from '@/lib/db';
+import { polarApiBase } from '@/lib/env';
 
 export const runtime = 'nodejs';
 
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
   }
 
   const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://fsp.by-rtc.com').replace(/\/$/, '');
-  const response = await fetch('https://api.polar.sh/v1/checkouts/', {
+  const response = await fetch(`${polarApiBase()}/v1/checkouts/`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
