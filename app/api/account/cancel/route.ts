@@ -6,9 +6,11 @@ export async function POST() {
   const userId = await getCurrentUserId();
   if (!userId) return new Response('Unauthorized', { status: 401 });
   const subscription = await getSubscription(userId);
-  if (!subscription?.polarSubscriptionId) return new Response('No Polar subscription found', { status: 400 });
+  if (!subscription?.polarSubscriptionId) {
+    return Response.json({ error: 'Dieses Abo wurde nicht über Polar abgeschlossen. Bitte kontaktiere den Support zum Kündigen.' }, { status: 400 });
+  }
   const token = process.env.POLAR_ACCESS_TOKEN;
-  if (!token) return new Response('Payment provider is not configured', { status: 503 });
+  if (!token) return Response.json({ error: 'Zahlungsanbieter ist nicht konfiguriert.' }, { status: 503 });
 
   const response = await fetch(`${polarApiBase()}/v1/subscriptions/${encodeURIComponent(subscription.polarSubscriptionId)}`, {
     method: 'PATCH',
@@ -18,7 +20,7 @@ export async function POST() {
   });
   if (!response.ok) {
     console.error('[polar cancel] API request failed', response.status, await response.text().catch(() => ''));
-    return new Response('Could not cancel subscription with Polar', { status: 502 });
+    return Response.json({ error: 'Kündigung bei Polar fehlgeschlagen. Bitte versuche es erneut.' }, { status: 502 });
   }
   await markPolarCancelPending(userId);
   return Response.json({ ok: true, currentPeriodEnd: subscription.currentPeriodEnd });

@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
+import { db } from '@/lib/db';
 import { upsertSubscriptionFromPolar, markPolarSubscriptionExpired } from '@/lib/progress';
 
 export const runtime = 'nodejs';
@@ -56,8 +57,13 @@ export async function POST(req: Request) {
     if (event.type.startsWith('subscription.')) {
       const customer = data.customer as Record<string, unknown> | undefined;
       const metadata = (data.metadata && typeof data.metadata === 'object' ? data.metadata : {}) as Record<string, unknown>;
-      const userId = typeof metadata.userId === 'string' ? metadata.userId
+      let userId = typeof metadata.userId === 'string' ? metadata.userId
         : typeof customer?.external_id === 'string' ? customer.external_id : null;
+      // Last-resort mapping: match the Polar customer's email to our user.
+      if (!userId && typeof customer?.email === 'string') {
+        const byEmail = await db.user.findUnique({ where: { email: customer.email.trim().toLowerCase() }, select: { id: true } });
+        userId = byEmail?.id ?? null;
+      }
       const subscriptionId = typeof data.id === 'string' ? data.id : null;
       if (!subscriptionId) return new Response('Missing subscription ID', { status: 422 });
 
