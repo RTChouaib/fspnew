@@ -1,6 +1,7 @@
 import { getCurrentUserId } from '@/lib/session';
 import { db } from '@/lib/db';
 import { polarApiBase } from '@/lib/env';
+import { randomUUID } from 'node:crypto';
 
 export const runtime = 'nodejs';
 
@@ -37,7 +38,29 @@ export async function POST(req: Request) {
     return Response.json({ error: 'Für dieses Konto besteht bereits ein aktives Abo.' }, { status: 409 });
   }
 
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://fsp.by-rtc.com').replace(/\/$/, '');
+  let appUrl = (process.env.NEXT_PUBLIC_APP_URL || '').trim() || 'https://fsp.by-rtc.com';
+  if (!/^https?:\/\//i.test(appUrl)) appUrl = `https://${appUrl}`;
+  appUrl = appUrl.replace(/\/+$/, '');
+
+  // Meta tracking: one event ID shared by the browser Purchase (success URL) and the
+  // server Purchase (webhook, via metadata) so Meta counts a purchase once. Identifiers
+  // for ad matching are only stored when the visitor granted marketing consent.
+  const metaEventId = `fsp_${randomUUID().replace(/-/g, '')}`;
+  const cookies = Object.fromEntries((req.headers.get('cookie') || '').split('; ').map((c) => {
+    const i = c.indexOf('=');
+    return i < 0 ? [c, ''] : [c.slice(0, i), c.slice(i + 1)];
+  }));
+  const metaMetadata: Record<string, string> = { metaEventId };
+  if (cookies.fsp_consent === 'granted') {
+    metaMetadata.metaConsent = '1';
+    const ip = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || req.headers.get('x-real-ip') || '';
+    const ua = req.headers.get('user-agent') || '';
+    if (cookies._fbp) metaMetadata.fbp = decodeURIComponent(cookies._fbp).slice(0, 200);
+    if (cookies._fbc) metaMetadata.fbc = decodeURIComponent(cookies._fbc).slice(0, 300);
+    if (ip) metaMetadata.ip = ip.slice(0, 100);
+    if (ua) metaMetadata.ua = ua.slice(0, 400);
+  }
+
   const response = await fetch(`${polarApiBase()}/v1/checkouts/`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
@@ -45,8 +68,8 @@ export async function POST(req: Request) {
       products: [productId],
       customer_email: user.email,
       external_customer_id: userId,
-      metadata: { userId, plan: typedPlan },
-      success_url: `${appUrl}/checkout/success?checkout_id={CHECKOUT_ID}`,
+      metadata: { userId, plan: typedPlan, ...metaMetadata },
+      success_url: `${appUrl}/checkout/success?checkout_id={CHECKOUT_ID}&eid=${metaEventId}&plan=${typedPlan}`,
       return_url: `${appUrl}/pricing`,
     }),
     cache: 'no-store',

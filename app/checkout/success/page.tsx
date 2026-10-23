@@ -1,13 +1,20 @@
 import Link from 'next/link';
 import { getCurrentUserId } from '@/lib/session';
 import { getSubscription } from '@/lib/progress';
+import { MetaPurchaseTracker } from '@/components/MetaPurchaseTracker';
 
-export default async function CheckoutSuccessPage() {
+export default async function CheckoutSuccessPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ eid?: string; plan?: string }>;
+}) {
+  const { eid, plan } = await searchParams;
   const userId = await getCurrentUserId();
   const subscription = userId ? await getSubscription(userId) : null;
   const active = subscription?.status === 'active' || subscription?.status === 'trial';
   return (
     <main className="wrap narrow" style={{ paddingTop: 64, paddingBottom: 64, textAlign: 'center' }}>
+      <MetaPurchaseTracker eventId={eid} plan={plan} />
       <div className="eyebrow">Polar Checkout</div>
       <h1>{active ? 'Zahlung bestätigt' : 'Zahlung wird bestätigt'}</h1>
       <p>{active

@@ -29,6 +29,14 @@ export function polarApiBase() {
   return process.env.POLAR_SERVER === 'sandbox' ? 'https://sandbox-api.polar.sh' : 'https://api.polar.sh';
 }
 
+// Public site URL with a scheme and no trailing slash, even if NEXT_PUBLIC_APP_URL
+// was entered as just "fsp.by-rtc.com".
+export function appBaseUrl() {
+  let url = (process.env.NEXT_PUBLIC_APP_URL || '').trim() || 'https://fsp.by-rtc.com';
+  if (!/^https?:\/\//i.test(url)) url = `https://${url}`;
+  return url.replace(/\/+$/, '');
+}
+
 export function assertDatabaseEnv() {
   requireEnv('DATABASE_URL');
 }

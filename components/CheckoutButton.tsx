@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { trackMeta } from '@/lib/metaClient';
+import { PLAN_VALUES } from '@/lib/metaShared';
 
 export function CheckoutButton({
   plan,
@@ -17,6 +19,7 @@ export function CheckoutButton({
   async function openCheckout() {
     setLoading(true);
     setError('');
+    trackMeta('InitiateCheckout', { value: PLAN_VALUES[plan], currency: 'EUR', content_name: plan, content_type: 'product' });
     try {
       const response = await fetch('/api/checkout', {
         method: 'POST',

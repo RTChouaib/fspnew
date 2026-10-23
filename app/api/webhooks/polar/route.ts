@@ -1,5 +1,7 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { db } from '@/lib/db';
+import { sendMetaPurchase } from '@/lib/meta';
+import { appBaseUrl } from '@/lib/env';
 import { upsertSubscriptionFromPolar, markPolarSubscriptionExpired } from '@/lib/progress';
 
 export const runtime = 'nodejs';
@@ -101,6 +103,13 @@ export async function POST(req: Request) {
           userId, status: 'active', plan, polarCustomerId: customerId, polarSubscriptionId: subscriptionId,
           currentPeriodEnd: periodEnd, cancelAtPeriodEnd: data.cancel_at_period_end === true,
         });
+        // First activation = the purchase. Never throws; skipped without marketing consent.
+        if (event.type === 'subscription.active') {
+          await sendMetaPurchase({
+            plan, userId, email: typeof customer?.email === 'string' ? customer.email : null,
+            metadata, sourceUrl: `${appBaseUrl()}/checkout/success`,
+          });
+        }
       }
     }
   } catch (error) {

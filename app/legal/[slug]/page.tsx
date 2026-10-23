@@ -26,7 +26,7 @@ const CONTENT: Record<string, { title: string; intro?: string; sections: { headi
   },
   datenschutz: {
     title: 'Datenschutzerklärung',
-    intro: 'Stand: 29. September 2026',
+    intro: 'Stand: 22. Oktober 2026',
     sections: [
       {
         heading: '1. Verantwortlicher',
@@ -79,9 +79,12 @@ const CONTENT: Record<string, { title: string; intro?: string; sections: { headi
         ],
       },
       {
-        heading: '8. Cookies und lokale Speicherung',
+        heading: '8. Cookies, lokale Speicherung und Werbemessung (Meta)',
         body: [
           'Die Anwendung verwendet technisch notwendige Cookies bzw. lokale Sitzungsinformationen, um den Login-Status und den sicheren Zugriff auf geschützte Bereiche zu ermöglichen. Diese Funktionen sind für den Betrieb des Dienstes erforderlich.',
+          'Nur mit Ihrer Einwilligung über das Cookie-Banner setzen wir das Meta Pixel und die Meta Conversions API der Meta Platforms Ireland Ltd. ein, um die Wirkung unserer Werbeanzeigen auf Facebook und Instagram zu messen und die Anzeigenauslieferung zu optimieren. Ohne Einwilligung wird das Pixel nicht geladen und es werden keine Daten an Meta übermittelt.',
+          'Bei erteilter Einwilligung können Seitenaufrufe, der Beginn eines Bezahlvorgangs und ein abgeschlossener Kauf (Tarif und Betrag) erfasst werden. Dabei können Meta-Cookies (_fbp, _fbc), die IP-Adresse, Browserinformationen sowie gehashte Kennungen (E-Mail-Adresse, interne Nutzer-ID) an Meta übermittelt werden, auch in die USA. Damit der Kauf serverseitig zugeordnet werden kann, werden diese Angaben bei erteilter Einwilligung zusätzlich als Teil des Bezahlvorgangs bei Polar hinterlegt. Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG).',
+          'Ihre Entscheidung wird in einem Cookie (fsp_consent) für 12 Monate gespeichert. Sie können sie jederzeit mit Wirkung für die Zukunft ändern oder widerrufen, indem Sie im Seitenfuß auf „Cookie-Einstellungen“ klicken.',
         ],
       },
       {

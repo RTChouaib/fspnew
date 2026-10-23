@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { DM_Serif_Display, Manrope, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
+import { ConsentBanner } from '@/components/ConsentBanner';
+import { MetaPixel } from '@/components/MetaPixel';
 
 const dmSerifDisplay = DM_Serif_Display({
   subsets: ['latin'],
@@ -44,6 +46,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         <Analytics />
+        <MetaPixel />
+        <ConsentBanner />
       </body>
     </html>
   );
