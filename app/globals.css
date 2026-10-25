@@ -167,7 +167,10 @@ button{font-family:var(--sans); cursor:pointer;}
   .pricing-grid{grid-template-columns:1fr;}
   .cat-grid{grid-template-columns:1fr 1fr;}
   .stat-row{grid-template-columns:1fr 1fr;}
-  .nav-links{display:none;}
+  /* Keep LOGIN reachable on phones; other links live on the page itself (hero CTA, pricing link). */
+  .nav-links{gap:12px;}
+  .nav-links .nav-hide-mobile{display:none;}
+  .nav-links .nav-login{border:1px solid var(--line-strong); border-radius:8px; padding:8px 14px; color:var(--ink); background:var(--card);}
   .habit-banner{padding:28px 22px;}
 }
 @media (max-width: 420px){
