@@ -12,9 +12,9 @@ export function ConsentBanner() {
       role="dialog"
       aria-label="Cookie-Einstellungen"
       style={{
-        position: 'fixed', left: 12, right: 12, bottom: 12, zIndex: 100, maxWidth: 720, margin: '0 auto',
+        position: 'fixed', left: 12, right: 12, bottom: 'calc(12px + env(safe-area-inset-bottom, 0px))', maxHeight: '75dvh', overflowY: 'auto', zIndex: 100, maxWidth: 720, margin: '0 auto',
         background: 'var(--card)', border: '1px solid var(--line-strong)', borderRadius: 12,
-        boxShadow: '0 8px 30px rgba(22,35,46,.18)', padding: 18,
+        boxShadow: '0 8px 30px rgba(22,35,46,.18)', padding: 16,
       }}
     >
       <p style={{ margin: '0 0 6px', color: 'var(--ink)', fontWeight: 600 }}>Cookies und Werbemessung</p>
