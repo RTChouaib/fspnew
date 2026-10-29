@@ -45,7 +45,9 @@ export async function startCaseSession(caseId: string, returnTo?: string, studyS
 
   const existing = await db.caseSession.findFirst({ where: { userId, caseId, status: 'in_progress' } });
   if (existing) {
-    const qs = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}${studyStep ? `&studyStep=${encodeURIComponent(studyStep)}` : ''}` : '';
+    const qs = returnTo
+      ? `?returnTo=${encodeURIComponent(returnTo)}${studyStep ? `&studyStep=${encodeURIComponent(studyStep)}` : ''}`
+      : '';
     redirect(`/simulation/${existing.id}${qs}`);
   }
 
@@ -57,10 +59,11 @@ export async function startCaseSession(caseId: string, returnTo?: string, studyS
 
   const session = await createSession(userId, caseRecord.id, caseRecord.openingStatement);
   await trackEvent('case_started', userId, { caseId: caseRecord.id });
-  const qs = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}${studyStep ? `&studyStep=${encodeURIComponent(studyStep)}` : ''}` : '';
+  const qs = returnTo
+    ? `?returnTo=${encodeURIComponent(returnTo)}${studyStep ? `&studyStep=${encodeURIComponent(studyStep)}` : ''}`
+    : '';
   redirect(`/simulation/${session.id}${qs}`);
 }
-
 
 export async function saveStudySessionProgress(input: {
   sessionId: string;
@@ -70,11 +73,20 @@ export async function saveStudySessionProgress(input: {
 }) {
   const userId = await getCurrentUserId();
   if (!userId) return null;
-  const result = await updateStudySession(userId, input.sessionId, input.currentStep, input.completedSteps, input.totalSteps);
-  if (result) await trackEvent(input.completedSteps.length ? 'study_step_completed' : 'study_started', userId, { sessionId: input.sessionId, currentStep: input.currentStep });
+  const result = await updateStudySession(
+    userId,
+    input.sessionId,
+    input.currentStep,
+    input.completedSteps,
+    input.totalSteps
+  );
+  if (result)
+    await trackEvent(input.completedSteps.length ? 'study_step_completed' : 'study_started', userId, {
+      sessionId: input.sessionId,
+      currentStep: input.currentStep,
+    });
   return result;
 }
-
 
 export async function completeStudyStepAction(stepId: string) {
   const userId = await getCurrentUserId();
@@ -87,7 +99,9 @@ export async function deleteAccountAction() {
   if (!userId) redirect('/login');
   const subscription = await getSubscription(userId);
   if (subscription && (subscription.status === 'active' || subscription.status === 'trial')) {
-    throw new Error('Bitte kündige dein Abo und warte bis zum Ende der laufenden Periode, bevor du dein Konto löschst.');
+    throw new Error(
+      'Bitte kündige dein Abo und warte bis zum Ende der laufenden Periode, bevor du dein Konto löschst.'
+    );
   }
   await db.user.delete({ where: { id: userId } });
   await clearSession();

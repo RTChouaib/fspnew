@@ -61,9 +61,7 @@ BEWERTUNGSKRITERIEN:
 ${JSON.stringify(input.rubric, null, 2)}
 
 TRANSKRIPT:
-${input.transcript
-  .map((t) => `${t.role === 'doctor' ? 'ARZT/ÄRZTIN' : 'PATIENT'}: ${t.content}`)
-  .join('\n')}`;
+${input.transcript.map((t) => `${t.role === 'doctor' ? 'ARZT/ÄRZTIN' : 'PATIENT'}: ${t.content}`).join('\n')}`;
 
   const messages: ChatMessage[] = [
     { role: 'system', content: EVALUATOR_SYSTEM_PROMPT },

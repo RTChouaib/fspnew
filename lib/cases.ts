@@ -3,7 +3,17 @@ import { db } from './db';
 export async function getPublishedCases() {
   return db.clinicalCase.findMany({
     where: { isPublished: true },
-    select: { id: true, slug: true, title: true, specialty: true, difficulty: true, estimatedMinutes: true, patientName: true, patientAge: true, patientSex: true },
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      specialty: true,
+      difficulty: true,
+      estimatedMinutes: true,
+      patientName: true,
+      patientAge: true,
+      patientSex: true,
+    },
     orderBy: { difficulty: 'asc' },
   });
 }
@@ -11,14 +21,33 @@ export async function getPublishedCases() {
 export async function getCaseSummaryBySlug(slug: string) {
   return db.clinicalCase.findUnique({
     where: { slug, isPublished: true },
-    select: { id: true, slug: true, title: true, specialty: true, difficulty: true, estimatedMinutes: true, patientName: true, patientAge: true, patientSex: true, openingStatement: true },
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      specialty: true,
+      difficulty: true,
+      estimatedMinutes: true,
+      patientName: true,
+      patientAge: true,
+      patientSex: true,
+      openingStatement: true,
+    },
   });
 }
 
 export async function getCaseForSimulation(id: string) {
   return db.clinicalCase.findUnique({
     where: { id },
-    select: { id: true, title: true, patientName: true, patientAge: true, patientSex: true, openingStatement: true, caseData: true },
+    select: {
+      id: true,
+      title: true,
+      patientName: true,
+      patientAge: true,
+      patientSex: true,
+      openingStatement: true,
+      caseData: true,
+    },
   });
 }
 
@@ -35,7 +64,9 @@ export async function getRecommendedCase(userId: string) {
     orderBy: { startedAt: 'desc' },
     select: {
       id: true,
-      case: { select: { id: true, slug: true, title: true, specialty: true, estimatedMinutes: true, patientName: true } },
+      case: {
+        select: { id: true, slug: true, title: true, specialty: true, estimatedMinutes: true, patientName: true },
+      },
     },
   });
   if (inProgress) return { ...inProgress.case, sessionId: inProgress.id, resume: true };
@@ -47,7 +78,14 @@ export async function getRecommendedCase(userId: string) {
   });
   const attemptedIds = attempted.map((s) => s.caseId);
 
-  const select = { id: true, slug: true, title: true, specialty: true, estimatedMinutes: true, patientName: true } as const;
+  const select = {
+    id: true,
+    slug: true,
+    title: true,
+    specialty: true,
+    estimatedMinutes: true,
+    patientName: true,
+  } as const;
   const unattempted = await db.clinicalCase.findFirst({
     where: { isPublished: true, id: { notIn: attemptedIds } },
     orderBy: { difficulty: 'asc' },
@@ -55,6 +93,10 @@ export async function getRecommendedCase(userId: string) {
   });
   if (unattempted) return { ...unattempted, sessionId: null, resume: false };
 
-  const fallback = await db.clinicalCase.findFirst({ where: { isPublished: true }, orderBy: { difficulty: 'asc' }, select });
+  const fallback = await db.clinicalCase.findFirst({
+    where: { isPublished: true },
+    orderBy: { difficulty: 'asc' },
+    select,
+  });
   return fallback ? { ...fallback, sessionId: null, resume: false } : null;
 }

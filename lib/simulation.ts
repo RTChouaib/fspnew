@@ -39,10 +39,7 @@ export async function getSessionForUser(sessionId: string, userId: string) {
   return session;
 }
 
-export async function appendTurn(
-  sessionId: string,
-  updatedTranscript: TranscriptEntry[]
-) {
+export async function appendTurn(sessionId: string, updatedTranscript: TranscriptEntry[]) {
   return db.caseSession.update({
     where: { id: sessionId },
     data: {
@@ -75,17 +72,12 @@ export async function completeSession(
 }
 
 /** Exponential moving average so one bad/lucky case doesn't swing a skill wildly. */
-export async function updateUserSkills(
-  userId: string,
-  skillResults: Evaluation['skillResults']
-) {
+export async function updateUserSkills(userId: string, skillResults: Evaluation['skillResults']) {
   for (const skill of skillResults) {
     const existing = await db.userSkill.findUnique({
       where: { userId_skillKey: { userId, skillKey: skill.skillKey } },
     });
-    const newScore = existing
-      ? Math.round(existing.score * 0.7 + skill.score * 0.3)
-      : skill.score;
+    const newScore = existing ? Math.round(existing.score * 0.7 + skill.score * 0.3) : skill.score;
 
     await db.userSkill.upsert({
       where: { userId_skillKey: { userId, skillKey: skill.skillKey } },
@@ -147,7 +139,9 @@ export async function queueEvaluationWeaknesses(userId: string, evaluation: Eval
     ...evaluation.missingInformation,
     ...evaluation.strengths.filter(() => false),
     ...evaluation.languageCorrections.map((c) => `${c.original} ${c.better}`),
-  ].join(' ').toLowerCase();
+  ]
+    .join(' ')
+    .toLowerCase();
 
   const candidates = TERMS.map((term) => {
     const aliases = [
@@ -164,15 +158,20 @@ export async function queueEvaluationWeaknesses(userId: string, evaluation: Eval
       return feedback.includes(normalized) ? n + 1 : n;
     }, 0);
     return { termId: term.id, hits };
-  }).filter((x) => x.hits > 0).sort((a, b) => b.hits - a.hits).slice(0, 8);
+  })
+    .filter((x) => x.hits > 0)
+    .sort((a, b) => b.hits - a.hits)
+    .slice(0, 8);
 
   if (!candidates.length) return [];
   await db.$transaction(
-    candidates.map(({ termId }) => db.mistake.upsert({
-      where: { userId_termId: { userId, termId } },
-      update: {},
-      create: { userId, termId },
-    }))
+    candidates.map(({ termId }) =>
+      db.mistake.upsert({
+        where: { userId_termId: { userId, termId } },
+        update: {},
+        create: { userId, termId },
+      })
+    )
   );
   return candidates.map((x) => x.termId);
 }

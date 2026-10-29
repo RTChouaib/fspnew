@@ -1,0 +1,485 @@
+/* Dashboard, stats and shared app grids — cascade order preserved from the original globals.css */
+.app-section {
+  margin-top: 30px;
+}
+.section-title-app {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px;
+}
+.section-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--app-primary);
+  text-decoration: none;
+}
+.app-grid {
+  display: grid;
+  gap: 16px;
+}
+.app-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.app-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.app-grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.app-stat {
+  padding: 17px 18px;
+}
+.app-stat-label {
+  font-size: 12px;
+  color: #5b6676;
+  font-weight: 600;
+}
+.app-stat-value {
+  font-size: 24px;
+  line-height: 1.1;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  margin-top: 7px;
+}
+.app-stat-note {
+  font-size: 12px;
+  color: #5b6676;
+  margin-top: 5px;
+}
+.recommend-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #5d79aa;
+  font-weight: 800;
+}
+.recommend-title {
+  font-size: 20px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  margin: 7px 0 5px;
+}
+.recommend-meta {
+  font-size: 12px;
+  color: #697586;
+  margin: 0;
+}
+.mini-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #f3f6fa;
+  color: #657184;
+  font-size: 12px;
+  font-weight: 650;
+}
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.skill-row {
+  padding: 13px 0;
+  border-top: 1px solid #edf0f4;
+}
+.skill-row:first-child {
+  border-top: 0;
+  padding-top: 2px;
+}
+.skill-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 650;
+  margin-bottom: 7px;
+}
+.skill-score {
+  color: #667085;
+}
+.activity-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-top: 1px solid #edf0f4;
+  text-decoration: none;
+  color: inherit;
+}
+.activity-row:first-child {
+  border-top: 0;
+  padding-top: 2px;
+}
+.activity-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #f2f6fc;
+  color: #4f76bc;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.activity-main {
+  min-width: 0;
+  flex: 1;
+}
+.activity-title {
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.activity-meta {
+  font-size: 12px;
+  color: #5b6676;
+  margin-top: 2px;
+}
+.activity-score {
+  font-size: 12px;
+  font-weight: 750;
+}
+.quick-card {
+  padding: 17px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.quick-card:hover {
+  border-color: #c9d5e5;
+}
+.quick-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f3f6fb;
+  color: #426eb7;
+  display: grid;
+  place-items: center;
+}
+.quick-title {
+  font-size: 13px;
+  font-weight: 700;
+}
+.quick-desc {
+  font-size: 12px;
+  color: #5b6676;
+  margin-top: 2px;
+}
+@media (max-width: 900px) {
+  .app-grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .app-grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 620px) {
+  .app-grid-2,
+  .app-grid-3 {
+    grid-template-columns: 1fr;
+  }
+  .app-grid-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .app-stat-value {
+    font-size: 21px;
+  }
+}
+.skill-preview-head span,
+.skill-preview-head b {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #5b6676;
+}
+.skill-preview {
+  background: #fff;
+  border: 1px solid #dfe5ed;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 14px 35px rgba(24, 39, 75, 0.05);
+}
+.skill-preview-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.skill-preview-head b {
+  color: #2563eb;
+}
+.dashboard-greeting {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.daily-plan-card {
+  padding: 24px;
+  background: linear-gradient(135deg, #f8fbff, #fff);
+  border-color: #d8e4f8;
+}
+.daily-plan-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.daily-plan-top h2 {
+  font-family: var(--sans);
+  font-size: 23px;
+  font-weight: 750;
+  margin: 6px 0 4px;
+}
+.daily-plan-top p {
+  font-size: 12px;
+  margin: 0;
+  max-width: 650px;
+}
+.daily-plan-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  color: #53647b;
+  font-size: 12px;
+  font-weight: 700;
+}
+.daily-steps {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.daily-steps span {
+  padding: 7px 9px;
+  border-radius: 999px;
+  background: #f0f4f9;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 650;
+}
+.daily-steps b {
+  color: #2563eb;
+  margin-right: 4px;
+}
+.daily-plan-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid #e7edf5;
+  padding-top: 18px;
+}
+.daily-focus-term span {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #5b6676;
+  font-weight: 800;
+}
+.daily-focus-term b {
+  display: block;
+  font-size: 15px;
+  margin-top: 3px;
+}
+.daily-focus-term small {
+  font-size: 12px;
+  color: #5b6676;
+}
+.section-heading-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+.case-recommend-inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  background: #f8fbff;
+  border-color: #dce7fb;
+}
+.case-recommend-inline .recommend-title {
+  margin-bottom: 3px;
+}
+.case-recommend-inline .app-btn {
+  flex: none;
+}
+@media (max-width: 900px) {
+  .dashboard-greeting {
+    align-items: flex-start;
+  }
+  .daily-plan-top {
+    flex-direction: column;
+  }
+}
+@media (max-width: 620px) {
+  .dashboard-greeting {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .dashboard-greeting > .app-btn {
+    width: 100%;
+  }
+  .daily-plan-bottom,
+  .case-recommend-inline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .case-recommend-inline .app-btn {
+    width: 100%;
+  }
+}
+.quick-card:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}
+.dashboard-greeting {
+  margin-bottom: 28px;
+}
+.dashboard-greeting .page-title {
+  margin-bottom: 8px;
+}
+.daily-plan-card {
+  border-radius: 18px;
+  padding: clamp(20px, 3vw, 30px);
+  box-shadow: 0 8px 28px rgba(34, 76, 140, 0.045);
+}
+.daily-plan-top h2 {
+  letter-spacing: -0.025em;
+}
+.daily-steps {
+  gap: 9px;
+}
+.daily-steps span {
+  padding: 8px 11px;
+  background: #f1f5fb;
+  border: 1px solid #e6edf7;
+  font-size: 12px;
+}
+.daily-plan-bottom {
+  margin-top: 4px;
+}
+.daily-focus-term b {
+  font-size: 17px;
+  letter-spacing: -0.015em;
+}
+.app-section {
+  margin-top: 30px;
+}
+.section-title-app {
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+.app-stat {
+  padding: 19px;
+  border-radius: 14px;
+}
+.app-stat-label {
+  letter-spacing: 0.075em;
+  line-height: 1.4;
+}
+.app-stat-value {
+  letter-spacing: -0.04em;
+}
+.quick-card {
+  min-height: 94px;
+  padding: 17px;
+  border-radius: 14px;
+  gap: 12px;
+}
+.quick-title {
+  letter-spacing: -0.01em;
+}
+.activity-row {
+  border-radius: 10px;
+  transition: background 0.14s ease;
+}
+.activity-row:hover {
+  background: #f7f9fc;
+}
+.case-recommend-inline {
+  border-radius: 16px;
+  padding: 22px;
+}
+@media (max-width: 620px) {
+  .dashboard-greeting {
+    margin-bottom: 20px;
+  }
+  .daily-plan-card {
+    padding: 18px;
+  }
+  .daily-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .daily-steps span {
+    white-space: nowrap;
+  }
+  .app-section {
+    margin-top: 24px;
+  }
+  .app-stat {
+    padding: 14px;
+  }
+  .app-stat-label {
+    font-size: 12px;
+  }
+  .app-stat-note {
+    line-height: 1.4;
+  }
+  .quick-card {
+    min-height: 78px;
+  }
+  .app-stat-label {
+    letter-spacing: 0.03em;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+  .app-stat-value {
+    font-size: 20px;
+  }
+  .app-grid-4 {
+    gap: 10px;
+  }
+  .daily-steps {
+    grid-template-columns: 1fr;
+  }
+  .daily-steps span {
+    white-space: normal;
+  }
+  .daily-plan-top h2 {
+    font-size: 20px;
+  }
+  .daily-plan-bottom .app-btn {
+    width: 100%;
+  }
+  .quick-card {
+    padding: 14px;
+  }
+  .activity-title {
+    white-space: normal;
+  }
+}
+@media (max-width: 360px) {
+  .app-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}

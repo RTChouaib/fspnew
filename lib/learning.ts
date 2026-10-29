@@ -12,20 +12,104 @@ export type LearningModule = {
 };
 
 export const LEARNING_MODULES: LearningModule[] = [
-  { id: 'grundlagen', title: 'Grundlagen & Anamnese', description: 'Baue die Sprache für strukturierte Anamnesen auf.', categories: ['Anamnese', 'Allgemeine Symptome'], icon: 'book' },
-  { id: 'herz', title: 'Herz & Kreislauf', description: 'Leitsymptome, Diagnosen und Patientensprache rund ums Herz.', categories: ['Herz & Kreislauf'], icon: 'stethoscope' },
-  { id: 'atmung', title: 'Atmung', description: 'Atemwegsbegriffe, Befunde und typische Gesprächssituationen.', categories: ['Atmung'], icon: 'stethoscope' },
-  { id: 'gastro', title: 'Gastroenterologie', description: 'Bauchbeschwerden, Alarmsymptome und relevante Diagnosen.', categories: ['Gastroenterologie'], icon: 'stethoscope' },
-  { id: 'neuro', title: 'Neurologie', description: 'Neurologische Leitsymptome und Notfallbegriffe sicher anwenden.', categories: ['Neurologie'], icon: 'stethoscope' },
-  { id: 'uro', title: 'Urologie', description: 'Typische urologische Beschwerden und Fachbegriffe.', categories: ['Urologie'], icon: 'stethoscope' },
-  { id: 'gyn', title: 'Gynäkologie', description: 'Gynäkologische Anamnese und zentrale Fachsprache.', categories: ['Gynäkologie'], icon: 'stethoscope' },
-  { id: 'ortho', title: 'Orthopädie', description: 'Schmerz, Trauma und klinische Untersuchungsbefunde.', categories: ['Orthopädie'], icon: 'stethoscope' },
-  { id: 'endo', title: 'Endokrinologie', description: 'Diabetes, Schilddrüse und Stoffwechselbegriffe.', categories: ['Endokrinologie'], icon: 'stethoscope' },
-  { id: 'infekt', title: 'Infektiologie', description: 'Infektiöse Leitsymptome, Diagnosen und Anamnese.', categories: ['Infektiologie'], icon: 'stethoscope' },
-  { id: 'notfall', title: 'Notfallmedizin', description: 'Vitalfunktionen, Notfälle und erste Maßnahmen.', categories: ['Notfallmedizin'], icon: 'stethoscope' },
-  { id: 'diagnostik', title: 'Diagnostik', description: 'Bildgebung, Labor und Funktionsdiagnostik.', categories: ['Diagnostik'], icon: 'clipboard' },
-  { id: 'medikamente', title: 'Medikamente', description: 'Wirkstoffgruppen und sichere Kommunikation über Medikamente.', categories: ['Medikamente'], icon: 'book' },
-  { id: 'eingriffe', title: 'Untersuchungen & Eingriffe', description: 'Prozeduren und Endoskopie patientengerecht erklären.', categories: ['Untersuchungen & Eingriffe'], icon: 'clipboard' },
+  {
+    id: 'grundlagen',
+    title: 'Grundlagen & Anamnese',
+    description: 'Baue die Sprache für strukturierte Anamnesen auf.',
+    categories: ['Anamnese', 'Allgemeine Symptome'],
+    icon: 'book',
+  },
+  {
+    id: 'herz',
+    title: 'Herz & Kreislauf',
+    description: 'Leitsymptome, Diagnosen und Patientensprache rund ums Herz.',
+    categories: ['Herz & Kreislauf'],
+    icon: 'stethoscope',
+  },
+  {
+    id: 'atmung',
+    title: 'Atmung',
+    description: 'Atemwegsbegriffe, Befunde und typische Gesprächssituationen.',
+    categories: ['Atmung'],
+    icon: 'stethoscope',
+  },
+  {
+    id: 'gastro',
+    title: 'Gastroenterologie',
+    description: 'Bauchbeschwerden, Alarmsymptome und relevante Diagnosen.',
+    categories: ['Gastroenterologie'],
+    icon: 'stethoscope',
+  },
+  {
+    id: 'neuro',
+    title: 'Neurologie',
+    description: 'Neurologische Leitsymptome und Notfallbegriffe sicher anwenden.',
+    categories: ['Neurologie'],
+    icon: 'stethoscope',
+  },
+  {
+    id: 'uro',
+    title: 'Urologie',
+    description: 'Typische urologische Beschwerden und Fachbegriffe.',
+    categories: ['Urologie'],
+    icon: 'stethoscope',
+  },
+  {
+    id: 'gyn',
+    title: 'Gynäkologie',
+    description: 'Gynäkologische Anamnese und zentrale Fachsprache.',
+    categories: ['Gynäkologie'],
+    icon: 'stethoscope',
+  },
+  {
+    id: 'ortho',
+    title: 'Orthopädie',
+    description: 'Schmerz, Trauma und klinische Untersuchungsbefunde.',
+    categories: ['Orthopädie'],
+    icon: 'stethoscope',
+  },
+  {
+    id: 'endo',
+    title: 'Endokrinologie',
+    description: 'Diabetes, Schilddrüse und Stoffwechselbegriffe.',
+    categories: ['Endokrinologie'],
+    icon: 'stethoscope',
+  },
+  {
+    id: 'infekt',
+    title: 'Infektiologie',
+    description: 'Infektiöse Leitsymptome, Diagnosen und Anamnese.',
+    categories: ['Infektiologie'],
+    icon: 'stethoscope',
+  },
+  {
+    id: 'notfall',
+    title: 'Notfallmedizin',
+    description: 'Vitalfunktionen, Notfälle und erste Maßnahmen.',
+    categories: ['Notfallmedizin'],
+    icon: 'stethoscope',
+  },
+  {
+    id: 'diagnostik',
+    title: 'Diagnostik',
+    description: 'Bildgebung, Labor und Funktionsdiagnostik.',
+    categories: ['Diagnostik'],
+    icon: 'clipboard',
+  },
+  {
+    id: 'medikamente',
+    title: 'Medikamente',
+    description: 'Wirkstoffgruppen und sichere Kommunikation über Medikamente.',
+    categories: ['Medikamente'],
+    icon: 'book',
+  },
+  {
+    id: 'eingriffe',
+    title: 'Untersuchungen & Eingriffe',
+    description: 'Prozeduren und Endoskopie patientengerecht erklären.',
+    categories: ['Untersuchungen & Eingriffe'],
+    icon: 'clipboard',
+  },
 ];
 
 export function termsForModule(module: LearningModule): Term[] {
@@ -45,7 +129,10 @@ export async function getLearningOverview(userId: string) {
   const [progress, mistakes, dueIds, weakSkills] = await Promise.all([
     getProgressMap(userId),
     getMistakeTermIds(userId),
-    getDueTermIds(userId, TERMS.map((t) => t.id)),
+    getDueTermIds(
+      userId,
+      TERMS.map((t) => t.id)
+    ),
     getWeakestSkills(userId, 5),
   ]);
   const total = TERMS.length;
@@ -63,17 +150,21 @@ export async function getLearningOverview(userId: string) {
 export async function buildStudyPlan(userId: string) {
   const [progress, dueIds, mistakeIds, weakSkills] = await Promise.all([
     getProgressMap(userId),
-    getDueTermIds(userId, TERMS.map((t) => t.id)),
+    getDueTermIds(
+      userId,
+      TERMS.map((t) => t.id)
+    ),
     getMistakeTermIds(userId),
     getWeakestSkills(userId, 3),
   ]);
 
   const weakSkillKeys = new Set(weakSkills.map((s) => s.skillKey.toLowerCase()));
   const candidateTerms = dueIds.map((id) => TERMS.find((t) => t.id === id)).filter(Boolean) as Term[];
-  const focusTerm = candidateTerms.find((t) => weakSkillKeys.has('terminology') || weakSkillKeys.has('patient_language'))
-    ?? candidateTerms[0]
-    ?? TERMS.find((t) => !progress[t.id])
-    ?? TERMS[0];
+  const focusTerm =
+    candidateTerms.find((t) => weakSkillKeys.has('terminology') || weakSkillKeys.has('patient_language')) ??
+    candidateTerms[0] ??
+    TERMS.find((t) => !progress[t.id]) ??
+    TERMS[0];
 
   const focusCategory = focusTerm.category;
   const focusTerms = TERMS.filter((t) => t.category === focusCategory);
@@ -112,7 +203,6 @@ export async function getOrCreateTodayStudySession(userId: string, focusCategory
   });
 }
 
-
 export async function completeTodayStudyStep(userId: string, stepId: string) {
   const session = await db.studySession.findFirst({ where: { userId, sessionDate: startOfDay() } });
   if (!session) return null;
@@ -125,7 +215,12 @@ export async function completeTodayStudyStep(userId: string, stepId: string) {
   const currentStep = Math.min(Math.max(steps.indexOf(stepId) + 1, 0), steps.length - 1);
   return db.studySession.update({
     where: { id: session.id },
-    data: { completedSteps: uniqueSteps, currentStep, status: completed ? 'completed' : 'in_progress', completedAt: completed ? new Date() : null },
+    data: {
+      completedSteps: uniqueSteps,
+      currentStep,
+      status: completed ? 'completed' : 'in_progress',
+      completedAt: completed ? new Date() : null,
+    },
   });
 }
 
@@ -134,7 +229,7 @@ export async function updateStudySession(
   sessionId: string,
   currentStep: number,
   completedSteps: string[],
-  totalSteps: number,
+  totalSteps: number
 ) {
   const session = await db.studySession.findFirst({ where: { id: sessionId, userId } });
   if (!session) return null;

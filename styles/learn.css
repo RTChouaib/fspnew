@@ -1,0 +1,258 @@
+/* Lernplan and learning modules — cascade order preserved from the original globals.css */
+.learn-overview {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 24px;
+  padding: 24px;
+  margin-bottom: 30px;
+}
+.learn-overline {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: #5b6676;
+  font-weight: 800;
+}
+.learn-progress-title {
+  font-size: 18px;
+  font-weight: 750;
+  margin-top: 5px;
+}
+.learn-progress-number {
+  font-size: 28px;
+  font-weight: 800;
+  color: #2563eb;
+  align-self: center;
+}
+.learn-progress-track {
+  grid-column: 1/-1;
+  height: 8px;
+  border-radius: 99px;
+  background: #edf1f5;
+  overflow: hidden;
+}
+.learn-progress-track span {
+  display: block;
+  height: 100%;
+  background: #2563eb;
+  border-radius: inherit;
+}
+.learn-mini-stats {
+  grid-column: 1/-1;
+  display: flex;
+  gap: 18px;
+  font-size: 12px;
+  color: #5b6676;
+}
+.learn-mini-stats b {
+  color: #344054;
+}
+.learn-section-heading {
+  margin-bottom: 14px;
+}
+.learn-module-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.learn-module {
+  display: grid;
+  grid-template-columns: 30px 40px 1fr auto 18px;
+  gap: 13px;
+  align-items: center;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: 0.15s;
+}
+.learn-module:hover {
+  border-color: #cbd7e7;
+  transform: translateY(-1px);
+}
+.learn-module-number {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #5b6676;
+}
+.learn-module-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: #eef4ff;
+  color: #2563eb;
+  display: grid;
+  place-items: center;
+}
+.learn-module-title {
+  font-size: 14px;
+  font-weight: 750;
+}
+.learn-module-desc {
+  font-size: 12px;
+  color: #5b6676;
+  margin-top: 2px;
+}
+.learn-module-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 9px;
+  max-width: 360px;
+}
+.learn-module-progress .app-progress {
+  height: 5px;
+}
+.learn-module-progress > span {
+  font-size: 12px;
+  font-weight: 700;
+  color: #667085;
+  width: 30px;
+}
+.learn-module-meta {
+  text-align: right;
+}
+.learn-module-meta b {
+  display: block;
+  font-size: 12px;
+}
+.learn-module-meta span {
+  font-size: 12px;
+  color: #5b6676;
+}
+@media (max-width: 900px) {
+  .learn-module {
+    grid-template-columns: 26px 38px 1fr 18px;
+  }
+  .learn-module-meta {
+    display: none;
+  }
+}
+@media (max-width: 620px) {
+  .learn-overview {
+    grid-template-columns: 1fr;
+  }
+  .learn-progress-number {
+    grid-row: 1;
+    grid-column: 2;
+    justify-self: end;
+  }
+  .learn-module {
+    grid-template-columns: 25px 38px 1fr 16px;
+    padding: 14px;
+  }
+  .learn-module-desc {
+    display: none;
+  }
+  .learn-module-progress {
+    max-width: none;
+  }
+}
+.module-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: center;
+  padding: 20px 22px;
+}
+.module-hero strong {
+  display: block;
+  font-size: 14px;
+  margin: 5px 0 10px;
+}
+.module-hero .app-progress {
+  max-width: 520px;
+  height: 7px;
+}
+.module-hero-number {
+  font-size: 28px;
+  font-weight: 800;
+  color: #2563eb;
+}
+.module-subcats {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+.module-subcats span {
+  padding: 5px 9px;
+  border-radius: 99px;
+  background: #f1f4f8;
+  color: #697586;
+  font-size: 12px;
+  font-weight: 650;
+}
+.module-term-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.module-term {
+  display: grid;
+  grid-template-columns: 1fr auto 16px;
+  gap: 15px;
+  align-items: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: inherit;
+}
+.module-term-name {
+  font-size: 14px;
+  font-weight: 750;
+}
+.module-term-patient {
+  font-size: 12px;
+  color: #5b6676;
+  margin-top: 3px;
+}
+.module-term-context {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.module-term-context > span:first-child {
+  font-size: 12px;
+  color: #5b6676;
+}
+.module-status {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 7px;
+  border-radius: 99px;
+  background: #f1f4f8;
+  color: #667085;
+}
+.module-status.is-done {
+  background: #ecfdf3;
+  color: #15803d;
+}
+.module-status.is-progress {
+  background: #eef4ff;
+  color: #2563eb;
+}
+@media (max-width: 620px) {
+  .module-page-header {
+    flex-direction: column;
+  }
+  .module-page-header > .app-btn {
+    width: 100%;
+  }
+  .module-hero {
+    grid-template-columns: 1fr;
+  }
+  .module-hero-number {
+    justify-self: start;
+  }
+  .module-term {
+    grid-template-columns: 1fr 16px;
+  }
+  .module-term-context {
+    grid-column: 1;
+  }
+  .module-term-context > span:first-child {
+    display: none;
+  }
+}
+.learn-module:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
+}

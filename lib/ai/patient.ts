@@ -55,9 +55,7 @@ export async function generatePatientResponse(
   latestUserMessage: string
 ): Promise<PatientResponse> {
   if (latestUserMessage.length === 0 || latestUserMessage.length > MAX_USER_MESSAGE_LENGTH) {
-    throw new AIProviderError(
-      `Message must be between 1 and ${MAX_USER_MESSAGE_LENGTH} characters`
-    );
+    throw new AIProviderError(`Message must be between 1 and ${MAX_USER_MESSAGE_LENGTH} characters`);
   }
   if (transcript.length >= MAX_TRANSCRIPT_MESSAGES) {
     throw new AIProviderError('This simulation has reached its maximum length');
