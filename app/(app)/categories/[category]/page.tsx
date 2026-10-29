@@ -1,16 +1,12 @@
 import Link from 'next/link';
-import { getCurrentUserId } from '@/lib/session';
+import { requireUser } from '@/lib/requireUser';
 import { getProgressMap } from '@/lib/progress';
 import { TERMS } from '@/data/terms';
 
-export default async function CategoryDetailPage({
-  params,
-}: {
-  params: Promise<{ category: string }>;
-}) {
+export default async function CategoryDetailPage({ params }: { params: Promise<{ category: string }> }) {
   const { category: rawCategory } = await params;
   const category = decodeURIComponent(rawCategory);
-  const userId = (await getCurrentUserId())!;
+  const userId = await requireUser();
   const progress = await getProgressMap(userId);
   const terms = TERMS.filter((t) => t.category === category);
 

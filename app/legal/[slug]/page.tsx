@@ -9,11 +9,7 @@ const CONTENT: Record<string, { title: string; intro?: string; sections: { headi
     sections: [
       {
         heading: 'Anbieter',
-        body: [
-          'FSP Terminology',
-          'Jnen El Bey, Annaba, Algerien',
-          'E-Mail: chouaib@by-rtc.com',
-        ],
+        body: ['FSP Terminology', 'Jnen El Bey, Annaba, Algerien', 'E-Mail: chouaib@by-rtc.com'],
       },
       {
         heading: 'Hinweise',
@@ -243,6 +239,12 @@ export function generateStaticParams() {
   return Object.keys(CONTENT).map((slug) => ({ slug }));
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const doc = CONTENT[slug];
+  return doc ? { title: doc.title, alternates: { canonical: `/legal/${slug}` } } : {};
+}
+
 export default async function LegalPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const entry = CONTENT[slug];
@@ -258,7 +260,9 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
           <section key={section.heading} style={{ marginTop: 28 }}>
             <h3 style={{ marginBottom: 10 }}>{section.heading}</h3>
             {section.body.map((p, i) => (
-              <p key={i} style={{ whiteSpace: 'pre-line' }}>{p}</p>
+              <p key={i} style={{ whiteSpace: 'pre-line' }}>
+                {p}
+              </p>
             ))}
           </section>
         ))}

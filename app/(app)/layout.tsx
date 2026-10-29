@@ -12,7 +12,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div className="app-frame">
       <AppNavigation />
-      <main className="app-main"><div className="app-content">{children}</div></main>
+      <main className="app-main">
+        <div className="app-content">{children}</div>
+      </main>
     </div>
   );
 }

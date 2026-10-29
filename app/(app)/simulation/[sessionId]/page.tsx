@@ -1,5 +1,5 @@
 import { notFound, redirect } from 'next/navigation';
-import { getCurrentUserId } from '@/lib/session';
+import { requireUser } from '@/lib/requireUser';
 import { getSessionForUser } from '@/lib/simulation';
 import { SimulationChat } from './SimulationChat';
 import type { TranscriptEntry } from '@/lib/ai/patient';
@@ -13,7 +13,7 @@ export default async function SimulationPage({
 }) {
   const { sessionId } = await params;
   const { returnTo, studyStep } = await searchParams;
-  const userId = (await getCurrentUserId())!;
+  const userId = await requireUser();
   const session = await getSessionForUser(sessionId, userId);
   if (!session) notFound();
   if (session.status === 'completed') {

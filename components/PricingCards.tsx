@@ -16,10 +16,7 @@ export function PricingCards() {
               <li key={f}>{f}</li>
             ))}
           </ul>
-          <Link
-            href={`/checkout?plan=${p.id}`}
-            className={`btn btn-block ${p.featured ? 'btn-blue' : 'btn-outline'}`}
-          >
+          <Link href={`/checkout?plan=${p.id}`} className={`btn btn-block ${p.featured ? 'btn-blue' : 'btn-outline'}`}>
             Wählen
           </Link>
         </div>

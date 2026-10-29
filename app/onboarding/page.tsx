@@ -40,7 +40,9 @@ export default function OnboardingPage() {
     }
 
     poll();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   if (!ready) {
@@ -55,8 +57,12 @@ export default function OnboardingPage() {
         </p>
         {timedOut && (
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginTop: 22 }}>
-            <button className="btn btn-blue" onClick={() => window.location.reload()}>Erneut prüfen</button>
-            <Link href="/login" className="btn btn-outline">Zum Login</Link>
+            <button className="btn btn-blue" onClick={() => window.location.reload()}>
+              Erneut prüfen
+            </button>
+            <Link href="/login" className="btn btn-outline">
+              Zum Login
+            </Link>
           </div>
         )}
       </div>

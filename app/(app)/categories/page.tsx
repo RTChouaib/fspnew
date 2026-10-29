@@ -1,2 +1,39 @@
-import Link from 'next/link';import {TERMS,CATEGORIES} from '@/data/terms';import {AppIcon} from '@/components/AppIcon';
-export default function CategoriesPage(){return <><div className="page-header"><div><div className="page-kicker">Begriffe</div><h1 className="page-title">Kategorien</h1><p className="page-subtitle">Strukturiere dein Lernen nach medizinischem Fachgebiet.</p></div></div><div className="app-grid app-grid-3">{CATEGORIES.map(c=>{const count=TERMS.filter(t=>t.category===c).length;return <Link key={c} href={`/categories/${encodeURIComponent(c)}`} className="app-card app-card-pad" style={{textDecoration:'none',color:'inherit'}}><div style={{display:'flex',justifyContent:'space-between'}}><div><div style={{fontSize:14,fontWeight:700}}>{c}</div><div className="small-muted" style={{marginTop:4}}>{count} Begriffe</div></div><AppIcon name="chevron"/></div></Link>})}</div></>;}
+import Link from 'next/link';
+import { TERMS, CATEGORIES } from '@/data/terms';
+import { AppIcon } from '@/components/AppIcon';
+export default function CategoriesPage() {
+  return (
+    <>
+      <div className="page-header">
+        <div>
+          <div className="page-kicker">Begriffe</div>
+          <h1 className="page-title">Kategorien</h1>
+          <p className="page-subtitle">Strukturiere dein Lernen nach medizinischem Fachgebiet.</p>
+        </div>
+      </div>
+      <div className="app-grid app-grid-3">
+        {CATEGORIES.map((c) => {
+          const count = TERMS.filter((t) => t.category === c).length;
+          return (
+            <Link
+              key={c}
+              href={`/categories/${encodeURIComponent(c)}`}
+              className="app-card app-card-pad"
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 700 }}>{c}</div>
+                  <div className="small-muted" style={{ marginTop: 4 }}>
+                    {count} Begriffe
+                  </div>
+                </div>
+                <AppIcon name="chevron" />
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </>
+  );
+}

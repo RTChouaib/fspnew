@@ -5,13 +5,28 @@ import Link from 'next/link';
 import { recordAnswerAction, completeStudyStepAction } from '@/lib/actions';
 import type { Term } from '@/data/terms';
 
-export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLabel, studyStep }: { initialQueue: Term[]; mode?: string; heading?: string; nextHref?: string; nextLabel?: string; studyStep?: string }) {
+export function PracticeSession({
+  initialQueue,
+  mode,
+  heading,
+  nextHref,
+  nextLabel,
+  studyStep,
+}: {
+  initialQueue: Term[];
+  mode?: string;
+  heading?: string;
+  nextHref?: string;
+  nextLabel?: string;
+  studyStep?: string;
+}) {
   const [queue] = useState(initialQueue);
   const [index, setIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [finished, setFinished] = useState(false);
   const [finishing, setFinishing] = useState(false);
   const [answered, setAnswered] = useState<boolean | null>(null);
+  const [saveNotice, setSaveNotice] = useState<string | null>(null);
 
   const term = queue[index];
 
@@ -19,8 +34,15 @@ export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLab
     setFinished(true);
     if (studyStep) {
       setFinishing(true);
-      await completeStudyStepAction(studyStep);
-      setFinishing(false);
+      try {
+        await completeStudyStepAction(studyStep);
+      } catch {
+        setSaveNotice(
+          'Der Lernschritt konnte nicht als erledigt gespeichert werden. Du kannst ihn im Lernplan erneut öffnen.'
+        );
+      } finally {
+        setFinishing(false);
+      }
     }
   }, [studyStep]);
 
@@ -31,8 +53,13 @@ export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLab
   const judge = useCallback(
     async (correct: boolean) => {
       if (!term) return;
-      await recordAnswerAction(term.id, correct);
       setAnswered(correct);
+      try {
+        await recordAnswerAction(term.id, correct);
+        setSaveNotice(null);
+      } catch {
+        setSaveNotice('Deine Antwort konnte nicht gespeichert werden. Du kannst trotzdem weiterüben.');
+      }
     },
     [term, index, queue.length, finish]
   );
@@ -51,7 +78,11 @@ export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLab
       if (answered !== null && e.key === 'Enter') {
         e.preventDefault();
         if (index + 1 >= queue.length) void finish();
-        else { setIndex((i) => i + 1); setRevealed(false); setAnswered(null); }
+        else {
+          setIndex((i) => i + 1);
+          setRevealed(false);
+          setAnswered(null);
+        }
       }
     }
     window.addEventListener('keydown', onKey);
@@ -59,22 +90,46 @@ export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLab
   }, [term, revealed, judge, finished, answered, index, queue.length, finish]);
 
   if (queue.length === 0) {
-    return <div className="empty-state">
-      <div className="es-emoji">🎉</div>
-      <h3>{mode === 'new' ? 'Keine neuen Begriffe' : mode === 'mistakes' ? 'Keine offenen Fehler' : 'Alles erledigt!'}</h3>
-      <p>{mode === 'new' ? 'In diesem Schwerpunkt gibt es aktuell keine neuen Begriffe.' : 'Dieser Abschnitt ist für heute bereits erledigt.'}</p>
-      {nextHref && <Link href={nextHref} className="app-btn app-btn-primary">{nextLabel ?? 'Weiter'} </Link>}
-    </div>;
+    return (
+      <div className="empty-state">
+        <div className="es-emoji">🎉</div>
+        <h3>
+          {mode === 'new' ? 'Keine neuen Begriffe' : mode === 'mistakes' ? 'Keine offenen Fehler' : 'Alles erledigt!'}
+        </h3>
+        <p>
+          {mode === 'new'
+            ? 'In diesem Schwerpunkt gibt es aktuell keine neuen Begriffe.'
+            : 'Dieser Abschnitt ist für heute bereits erledigt.'}
+        </p>
+        {nextHref && (
+          <Link href={nextHref} className="app-btn app-btn-primary">
+            {nextLabel ?? 'Weiter'}{' '}
+          </Link>
+        )}
+      </div>
+    );
   }
 
   if (finished || !term) {
-    return <div style={{ maxWidth: 760, margin: '0 auto', textAlign: 'center', paddingTop: 40 }}>
-      <div className="study-complete-inline app-card">
-        <div className="study-start-icon"><span style={{fontSize:22}}>✓</span></div>
-        <div><div className="learn-overline">ABSCHNITT ABGESCHLOSSEN</div><h2>{heading ?? 'Training'} fertig</h2><p>{queue.length} Begriffe bearbeitet. Der nächste Abschnitt wartet bereits.</p></div>
+    return (
+      <div style={{ maxWidth: 760, margin: '0 auto', textAlign: 'center', paddingTop: 40 }}>
+        <div className="study-complete-inline app-card">
+          <div className="study-start-icon">
+            <span style={{ fontSize: 22 }}>✓</span>
+          </div>
+          <div>
+            <div className="learn-overline">ABSCHNITT ABGESCHLOSSEN</div>
+            <h2>{heading ?? 'Training'} fertig</h2>
+            <p>{queue.length} Begriffe bearbeitet. Der nächste Abschnitt wartet bereits.</p>
+          </div>
+        </div>
+        {nextHref && (
+          <Link href={nextHref} className="app-btn app-btn-primary" style={{ marginTop: 16 }} aria-disabled={finishing}>
+            {finishing ? 'Speichern…' : (nextLabel ?? 'Weiter')} <span>→</span>
+          </Link>
+        )}
       </div>
-      {nextHref && <Link href={nextHref} className="app-btn app-btn-primary" style={{marginTop:16}} aria-disabled={finishing}>{finishing ? 'Speichern…' : nextLabel ?? 'Weiter'} <span>→</span></Link>}
-    </div>;
+    );
   }
 
   const pct = Math.round(((index + (answered !== null ? 1 : 0)) / queue.length) * 100);
@@ -82,15 +137,35 @@ export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLab
   return (
     <div style={{ maxWidth: 760, margin: '0 auto' }}>
       <div className="page-kicker">{heading ?? 'Begriffe trainieren'}</div>
-      <h1 className="page-title" style={{marginBottom:18}}>{mode === 'new' ? 'Neue Begriffe' : mode === 'mistakes' ? 'Meine Fehler' : 'Aktive Wiederholung'}</h1>
-      <div className="progress-bar-track"><div className="progress-bar-fill" style={{ width: `${pct}%` }} /></div>
+      <h1 className="page-title" style={{ marginBottom: 18 }}>
+        {mode === 'new' ? 'Neue Begriffe' : mode === 'mistakes' ? 'Meine Fehler' : 'Aktive Wiederholung'}
+      </h1>
+      <div
+        className="progress-bar-track"
+        role="progressbar"
+        aria-label="Fortschritt der Übung"
+        aria-valuemin={0}
+        aria-valuemax={queue.length}
+        aria-valuenow={index}
+      >
+        <div className="progress-bar-fill" style={{ width: `${pct}%` }} />
+      </div>
+      {saveNotice && (
+        <p className="err-text" role="alert">
+          {saveNotice}
+        </p>
+      )}
       <div className="app-card flash-card">
-        <div className="question-kicker">Begriff {index + 1}/{queue.length}</div>
+        <div className="question-kicker">
+          Begriff {index + 1}/{queue.length}
+        </div>
         <div className="flash-term">{term.medicalTerm}</div>
         {!revealed ? (
           <>
             <div className="flash-hint">Versuche zuerst, die Patientensprache selbst zu nennen.</div>
-            <button className="app-btn app-btn-secondary" style={{ marginTop: 20 }} onClick={() => setRevealed(true)}>Antwort anzeigen</button>
+            <button className="app-btn app-btn-secondary" style={{ marginTop: 20 }} onClick={() => setRevealed(true)}>
+              Antwort anzeigen
+            </button>
           </>
         ) : (
           <>
@@ -106,16 +181,42 @@ export function PracticeSession({ initialQueue, mode, heading, nextHref, nextLab
             </div>
             {answered === null ? (
               <div className="judge-row">
-                <button className="app-btn app-btn-secondary judge-btn judge-wrong" onClick={() => void judge(false)}>✗ Nicht gewusst <span className="small-muted">(1)</span></button>
-                <button className="app-btn app-btn-primary judge-btn judge-right" onClick={() => void judge(true)}>✓ Gewusst <span className="small-muted">(2)</span></button>
+                <button className="app-btn app-btn-secondary judge-btn judge-wrong" onClick={() => void judge(false)}>
+                  ✗ Nicht gewusst <span className="small-muted">(1)</span>
+                </button>
+                <button className="app-btn app-btn-primary judge-btn judge-right" onClick={() => void judge(true)}>
+                  ✓ Gewusst <span className="small-muted">(2)</span>
+                </button>
               </div>
             ) : (
-              <div style={{ marginTop: 20, paddingTop: 18, borderTop: '1px solid var(--app-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+              <div
+                style={{
+                  marginTop: 20,
+                  paddingTop: 18,
+                  borderTop: '1px solid var(--app-border)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 16,
+                }}
+              >
                 <div>
                   <div className="learn-overline">BEGRIFF GESPEICHERT</div>
-                  <div style={{ fontWeight: 650 }}>{answered ? 'Gut — weiter zum nächsten Begriff.' : 'Kein Problem — dieser Begriff wird wiederholt.'}</div>
+                  <div style={{ fontWeight: 650 }}>
+                    {answered ? 'Gut — weiter zum nächsten Begriff.' : 'Kein Problem — dieser Begriff wird wiederholt.'}
+                  </div>
                 </div>
-                <button className="app-btn app-btn-primary" onClick={() => { if (index + 1 >= queue.length) void finish(); else { setIndex((i) => i + 1); setRevealed(false); setAnswered(null); } }}>
+                <button
+                  className="app-btn app-btn-primary"
+                  onClick={() => {
+                    if (index + 1 >= queue.length) void finish();
+                    else {
+                      setIndex((i) => i + 1);
+                      setRevealed(false);
+                      setAnswered(null);
+                    }
+                  }}
+                >
                   {index + 1 >= queue.length ? 'Abschnitt abschließen' : 'Nächster Begriff'} <span>→</span>
                 </button>
               </div>

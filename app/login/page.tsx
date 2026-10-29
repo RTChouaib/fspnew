@@ -106,7 +106,12 @@ export default function LoginPage() {
               type="button"
               className="arrow-link"
               style={{ marginTop: 16 }}
-              onClick={() => { setSent(false); setCode(''); setError(''); setMessage(''); }}
+              onClick={() => {
+                setSent(false);
+                setCode('');
+                setError('');
+                setMessage('');
+              }}
             >
               Andere E-Mail verwenden
             </button>

@@ -4,7 +4,13 @@ import { StartCaseButton } from './StartCaseButton';
 
 const DIFFICULTY_LABEL: Record<number, string> = { 1: 'Leicht', 2: 'Mittel', 3: 'Schwer' };
 
-export default async function CaseDetailPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ from?: string; studyStep?: string }> }) {
+export default async function CaseDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ from?: string; studyStep?: string }>;
+}) {
   const { slug } = await params;
   const { from, studyStep } = await searchParams;
   const c = await getCaseSummaryBySlug(slug);
@@ -25,8 +31,8 @@ export default async function CaseDetailPage({ params, searchParams }: { params:
         <p style={{ margin: '4px 0 0', fontStyle: 'italic' }}>„{c.openingStatement}&quot;</p>
       </div>
       <p className="small-muted" style={{ marginBottom: 16 }}>
-        Führe ein Anamnesegespräch auf Deutsch. Am Ende erhältst du eine detaillierte Auswertung —
-        das ist eine Trainingsbewertung, kein offizielles FSP-Ergebnis.
+        Führe ein Anamnesegespräch auf Deutsch. Am Ende erhältst du eine detaillierte Auswertung — das ist eine
+        Trainingsbewertung, kein offizielles FSP-Ergebnis.
       </p>
       <StartCaseButton caseId={c.id} returnTo={from === 'study' ? '/study' : undefined} studyStep={studyStep} />
     </div>

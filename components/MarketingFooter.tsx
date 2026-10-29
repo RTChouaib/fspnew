@@ -12,8 +12,8 @@ export function MarketingFooter() {
           <Link href="/legal/refund">Rückerstattung</Link>
           <CookieSettingsLink />
           <span className="small-muted">
-            © {new Date().getFullYear()} FSP Terminology. Kein medizinisches oder amtliches
-            Prüfungsprodukt; unabhängiges Lernangebot zur Sprachvorbereitung.
+            © {new Date().getFullYear()} FSP Terminology. Kein medizinisches oder amtliches Prüfungsprodukt;
+            unabhängiges Lernangebot zur Sprachvorbereitung.
           </span>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { getCurrentUserId } from '@/lib/session';
+import { requireUser } from '@/lib/requireUser';
 import { getSessionForUser } from '@/lib/simulation';
 import { termById } from '@/data/terms';
 import { completeStudyStepAction } from '@/lib/actions';
@@ -24,7 +24,7 @@ export default async function ResultsPage({
 }) {
   const { sessionId } = await params;
   const { returnTo, studyStep } = await searchParams;
-  const userId = (await getCurrentUserId())!;
+  const userId = await requireUser();
   const session = await getSessionForUser(sessionId, userId);
   if (!session || session.status !== 'completed' || !session.evaluation) notFound();
 
@@ -35,8 +35,7 @@ export default async function ResultsPage({
       <div className="eyebrow">Trainingsauswertung — {session.case.title}</div>
       <h2>{evaluation.overallScore}/100</h2>
       <p className="small-muted">
-        Dies ist eine Trainingsbewertung zu Übungszwecken und entspricht keinem offiziellen
-        FSP-Ergebnis.
+        Dies ist eine Trainingsbewertung zu Übungszwecken und entspricht keinem offiziellen FSP-Ergebnis.
       </p>
 
       <div className="stat-row" style={{ marginTop: 18 }}>
@@ -83,8 +82,7 @@ export default async function ResultsPage({
               style={{
                 marginBottom: 14,
                 paddingBottom: 14,
-                borderBottom:
-                  i < evaluation.languageCorrections.length - 1 ? '1px solid var(--line)' : 'none',
+                borderBottom: i < evaluation.languageCorrections.length - 1 ? '1px solid var(--line)' : 'none',
               }}
             >
               <div className="a-label" style={{ fontSize: 11, textTransform: 'uppercase', color: 'var(--muted)' }}>
@@ -94,9 +92,7 @@ export default async function ResultsPage({
               <div className="a-label" style={{ fontSize: 11, textTransform: 'uppercase', color: 'var(--muted)' }}>
                 Bessere Formulierung
               </div>
-              <p style={{ margin: '2px 0 8px', fontSize: 13.5, color: 'var(--blue-dark)' }}>
-                „{c.better}&quot;
-              </p>
+              <p style={{ margin: '2px 0 8px', fontSize: 13.5, color: 'var(--blue-dark)' }}>„{c.better}&quot;</p>
               <div className="a-label" style={{ fontSize: 11, textTransform: 'uppercase', color: 'var(--muted)' }}>
                 Warum?
               </div>
@@ -114,23 +110,44 @@ export default async function ResultsPage({
       {session.reviewTermIds.length > 0 && (
         <div className="card" style={{ marginBottom: 20 }}>
           <h3 style={{ fontSize: 15 }}>Diese Begriffe solltest du wiederholen</h3>
-          <p className="small-muted">Deine Auswertung hat diese vorhandenen Begriffe als relevante Review-Themen erkannt.</p>
+          <p className="small-muted">
+            Deine Auswertung hat diese vorhandenen Begriffe als relevante Review-Themen erkannt.
+          </p>
           <div style={{ display: 'grid', gap: 8, marginTop: 12 }}>
             {session.reviewTermIds.map((id) => {
               const term = termById(id);
               if (!term) return null;
-              return <Link key={id} href={`/term/${id}`} className="activity-row" style={{ padding: '10px 0' }}><div className="activity-main"><div className="activity-title">{term.medicalTerm}</div><div className="activity-meta">{term.patientTerms.join(' / ')}</div></div><span>→</span></Link>;
+              return (
+                <Link key={id} href={`/term/${id}`} className="activity-row" style={{ padding: '10px 0' }}>
+                  <div className="activity-main">
+                    <div className="activity-title">{term.medicalTerm}</div>
+                    <div className="activity-meta">{term.patientTerms.join(' / ')}</div>
+                  </div>
+                  <span>→</span>
+                </Link>
+              );
             })}
           </div>
         </div>
       )}
 
       {returnTo === '/study' && studyStep === 'conversation' ? (
-        <form action={async () => { 'use server'; await completeStudyStepAction('conversation'); redirect('/test?studyStep=check'); }} style={{ marginTop: 18 }}>
+        <form
+          action={async () => {
+            'use server';
+            await completeStudyStepAction('conversation');
+            redirect('/test?studyStep=check');
+          }}
+          style={{ marginTop: 18 }}
+        >
           <button className="btn btn-blue btn-block">Gespräch abschließen & weiter zum Check →</button>
         </form>
       ) : null}
-      <Link href={returnTo === '/study' ? '/study' : '/cases'} className="btn btn-blue btn-block" style={{ marginTop: returnTo === '/study' ? 10 : 0 }}>
+      <Link
+        href={returnTo === '/study' ? '/study' : '/cases'}
+        className="btn btn-blue btn-block"
+        style={{ marginTop: returnTo === '/study' ? 10 : 0 }}
+      >
         {returnTo === '/study' ? 'Zum Lernplan' : 'Weiteren Fall üben'}
       </Link>
       <Link href="/practice" className="btn btn-outline btn-block" style={{ marginTop: 10 }}>

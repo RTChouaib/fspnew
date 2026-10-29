@@ -1,4 +1,4 @@
-import { getCurrentUserId } from '@/lib/session';
+import { requireUser } from '@/lib/requireUser';
 import { getSubscription } from '@/lib/progress';
 import { db } from '@/lib/db';
 import { AccountActions } from './AccountActions';
@@ -10,7 +10,7 @@ const PLAN_LABEL: Record<string, string> = {
 };
 
 export default async function AccountPage() {
-  const userId = (await getCurrentUserId())!;
+  const userId = await requireUser();
   const [user, subscription] = await Promise.all([
     db.user.findUnique({ where: { id: userId } }),
     getSubscription(userId),

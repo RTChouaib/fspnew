@@ -34,7 +34,11 @@ export function AccountActions({ isActive, canDelete }: { isActive: boolean; can
       }
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Kündigung fehlgeschlagen. Bitte versuche es erneut oder kontaktiere den Support.');
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Kündigung fehlgeschlagen. Bitte versuche es erneut oder kontaktiere den Support.'
+      );
     } finally {
       setCancelling(false);
     }
@@ -42,7 +46,12 @@ export function AccountActions({ isActive, canDelete }: { isActive: boolean; can
 
   async function handleDelete() {
     if (!canDelete) return;
-    if (!confirm('Konto wirklich löschen? Dies löscht dauerhaft dein Konto, deinen Lernfortschritt, Fehler, Patientengespräche und gespeicherte Ergebnisse. Dieser Vorgang kann nicht rückgängig gemacht werden.')) return;
+    if (
+      !confirm(
+        'Konto wirklich löschen? Dies löscht dauerhaft dein Konto, deinen Lernfortschritt, Fehler, Patientengespräche und gespeicherte Ergebnisse. Dieser Vorgang kann nicht rückgängig gemacht werden.'
+      )
+    )
+      return;
     await deleteAccountAction();
   }
 
@@ -62,13 +71,19 @@ export function AccountActions({ isActive, canDelete }: { isActive: boolean; can
           Abo abschließen
         </Link>
       )}
-      {error && (
-        <p style={{ color: 'var(--danger, #c0392b)', fontSize: 13.5, marginTop: 8 }}>{error}</p>
-      )}
+      {error && <p style={{ color: 'var(--danger, #c0392b)', fontSize: 13.5, marginTop: 8 }}>{error}</p>}
       <button className="btn btn-outline btn-block" style={{ marginTop: 10 }} onClick={handleLogout}>
         Abmelden
       </button>
-      {canDelete ? <button className="btn btn-danger-outline btn-block" style={{ marginTop: 10 }} onClick={handleDelete}>Konto dauerhaft löschen</button> : <p className="small-muted" style={{marginTop:10}}>Kontolöschung ist erst nach Ende deines Abos möglich.</p>}
+      {canDelete ? (
+        <button className="btn btn-danger-outline btn-block" style={{ marginTop: 10 }} onClick={handleDelete}>
+          Konto dauerhaft löschen
+        </button>
+      ) : (
+        <p className="small-muted" style={{ marginTop: 10 }}>
+          Kontolöschung ist erst nach Ende deines Abos möglich.
+        </p>
+      )}
     </>
   );
 }

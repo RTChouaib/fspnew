@@ -3,7 +3,15 @@
 import { useState } from 'react';
 import { startCaseSession } from '@/lib/actions';
 
-export function StartCaseButton({ caseId, returnTo, studyStep }: { caseId: string; returnTo?: string; studyStep?: string }) {
+export function StartCaseButton({
+  caseId,
+  returnTo,
+  studyStep,
+}: {
+  caseId: string;
+  returnTo?: string;
+  studyStep?: string;
+}) {
   const [loading, setLoading] = useState(false);
 
   async function handleClick() {

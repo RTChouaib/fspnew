@@ -81,7 +81,9 @@ export function SimulationChat({
         setEnding(false);
         return;
       }
-      const qs = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}${studyStep ? `&studyStep=${encodeURIComponent(studyStep)}` : ''}` : '';
+      const qs = returnTo
+        ? `?returnTo=${encodeURIComponent(returnTo)}${studyStep ? `&studyStep=${encodeURIComponent(studyStep)}` : ''}`
+        : '';
       router.push(`/simulation/${sessionId}/results${qs}`);
     } catch {
       setError('Verbindungsfehler. Bitte versuche es erneut.');
@@ -97,21 +99,41 @@ export function SimulationChat({
         {caseTitle} · {patientName}, {patientAge} Jahre
       </div>
 
-<div className="simulation-transcript">
+      <div className="simulation-transcript" role="log" aria-live="polite" aria-label="Gesprächsverlauf">
         {transcript.map((entry, i) => (
-<div key={i} className={`simulation-bubble ${entry.role}`}>
+          <div key={i} className={`simulation-bubble ${entry.role}`}>
             {entry.content}
           </div>
         ))}
-<>{sending && (
-          <div className="small-muted" style={{ fontStyle: 'italic' }}>
+        {sending && (
+          <div className="typing-indicator" role="status">
+            <span className="typing-dots" aria-hidden="true">
+              <i />
+              <i />
+              <i />
+            </span>
             {patientName} antwortet…
           </div>
-        )}</>
+        )}
         <div ref={bottomRef} />
       </div>
 
-      {error && <p className="err-text">{error}</p>}
+      {ending && (
+        <div className="evaluating-banner" role="status">
+          <span className="typing-dots" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </span>
+          Dein Gespräch wird ausgewertet. Das kann bis zu einer Minute dauern. Bitte lass diese Seite geöffnet.
+        </div>
+      )}
+
+      {error && (
+        <p className="err-text" role="alert">
+          {error}
+        </p>
+      )}
 
       <div className="simulation-composer">
         <input
@@ -126,6 +148,7 @@ export function SimulationChat({
             }
           }}
           placeholder="Ihre Frage an den Patienten…"
+          aria-label="Ihre Frage an den Patienten"
           disabled={sending || ending}
           maxLength={1000}
         />
