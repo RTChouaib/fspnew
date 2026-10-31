@@ -254,7 +254,7 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
     <>
       <MarketingTopBar />
       <main className="wrap narrow" style={{ paddingTop: 36, paddingBottom: 56 }}>
-        <h2>{entry.title}</h2>
+        <h1 className="page-display">{entry.title}</h1>
         {entry.intro && <p className="small-muted">{entry.intro}</p>}
         {entry.sections.map((section) => (
           <section key={section.heading} style={{ marginTop: 28 }}>

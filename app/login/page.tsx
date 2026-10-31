@@ -59,8 +59,8 @@ export default function LoginPage() {
     <>
       <MarketingTopBar />
       <div className="wrap narrow" style={{ paddingTop: 70, paddingBottom: 80 }}>
-        <div className="eyebrow">Bereits Mitglied?</div>
-        <h2>Einloggen</h2>
+        <div className="page-intro">Bereits Mitglied?</div>
+        <h1 className="page-display">Einloggen</h1>
         <p>Nutze die E-Mail-Adresse, mit der du dein FSP-Terminology-Abo gekauft hast.</p>
 
         {!sent ? (

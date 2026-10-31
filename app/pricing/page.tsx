@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { MarketingTopBar } from '@/components/MarketingTopBar';
 import { MarketingFooter } from '@/components/MarketingFooter';
 import { PricingCards } from '@/components/PricingCards';
+import { PLANS } from '@/lib/pricing';
+import { Reveal } from '@/components/Reveal';
 
 export const metadata: Metadata = {
   title: 'Preise',
@@ -16,7 +18,7 @@ export default async function PricingPage({ searchParams }: { searchParams: Prom
   return (
     <>
       <MarketingTopBar />
-      <div className="wrap narrow" style={{ paddingTop: 44 }}>
+      <div className="wrap narrow wide" style={{ paddingTop: 44 }}>
         {reason && (
           <div className="locked-banner">
             {reason === 'paid'
@@ -24,12 +26,18 @@ export default async function PricingPage({ searchParams }: { searchParams: Prom
               : 'Bitte wähle zunächst einen Plan, um dein Konto einzurichten.'}
           </div>
         )}
-        <div className="eyebrow">Bereit, gezielt für die FSP zu trainieren?</div>
-        <h2>Vorbereitung starten</h2>
-        <p>Wähle den Plan, der zu deiner Prüfungsvorbereitung passt. Keine langfristige Bindung, jederzeit kündbar.</p>
-        <PricingCards />
+        <Reveal>
+          <h1 className="page-display page-xl">Vorbereitung starten</h1>
+          <p className="page-lead">
+            Wähle den Plan, der zu deiner Prüfungsvorbereitung passt. Keine langfristige Bindung, jederzeit kündbar.
+          </p>
+          <p className="small-note">In allen Plänen enthalten: {PLANS[PLANS.length - 1].features.join(', ')}.</p>
+        </Reveal>
+        <Reveal delay={100}>
+          <PricingCards />
+        </Reveal>
         <p className="small-muted" style={{ marginTop: 18 }}>
-          Alle Preise inkl. gesetzlicher MwSt. Zahlungsabwicklung erfolgt sicher über unseren Zahlungsanbieter — wir
+          Alle Preise inkl. gesetzlicher MwSt. Zahlungsabwicklung erfolgt sicher über unseren Zahlungsanbieter. Wir
           speichern keine Kartendaten. Noch unsicher? <Link href="/demo">5 Aufgaben kostenlos testen</Link>.
         </p>
       </div>

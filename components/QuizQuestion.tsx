@@ -49,7 +49,7 @@ export function QuizQuestion({ question, index, total, chosen, onChoose, onNext,
 
   return (
     <div className="app-card question-card">
-      <div className="question-kicker">
+      <div className="question-caption">
         {question.kicker} · Frage {index + 1}/{total}
       </div>
       <div className="question-term" id={`q-${index}`}>
@@ -75,8 +75,8 @@ export function QuizQuestion({ question, index, total, chosen, onChoose, onNext,
                 {i + 1}
               </span>
               <span className="option-text">{option}</span>
-              {isRight && <span className="option-flag">✓ Richtig</span>}
-              {isWrong && <span className="option-flag">✗ Deine Antwort</span>}
+              {isRight && <span className="option-flag">Richtig</span>}
+              {isWrong && <span className="option-flag">Deine Antwort</span>}
             </button>
           );
         })}
@@ -85,7 +85,7 @@ export function QuizQuestion({ question, index, total, chosen, onChoose, onNext,
       <div aria-live="polite">
         {answered && (
           <div className={`quiz-feedback ${isCorrect ? 'is-correct' : 'is-wrong'}`}>
-            <strong>{isCorrect ? '✓ Richtig.' : `✗ Nicht ganz. Richtig ist: ${question.correct}`}</strong>
+            <strong>{isCorrect ? 'Richtig.' : `Nicht ganz. Richtig ist: ${question.correct}`}</strong>
             {question.explanation && <p>{question.explanation}</p>}
             {notice && <p className="quiz-notice">{notice}</p>}
             <button type="button" className="app-btn app-btn-primary quiz-next" onClick={onNext} disabled={nextBusy}>

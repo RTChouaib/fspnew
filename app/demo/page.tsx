@@ -20,6 +20,7 @@ export default function DemoPage() {
     <>
       <MarketingTopBar />
       <div className="wrap narrow" style={{ paddingTop: 36 }}>
+        <h1 className="page-display">5 Aufgaben kostenlos testen</h1>
         <DemoQuiz questions={questions} />
       </div>
       <MarketingFooter />

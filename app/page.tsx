@@ -6,9 +6,14 @@ import { appBaseUrl } from '@/lib/env';
 import { MarketingTopBar } from '@/components/MarketingTopBar';
 import { MarketingFooter } from '@/components/MarketingFooter';
 import { PricingCards } from '@/components/PricingCards';
-import { ProductShot } from '@/components/ProductShot';
+import { Reveal } from '@/components/Reveal';
+import { TermFinder, type FinderTerm } from '@/components/TermFinder';
+import { StageSlider } from '@/components/StageSlider';
 
 export const metadata: Metadata = {
+  title: { absolute: 'FSP Terminology: Fachsprachprüfung für Ärzte trainieren' },
+  description:
+    'Medizinisches Deutsch für die Fachsprachprüfung: Fachbegriffe und Patientensprache lernen, Patientengespräche üben, Feedback erhalten. 5 Aufgaben kostenlos testen.',
   alternates: { canonical: '/' },
 };
 
@@ -30,7 +35,7 @@ const FAQ_ITEMS: [string, string][] = [
     'Simulierte Anamnesegespräche mit einer virtuellen Patientin oder einem virtuellen Patienten. Du stellst Fragen auf Deutsch, bekommst Antworten und erhältst anschließend strukturiertes Trainingsfeedback.',
   ],
   [
-    'Wie zuverlässig sind der virtuelle Patient und das Feedback?',
+    'Wie zuverlässig sind Patient und Feedback?',
     'Beides wird mit Hilfe künstlicher Intelligenz erzeugt. Antworten und Bewertungen können Fehler oder Lücken enthalten und sind Trainingshinweise, keine medizinische Beratung. Bitte gib in Freitextfeldern keine echten Patientendaten ein.',
   ],
   [
@@ -47,7 +52,7 @@ const FAQ_ITEMS: [string, string][] = [
   ],
   ['Kann ich jederzeit kündigen?', 'Ja. Die Kündigung ist im Konto-Bereich möglich.'],
   [
-    'Wie läuft die Bezahlung und was passiert bei Problemen?',
+    'Wie läuft die Bezahlung?',
     'Die Zahlung wird über Polar abgewickelt. Bei einem wesentlichen technischen Problem, das den Zugriff verhindert, prüfen wir eine Rückerstattung. Alle Details und deine gesetzlichen Verbraucherrechte findest du in der Rückerstattungsrichtlinie.',
   ],
   [
@@ -55,19 +60,6 @@ const FAQ_ITEMS: [string, string][] = [
     'Zugriff auf alle Begriffe, geführtes Training, Fehlertraining, Tests, Patientengespräche und deinen persönlichen Lernfortschritt.',
   ],
 ];
-
-function Faq() {
-  return (
-    <>
-      {FAQ_ITEMS.map(([q, a]) => (
-        <details className="faq-item" key={q}>
-          <summary>{q}</summary>
-          <p>{a}</p>
-        </details>
-      ))}
-    </>
-  );
-}
 
 function JsonLd({ data }: { data: unknown }) {
   // "<" is escaped so the JSON can never close the script tag.
@@ -82,8 +74,24 @@ function JsonLd({ data }: { data: unknown }) {
 export default function LandingPage() {
   const t = termById('t001')!;
   const baseUrl = appBaseUrl();
-  const focusCategory = CATEGORIES.includes('Herz & Kreislauf') ? 'Herz & Kreislauf' : CATEGORIES[0];
   const cheapest = PLANS[0];
+  const shared = PLANS[PLANS.length - 1].features;
+
+  const finderTerms: FinderTerm[] = TERMS.filter(
+    (x, i) => i % 9 === 0 || ['t001', 't002', 't004', 't013', 't022', 't012', 't089'].includes(x.id)
+  ).map((x) => ({
+    medical: x.medicalTerm,
+    patient: x.patientTerms,
+    question: x.exampleDoctorQuestion,
+    letter: x.exampleArztbriefSentence,
+    explanation: x.explanation,
+    category: x.category,
+  }));
+  const stageData = {
+    term: { medical: t.medicalTerm, patient: t.patientTerms, explanation: t.explanation },
+    options: [t.patientTerms[0], 'Impfungen', 'geschwächtes Abwehrsystem', 'fiebersenkendes Medikament'],
+    review: ['t012', 't013', 't004'].map((id) => termById(id)?.medicalTerm).filter(Boolean) as string[],
+  };
 
   const faqJsonLd = {
     '@context': 'https://schema.org',
@@ -103,316 +111,163 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="marketing-page">
+    <div className="site-page">
       <JsonLd data={siteJsonLd} />
       <JsonLd data={faqJsonLd} />
       <MarketingTopBar />
       <main>
-        <section className="marketing-hero">
-          <div className="marketing-wrap marketing-hero-grid">
-            <div className="marketing-hero-copy">
-              <div className="eyebrow">FSP-Vorbereitung für internationale Ärzt:innen</div>
-              <h1>
-                Dein FSP-Training. <em>Schritt für Schritt.</em>
-              </h1>
-              <p className="lead">
-                Patient:innen sagen „Atemnot“, im Arztbrief steht „Dyspnoe“. Die FSP verlangt beides. Hier lernst du
-                Fachsprache und Patientensprache zusammen, übst in simulierten Patientengesprächen und siehst, wo du
-                dich verbessern kannst.
-              </p>
-              <div className="hero-cta">
-                <Link href="/demo" className="btn btn-blue">
-                  5 Aufgaben kostenlos testen
-                </Link>
-                <Link href="/pricing" className="arrow-link">
-                  Preise ansehen <span className="arr">↗</span>
-                </Link>
-              </div>
-              <p className="price-teaser">
-                Ohne Konto testen · danach ab {cheapest.price} {cheapest.period} · jederzeit kündbar ·{' '}
-                <Link href="#pricing-preview">Preise</Link>
-              </p>
-              <div className="marketing-proof-row">
-                <span>{TERMS.length} Begriffe</span>
-                <span>{CATEGORIES.length} Kategorien</span>
-                <span>Patientengespräche</span>
-                <span>Fehlertraining</span>
-              </div>
-            </div>
-            <ProductShot name="hero.png" alt="Das tägliche Training in FSP Terminology" width={1200} height={900}>
-              <div className="marketing-product-preview">
-                <span className="example-badge">Beispielansicht</span>
-                <div className="preview-top">
-                  <span>HEUTIGES TRAINING</span>
-                </div>
-                <div className="preview-focus">
-                  <div>
-                    <small>FOKUS</small>
-                    <strong>{focusCategory}</strong>
-                    <p>Wiederholen → Lernen → Patientengespräch → Check</p>
-                  </div>
-                </div>
-                <div className="preview-term">
-                  <div>
-                    <small>BEGRIFF</small>
-                    <strong>{t.medicalTerm}</strong>
-                  </div>
-                  <span>→</span>
-                  <div>
-                    <small>PATIENTENSPRACHE</small>
-                    <strong>{t.patientTerms[0]}</strong>
-                  </div>
-                </div>
-                <div className="preview-case">
-                  <div className="preview-case-icon">+</div>
-                  <div>
-                    <small>NÄCHSTER SCHRITT</small>
-                    <strong>Anamnese mit virtuellem Patienten</strong>
-                    <span>Feedback nach dem Gespräch</span>
-                  </div>
-                  <span>›</span>
-                </div>
-              </div>
-            </ProductShot>
-          </div>
-        </section>
-
-        <section className="marketing-section marketing-loop-section" id="how">
-          <div className="marketing-wrap">
-            <div className="marketing-section-head">
-              <div className="section-num">01 / DAS LERNSYSTEM</div>
-              <h2>
-                Nicht Features sammeln. <em>Gezielt lernen.</em>
-              </h2>
-              <p>Die App führt dich durch einen Lernkreislauf, statt dich mit einzelnen Werkzeugen allein zu lassen.</p>
-            </div>
-            <div className="learning-loop">
-              {[
-                ['01', 'Lernen', 'Medizinische Begriffe verstehen', '▤'],
-                ['02', 'Üben', 'Aktiv abrufen und Patientensprache trainieren', '◎'],
-                ['03', 'Anwenden', 'Im Patientengespräch kommunizieren', '✚'],
-                ['04', 'Verbessern', 'Feedback, Fehler und nächste Einheit', '↗'],
-              ].map(([n, title, desc, icon]) => (
-                <div className="loop-card" key={n}>
-                  <div className="loop-number">{n}</div>
-                  <div className="loop-icon">{icon}</div>
-                  <h3>{title}</h3>
-                  <p>{desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="marketing-section">
-          <div className="marketing-wrap marketing-two-col">
-            <div className="marketing-section-head">
-              <div className="section-num">02 / DEIN LERNPLAN</div>
-              <h2>
-                Du öffnest die App und weißt, <em>was als Nächstes kommt.</em>
-              </h2>
-              <p>
-                Dein Dashboard priorisiert fällige Begriffe, neue Inhalte, Fehler und Patientengespräche. Du kannst
-                trotzdem jederzeit frei trainieren.
-              </p>
-              <Link href="/demo" className="arrow-link">
-                Training ansehen <span className="arr">↗</span>
+        <section className="hero" aria-labelledby="hero-title">
+          <h1 id="hero-title" className="hero-title">
+            <span className="hero-word">Atemnot</span> <span className="sr-only">oder</span>
+            <span className="hero-frame" data-ui aria-hidden="true">
+              <span className="hero-frame-row">
+                <small>Patient</small>
+                <b>{t.patientTerms[0]}</b>
+              </span>
+              <span className="hero-frame-row">
+                <small>Arzt</small>
+                <b>{t.medicalTerm}</b>
+              </span>
+            </span>{' '}
+            <span className="hero-word">Dyspnoe?</span>
+          </h1>
+          <div className="hero-sub">
+            <p className="hero-lead">
+              Die Fachsprachprüfung verlangt beides: die Worte der Patient:innen und die Fachsprache im Arztbrief. Lerne
+              medizinisches Deutsch, übe in simulierten Patientengesprächen und sieh, wo du dich verbessern kannst.
+            </p>
+            <div className="hero-actions">
+              <Link href="/demo" className="btn btn-blue btn-lg">
+                5 Aufgaben kostenlos testen
+              </Link>
+              <Link href="/pricing" className="text-link">
+                Preise ansehen
               </Link>
             </div>
-            <ProductShot name="study.png" alt="Der tägliche Lernplan" width={1200} height={900}>
-              <div className="plan-preview">
-                <span className="example-badge">Beispielansicht</span>
-                <div className="plan-preview-header">
-                  <div>
-                    <small>HEUTE</small>
-                    <strong>Dein FSP-Training</strong>
-                  </div>
-                </div>
-                <div className="plan-row done">
-                  <i>01</i>
-                  <div>
-                    <b>Wiederholen</b>
-                    <span>Fällige Begriffe aus deinem Lernstand</span>
-                  </div>
-                  <strong>✓</strong>
-                </div>
-                <div className="plan-row active">
-                  <i>02</i>
-                  <div>
-                    <b>Neu lernen</b>
-                    <span>Neue Begriffe mit Patientensprache</span>
-                  </div>
-                  <strong>→</strong>
-                </div>
-                <div className="plan-row">
-                  <i>03</i>
-                  <div>
-                    <b>Patientengespräch</b>
-                    <span>Anamnese mit virtuellem Patienten</span>
-                  </div>
-                  <strong>›</strong>
-                </div>
-                <div className="plan-row">
-                  <i>04</i>
-                  <div>
-                    <b>Check</b>
-                    <span>Wissen im Kontext testen</span>
-                  </div>
-                  <strong>›</strong>
-                </div>
-              </div>
-            </ProductShot>
+            <p className="hero-meta">
+              Ohne Konto testen. Danach ab {cheapest.price} {cheapest.period}, jederzeit kündbar (
+              <Link href="#pricing-preview">Preise</Link>). {TERMS.length} Begriffe in {CATEGORIES.length} Kategorien.
+            </p>
           </div>
         </section>
 
-        <section className="marketing-section marketing-blue-section">
-          <div className="marketing-wrap">
-            <div className="marketing-section-head">
-              <div className="section-num">03 / PATIENTENGESPRÄCH</div>
-              <h2>
-                Was du lernst, <em>wendest du an.</em>
+        <section className="band band-split" id="how" aria-labelledby="how-title">
+          <h2 id="how-title" className="sr-only">
+            So funktioniert das Training
+          </h2>
+          <StageSlider data={stageData} />
+        </section>
+
+        <section className="section section-finder" aria-labelledby="finder-title">
+          <div className="grid">
+            <Reveal className="head-row">
+              <h2 id="finder-title" className="statement">
+                Was sagt der Patient?
               </h2>
-              <p>
-                Deine Terminologie wird nicht isoliert gelernt. Du bringst sie direkt in realistische Anamnesegespräche
-                ein.
+            </Reveal>
+            <Reveal className="col-head">
+              <p className="lead">
+                Tippe ein Wort aus dem Mund einer Patientin und sieh, was im Arztbrief steht. Das ist der Kern der App,
+                in {TERMS.length} Begriffen.
               </p>
-            </div>
-            <ProductShot name="chat.png" alt="Ein Patientengespräch mit Feedback" width={1200} height={900}>
-              <div className="conversation-preview">
-                <span className="example-badge">Beispielgespräch</span>
-                <div className="chat-patient">
-                  <small>PATIENT</small>
-                  <p>„Ich habe seit einer Stunde starke Schmerzen in der Brust.“</p>
-                </div>
-                <div className="chat-doctor">
-                  <small>DU</small>
-                  <p>„Wo genau sind die Schmerzen und strahlen sie irgendwohin aus?“</p>
-                </div>
-                <div className="feedback-preview">
-                  <span>FEEDBACK</span>
-                  <b>Strukturiertes Feedback nach dem Gespräch</b>
+            </Reveal>
+            <Reveal className="col-body" delay={80}>
+              <TermFinder terms={finderTerms} total={TERMS.length} />
+              <p className="small-note">Kategorien: {CATEGORIES.join(', ')}.</p>
+            </Reveal>
+          </div>
+        </section>
+
+        <section className="section section-chat" aria-labelledby="chat-title">
+          <div className="grid">
+            <Reveal className="head-row">
+              <h2 id="chat-title" className="statement">
+                Was du lernst, wendest du an.
+              </h2>
+            </Reveal>
+            <Reveal className="col-body col-first">
+              <div data-ui className="ui-chat">
+                <p className="ui-caption">Patientengespräch · Beispiel</p>
+                <p className="ui-bubble ui-patient">
+                  <span>Patient</span>Ich habe seit einer Stunde starke Schmerzen in der Brust.
+                </p>
+                <p className="ui-bubble ui-doctor">
+                  <span>Du</span>Wo genau sind die Schmerzen und strahlen sie irgendwohin aus?
+                </p>
+                <div className="ui-feedback">
+                  <p className="ui-caption">Feedback</p>
                   <p>Du siehst, welche Fragen fehlten und welche Begriffe du wiederholen solltest.</p>
                 </div>
               </div>
-            </ProductShot>
-          </div>
-        </section>
+            </Reveal>
 
-        <section className="marketing-section">
-          <div className="marketing-wrap">
-            <div className="marketing-section-head">
-              <div className="section-num">04 / DEINE BEGRIFFE</div>
-              <h2>Ein Begriff ist mehr als eine Übersetzung.</h2>
-              <p>
-                Die Begriffe enthalten Fachsprache, Patientensprache, Arztfragen, Arztbrief-Beispiele, typische Fehler
-                und verwandte Begriffe.
+            <Reveal className="col-head" delay={80}>
+              <p className="lead">
+                Du führst realistische Anamnesegespräche mit einer virtuellen Patientin. Danach bekommst du
+                strukturiertes Feedback.
               </p>
-            </div>
-            <div className="term-showcase">
-              <div className="term-showcase-main">
-                <small>FACHBEGRIFF</small>
-                <h3>{t.medicalTerm}</h3>
-                <div className="term-pills">
-                  {t.patientTerms.map((x) => (
-                    <span key={x}>{x}</span>
-                  ))}
-                </div>
-              </div>
-              <div className="term-showcase-detail">
-                <div>
-                  <small>ARZTFRAGE</small>
-                  <p>„{t.exampleDoctorQuestion}“</p>
-                </div>
-                <div>
-                  <small>ARZTBRIEF</small>
-                  <p>{t.exampleArztbriefSentence}</p>
-                </div>
-                <div>
-                  <small>ERKLÄRUNG</small>
-                  <p>{t.explanation}</p>
-                </div>
-              </div>
-            </div>
-            <div className="cat-grid marketing-cat-grid">
-              {CATEGORIES.slice(0, 9).map((c) => (
-                <div className="cat-pill" key={c}>
-                  {c}
-                </div>
-              ))}
-              <div className="cat-pill">+ weitere Kategorien</div>
-            </div>
+            </Reveal>
           </div>
         </section>
 
-        <section className="marketing-section">
-          <div className="marketing-wrap marketing-two-col reverse-mobile">
-            <div className="checklist-card">
-              <span className="example-badge">Nach jedem Gespräch</span>
-              <ul>
-                <li>
-                  <i>✓</i>
-                  <div>
-                    <b>Strukturiertes Feedback</b>
-                    <span>Was gut lief und woran du noch arbeiten kannst.</span>
-                  </div>
-                </li>
-                <li>
-                  <i>✓</i>
-                  <div>
-                    <b>Begriffe zum Wiederholen</b>
-                    <span>Unsichere Begriffe fließen in deinen nächsten Lernplan ein.</span>
-                  </div>
-                </li>
-                <li>
-                  <i>✓</i>
-                  <div>
-                    <b>Deine Schwachstellen im Blick</b>
-                    <span>Dein Dashboard zeigt, welche Bereiche du als Nächstes üben solltest.</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div className="marketing-section-head">
-              <div className="section-num">05 / FEEDBACK</div>
-              <h2>
-                Deine Fehler bestimmen, <em>was du als Nächstes übst.</em>
+        <section className="section section-plan" aria-labelledby="plan-title">
+          <div className="grid">
+            <Reveal className="head-row">
+              <h2 id="plan-title" className="statement">
+                Du weißt, was als Nächstes kommt.
               </h2>
-              <p>
-                Nach Übungen und Patientengesprächen werden Schwachstellen sichtbar. Relevante Begriffe können wieder in
-                deine nächste Einheit einfließen.
+            </Reveal>
+            <Reveal className="col-head">
+              <p className="lead">
+                Dein Dashboard priorisiert fällige Begriffe, neue Inhalte, Fehler und Patientengespräche. Deine Fehler
+                bestimmen, was du als Nächstes übst. Frei trainieren kannst du trotzdem jederzeit.
               </p>
-            </div>
+            </Reveal>
+            <Reveal className="col-body" delay={80}>
+              <div data-ui className="ui-plan">
+                <p className="ui-caption">Heute · Beispiel</p>
+                <ol>
+                  <li className="is-done">
+                    <b>Wiederholen</b>
+                    <span>Fällige Begriffe aus deinem Lernstand</span>
+                  </li>
+                  <li className="is-now">
+                    <b>Neu lernen</b>
+                    <span>Neue Begriffe mit Patientensprache</span>
+                  </li>
+                  <li>
+                    <b>Patientengespräch</b>
+                    <span>Anamnese mit virtuellem Patienten</span>
+                  </li>
+                  <li>
+                    <b>Check</b>
+                    <span>Wissen im Kontext testen</span>
+                  </li>
+                </ol>
+              </div>
+            </Reveal>
           </div>
         </section>
 
-        <section className="marketing-section" id="about">
-          <div className="marketing-wrap">
-            <div className="marketing-section-head">
-              <div className="section-num">06 / ÜBER DIE APP</div>
-              <h2>
-                Von einem Arzt, <em>der Deutsch selbst gelernt hat.</em>
+        <section className="section section-about" id="about" aria-labelledby="about-title">
+          <div className="grid">
+            <Reveal className="about-text">
+              <h2 id="about-title" className="about-heading">
+                Von einem Arzt, der Deutsch selbst gelernt hat
               </h2>
-            </div>
-            <div className="about-grid">
-              <div className="about-card">
-                <p>
-                  Ich bin Arzt und habe mir Deutsch selbst beigebracht. Ich weiß, wie schwer es ist, medizinische
-                  Fachsprache zu lernen, wenn Patient:innen ganz anders sprechen als in den Lehrbüchern.
-                </p>
-                <p>
-                  Deshalb habe ich FSP Terminology gebaut: Fachbegriffe und Patientensprache gehören hier zusammen, und
-                  du übst sie direkt im Gespräch. Die App soll dir helfen, dich sicherer auf die FSP vorzubereiten.
-                </p>
-                <p>
-                  Die App ist neu und wird laufend verbessert. Erfahrungsberichte gibt es deshalb noch nicht. Darum
-                  kannst du vor dem Kauf 5 echte Aufgaben ohne Konto ausprobieren und dir selbst ein Bild machen.
-                </p>
-                <p className="about-sign">
-                  Gründer von FSP Terminology
-                  <span>Arzt</span>
-                </p>
-              </div>
-              <div className="honest-card">
+              <p className="about-statement">
+                Ich bin Arzt und habe mir Deutsch selbst beigebracht. Ich weiß, wie schwer es ist, medizinische
+                Fachsprache zu lernen, wenn Patient:innen ganz anders sprechen als in den Lehrbüchern. Deshalb habe ich
+                FSP Terminology gebaut: Fachbegriffe und Patientensprache gehören hier zusammen, und du übst sie direkt
+                im Gespräch.
+              </p>
+              <p className="about-more">
+                Die App ist neu und wird laufend verbessert. Erfahrungsberichte gibt es deshalb noch nicht. Darum kannst
+                du vor dem Kauf 5 echte Aufgaben ohne Konto ausprobieren und dir selbst ein Bild machen.
+              </p>
+            </Reveal>
+            <Reveal className="honest" delay={80}>
+              <div className="honest-col">
                 <h3>Das kann die App</h3>
                 <ul>
                   <li>
@@ -422,6 +277,8 @@ export default function LandingPage() {
                   <li>Simulierte Anamnesegespräche mit Feedback</li>
                   <li>Fehlertraining und Tests</li>
                 </ul>
+              </div>
+              <div className="honest-col">
                 <h3>Das kann sie nicht</h3>
                 <ul>
                   <li>Einen vollständigen Prüfungskurs oder Unterricht ersetzen</li>
@@ -429,42 +286,61 @@ export default function LandingPage() {
                   <li>Medizinische Beratung geben (KI-Antworten können Fehler enthalten)</li>
                 </ul>
               </div>
+            </Reveal>
+          </div>
+        </section>
+
+        <section className="section section-pricing" id="pricing-preview" aria-labelledby="pricing-title">
+          <div className="grid">
+            <Reveal className="head-row">
+              <h2 id="pricing-title" className="statement">
+                Ab {cheapest.price} {cheapest.period}. Jederzeit kündbar.
+              </h2>
+            </Reveal>
+            <Reveal className="col-head">
+              <p className="lead">Wähle den Zeitraum, in dem du dich intensiv vorbereiten möchtest.</p>
+              <p className="small-note">In allen Plänen enthalten: {shared.join(', ')}.</p>
+            </Reveal>
+            <Reveal className="col-body" delay={80}>
+              <div className="pricing-rows">
+                <PricingCards />
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        <section className="section section-faq" id="faq" aria-labelledby="faq-title">
+          <div className="grid">
+            <Reveal className="head-row">
+              <h2 id="faq-title" className="statement">
+                Häufige Fragen
+              </h2>
+            </Reveal>
+            <div className="faq-list">
+              {FAQ_ITEMS.map(([q, a]) => (
+                <Reveal key={q} className="faq-row">
+                  <h3>{q}</h3>
+                  <p>{a}</p>
+                </Reveal>
+              ))}
             </div>
           </div>
         </section>
 
-        <section className="marketing-section" id="pricing-preview">
-          <div className="marketing-wrap">
-            <div className="marketing-section-head">
-              <div className="section-num">07 / PREISE</div>
-              <h2>
-                Einfaches Training, <em>flexibles Abo.</em>
-              </h2>
-              <p>Wähle den Zeitraum, in dem du dich intensiv vorbereiten möchtest.</p>
-            </div>
-            <PricingCards />
-          </div>
-        </section>
-        <section className="marketing-section" id="faq">
-          <div className="marketing-wrap marketing-narrow">
-            <div className="marketing-section-head">
-              <div className="section-num">08 / FAQ</div>
-              <h2>Häufige Fragen</h2>
-            </div>
-            <Faq />
-          </div>
-        </section>
-        <section className="marketing-section marketing-final">
-          <div className="marketing-wrap marketing-narrow">
-            <div className="section-num">09 / LOS GEHT&apos;S</div>
-            <h2>
-              Starte dein <em>FSP-Training.</em>
-            </h2>
-            <p>Teste echte Aufgaben ohne Konto und entdecke, wie das Training funktioniert.</p>
-            <Link href="/demo" className="btn btn-blue">
+        <section className="cta" aria-labelledby="cta-title">
+          <h2 id="cta-title" className="cta-title">
+            Erst testen, dann starten?
+          </h2>
+          <div className="cta-actions">
+            <Link href="/demo" className="btn btn-blue btn-lg">
               5 Aufgaben kostenlos testen
             </Link>
+            <span className="cta-or">oder</span>
+            <Link href="/pricing" className="btn btn-light btn-lg">
+              Preise ansehen
+            </Link>
           </div>
+          <p className="cta-note">Die Demo braucht kein Konto und keine Zahlungsdaten.</p>
         </section>
       </main>
       <MarketingFooter />

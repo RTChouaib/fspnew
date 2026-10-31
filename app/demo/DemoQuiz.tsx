@@ -35,13 +35,13 @@ export function DemoQuiz({ questions }: { questions: Question[] }) {
   if (done) {
     return (
       <div style={{ textAlign: 'center', paddingTop: 20 }}>
-        <div className="eyebrow">Deine ersten Ergebnisse</div>
+        <div className="page-intro">Deine ersten Ergebnisse</div>
         <h2>
           {done.correct}/{done.total} richtig
         </h2>
         <p>
-          Du hast jetzt einen ersten Eindruck davon, wo dir medizinische Fachsprache leichtfällt — und wo du noch
-          gezielt trainieren kannst.
+          Du hast jetzt einen ersten Eindruck davon, wo dir medizinische Fachsprache leichtfällt, und wo du noch gezielt
+          trainieren kannst.
         </p>
         <div className="card" style={{ margin: '26px 0', textAlign: 'left' }}>
           <h3 style={{ fontSize: 16 }}>Aktives Training statt passives Auswendiglernen</h3>

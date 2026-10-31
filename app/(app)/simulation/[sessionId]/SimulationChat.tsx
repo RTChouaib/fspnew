@@ -95,7 +95,7 @@ export function SimulationChat({
 
   return (
     <div className="simulation-shell">
-      <div className="question-kicker">
+      <div className="question-caption">
         {caseTitle} · {patientName}, {patientAge} Jahre
       </div>
 

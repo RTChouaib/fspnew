@@ -25,7 +25,7 @@ export default function OpengraphImage() {
             width: 18,
             height: 18,
             borderRadius: 9,
-            background: '#1d4ed8',
+            background: '#1857d1',
           }}
         />
         FSP Terminology
@@ -38,7 +38,7 @@ export default function OpengraphImage() {
           Fachsprache und Patientensprache lernen, Patientengespräche üben, Schwächen erkennen.
         </div>
       </div>
-      <div style={{ fontSize: 28, color: '#1d4ed8', fontWeight: 700 }}>5 Aufgaben kostenlos testen</div>
+      <div style={{ fontSize: 28, color: '#1857d1', fontWeight: 700 }}>5 Aufgaben kostenlos testen</div>
     </div>,
     size
   );

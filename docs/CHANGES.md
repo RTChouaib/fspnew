@@ -24,14 +24,14 @@ subscriptions exist.
   `role="progressbar"`, save errors handled. Question options are now always unique (previous bug: duplicate answers).
 - Added `loading.tsx`, `error.tsx` (uses `retry`, per Next 16), `not-found.tsx`; chat shows typing and evaluating states.
 
-## Landing page
-- Example mock-ups are labelled "Beispielansicht"; invented numbers removed. Real screenshots placed in
-  `public/screenshots/` (`hero.png`, `study.png`, `chat.png`) replace the mock-ups automatically.
-- New founder section, "what the app can / cannot do" box, price teaser (read from `lib/pricing.ts`), extended FAQ with
-  FAQ structured data, mobile hamburger menu, fixed `#how` anchor, compact cookie banner (wording unchanged).
+## Landing page and public pages (design overhaul, tasteskill v2)
+See `docs/DESIGN.md`. Summary: new composition ("the sentence is the layout"), one live term finder, a four-stage
+slider, flat tone fields, motion layer, in-flow cookie bar, new header and footer, utility pages (pricing, login,
+demo, legal) restyled, one brand blue, two typefaces (DM Serif Display, Manrope), favicon.
 - SEO: per-page metadata, title template, `sitemap.ts`, `robots.ts`, Open Graph image, JSON-LD.
 
 ## Not done / left on purpose
 - `app/onboarding` untouched (it polls payment status).
+- App screens keep their current layout (design pass 2 pending); only tokens, fonts and nav casing changed.
 - About 175 inline `style={{}}` remain; they work but should be moved to classes over time.
 - One pre-existing lint error remains in `PracticeSession.tsx` (setState inside an effect).

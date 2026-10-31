@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { appBaseUrl } from '@/lib/env';
-import { DM_Serif_Display, Manrope, JetBrains_Mono } from 'next/font/google';
+import { DM_Serif_Display, Manrope } from 'next/font/google';
 import '../styles/base.css';
 import '../styles/components.css';
 import '../styles/marketing.css';
@@ -10,6 +10,7 @@ import '../styles/learn.css';
 import '../styles/study.css';
 import '../styles/quiz.css';
 import '../styles/simulation.css';
+import '../styles/site.css';
 import { Analytics } from '@vercel/analytics/next';
 import { ConsentBanner } from '@/components/ConsentBanner';
 import { MetaPixel } from '@/components/MetaPixel';
@@ -28,13 +29,6 @@ const manrope = Manrope({
   display: 'swap',
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-mono',
-  display: 'swap',
-});
-
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -44,7 +38,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(appBaseUrl()),
   title: {
-    default: 'FSP Terminology — Medizinisches Deutsch für die Fachsprachprüfung',
+    default: 'FSP Terminology: Fachsprachprüfung für Ärzte trainieren',
     template: '%s · FSP Terminology',
   },
   description:
@@ -55,18 +49,18 @@ export const metadata: Metadata = {
     siteName: 'FSP Terminology',
     title: 'FSP Terminology',
     description:
-      'Medizinisches Deutsch für die Fachsprachprüfung — Fachsprache, Patientensprache, Anamnese und Arztbrief aktiv trainieren.',
+      'Medizinisches Deutsch für die Fachsprachprüfung: Fachsprache, Patientensprache, Anamnese und Arztbrief aktiv trainieren.',
   },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className={`${dmSerifDisplay.variable} ${manrope.variable} ${jetbrainsMono.variable}`}>
+    <html lang="de" className={`${dmSerifDisplay.variable} ${manrope.variable}`}>
       <body>
+        <ConsentBanner />
         {children}
         <Analytics />
         <MetaPixel />
-        <ConsentBanner />
       </body>
     </html>
   );

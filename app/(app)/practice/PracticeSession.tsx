@@ -156,7 +156,7 @@ export function PracticeSession({
         </p>
       )}
       <div className="app-card flash-card">
-        <div className="question-kicker">
+        <div className="question-caption">
           Begriff {index + 1}/{queue.length}
         </div>
         <div className="flash-term">{term.medicalTerm}</div>
