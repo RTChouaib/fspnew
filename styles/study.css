@@ -106,7 +106,7 @@
   height: 36px;
   border-radius: 10px;
   background: #eef4ff;
-  color: #2563eb;
+  color: #1857d1;
   display: grid;
   place-items: center;
   flex: none;
@@ -153,7 +153,7 @@
   height: 48px;
   border-radius: 14px;
   background: #eaf2ff;
-  color: #2563eb;
+  color: #1857d1;
   display: grid;
   place-items: center;
 }
@@ -207,7 +207,7 @@
   height: 48px;
   border-radius: 14px;
   background: #eef4ff;
-  color: #2563eb;
+  color: #1857d1;
   display: grid;
   place-items: center;
   flex: none;
@@ -278,7 +278,7 @@
 .study-step-pill.is-active {
   border-color: #9fc0ef;
   background: #f4f8ff;
-  color: #2563eb;
+  color: #1857d1;
 }
 .study-step-pill.is-done {
   border-color: #b7e4c7;
@@ -301,7 +301,7 @@
 }
 .study-step-pill.is-active .study-step-pill-icon {
   background: #e4efff;
-  color: #2563eb;
+  color: #1857d1;
 }
 .study-step-pill.is-done .study-step-pill-icon {
   background: #d8f7e3;

@@ -19,7 +19,7 @@
   --radius-lg: 16px;
   --serif: var(--font-serif), Georgia, 'Times New Roman', serif;
   --sans: var(--font-sans), -apple-system, Helvetica, Arial, sans-serif;
-  --mono: var(--font-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+  --mono: var(--sans);
 }
 * {
   box-sizing: border-box;
@@ -61,8 +61,8 @@ button {
   --app-border: #e3e8ef;
   --app-text: #17212b;
   --app-muted: #687586;
-  --app-primary: #2563eb;
-  --app-primary-dark: #1d4ed8;
+  --app-primary: #1857d1;
+  --app-primary-dark: #123e9e;
   --app-primary-soft: #eef4ff;
   --app-success: #15803d;
   --app-success-soft: #ecfdf3;
@@ -72,7 +72,7 @@ button {
   --app-danger-soft: #fff1f0;
   --app-radius: 14px;
   --app-radius-sm: 10px;
-  --app-shadow: 0 1px 2px rgba(16, 24, 40, 0.03), 0 8px 24px rgba(16, 24, 40, 0.04);
+  --app-shadow: none;
 }
 h2,
 h3 {

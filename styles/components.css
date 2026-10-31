@@ -140,7 +140,6 @@
   background: #fff;
   border: 1px solid var(--app-border);
   border-radius: var(--app-radius);
-  box-shadow: var(--app-shadow);
 }
 .app-card-pad {
   padding: 20px;
@@ -195,7 +194,6 @@
 }
 .card,
 .card-flat {
-  box-shadow: var(--app-shadow);
   border-color: var(--app-border);
 }
 .card,
@@ -231,7 +229,7 @@
   font-weight: 650;
 }
 .back-link:hover {
-  color: #2563eb;
+  color: #1857d1;
 }
 .app-card {
   transition:

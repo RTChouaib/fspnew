@@ -20,7 +20,7 @@
 .learn-progress-number {
   font-size: 28px;
   font-weight: 800;
-  color: #2563eb;
+  color: #1857d1;
   align-self: center;
 }
 .learn-progress-track {
@@ -33,7 +33,7 @@
 .learn-progress-track span {
   display: block;
   height: 100%;
-  background: #2563eb;
+  background: #1857d1;
   border-radius: inherit;
 }
 .learn-mini-stats {
@@ -78,7 +78,7 @@
   height: 40px;
   border-radius: 11px;
   background: #eef4ff;
-  color: #2563eb;
+  color: #1857d1;
   display: grid;
   place-items: center;
 }
@@ -165,7 +165,7 @@
 .module-hero-number {
   font-size: 28px;
   font-weight: 800;
-  color: #2563eb;
+  color: #1857d1;
 }
 .module-subcats {
   display: flex;
@@ -227,7 +227,7 @@
 }
 .module-status.is-progress {
   background: #eef4ff;
-  color: #2563eb;
+  color: #1857d1;
 }
 @media (max-width: 620px) {
   .module-page-header {
