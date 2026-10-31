@@ -11,6 +11,7 @@ import '../styles/study.css';
 import '../styles/quiz.css';
 import '../styles/simulation.css';
 import '../styles/site.css';
+import '../styles/landing-refresh.css';
 import { Analytics } from '@vercel/analytics/next';
 import { ConsentBanner } from '@/components/ConsentBanner';
 import { MetaPixel } from '@/components/MetaPixel';

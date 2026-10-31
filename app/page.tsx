@@ -117,7 +117,9 @@ export default function LandingPage() {
       <MarketingTopBar />
       <main>
         <section className="hero" aria-labelledby="hero-title">
-          <h1 id="hero-title" className="hero-title">
+          <div className="hero-copy">
+            <p className="hero-eyebrow"><span className="eyebrow-mark" /> Medizinisches Deutsch. Gezielt für die FSP.</p>
+            <h1 id="hero-title" className="hero-title">
             <span className="hero-word">Atemnot</span> <span className="sr-only">oder</span>
             <span className="hero-frame" data-ui aria-hidden="true">
               <span className="hero-frame-row">
@@ -130,7 +132,8 @@ export default function LandingPage() {
               </span>
             </span>{' '}
             <span className="hero-word">Dyspnoe?</span>
-          </h1>
+            </h1>
+          </div>
           <div className="hero-sub">
             <p className="hero-lead">
               Die Fachsprachprüfung verlangt beides: die Worte der Patient:innen und die Fachsprache im Arztbrief. Lerne
@@ -148,6 +151,11 @@ export default function LandingPage() {
               Ohne Konto testen. Danach ab {cheapest.price} {cheapest.period}, jederzeit kündbar (
               <Link href="#pricing-preview">Preise</Link>). {TERMS.length} Begriffe in {CATEGORIES.length} Kategorien.
             </p>
+          </div>
+          <div className="hero-proofline" aria-label="Was dich erwartet">
+            <span><b>{TERMS.length}+</b> medizinische Begriffe</span><i />
+            <span><b>{CATEGORIES.length}</b> Fachbereiche</span><i />
+            <span><b>5</b> Demo-Aufgaben ohne Anmeldung</span>
           </div>
         </section>
 
@@ -253,13 +261,12 @@ export default function LandingPage() {
           <div className="grid">
             <Reveal className="about-text">
               <h2 id="about-title" className="about-heading">
-                Von einem Arzt, der Deutsch selbst gelernt hat
+                Entwickelt für die sprachliche Realität im Klinikalltag
               </h2>
               <p className="about-statement">
-                Ich bin Arzt und habe mir Deutsch selbst beigebracht. Ich weiß, wie schwer es ist, medizinische
-                Fachsprache zu lernen, wenn Patient:innen ganz anders sprechen als in den Lehrbüchern. Deshalb habe ich
-                FSP Terminology gebaut: Fachbegriffe und Patientensprache gehören hier zusammen, und du übst sie direkt
-                im Gespräch.
+                In der FSP reicht es nicht, medizinische Begriffe auswendig zu kennen. Du musst verstehen, wie
+                Patient:innen Beschwerden beschreiben – und diese anschließend präzise in ärztlicher Fachsprache
+                wiedergeben. Genau diese Verbindung steht im Mittelpunkt von FSP Terminology.
               </p>
               <p className="about-more">
                 Die App ist neu und wird laufend verbessert. Erfahrungsberichte gibt es deshalb noch nicht. Darum kannst
